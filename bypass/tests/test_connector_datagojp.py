@@ -48,7 +48,7 @@ class TestDataGoJpConnectorSearch:
     def test_検索結果をDatasetMetadataに変換する(self):
         """CKAN API レスポンスを DatasetMetadata のリストに変換する。"""
         fixture = load_fixture("datagojp_search_response.json")
-        respx.get("https://www.data.go.jp/api/3/action/package_search").mock(
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
             return_value=httpx.Response(200, json=fixture)
         )
         connector = DataGoJpConnector()
@@ -64,7 +64,7 @@ class TestDataGoJpConnectorSearch:
     def test_limitとoffsetがrowsとstartに変換される(self):
         """CKAN では limit=rows, offset=start として送信される。"""
         fixture = load_fixture("datagojp_search_response.json")
-        route = respx.get("https://www.data.go.jp/api/3/action/package_search").mock(
+        route = respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
             return_value=httpx.Response(200, json=fixture)
         )
         connector = DataGoJpConnector()
@@ -79,7 +79,7 @@ class TestDataGoJpConnectorSearch:
     @respx.mock
     def test_タイムアウトでUpstreamTimeoutErrorを発生させる(self):
         """タイムアウト時に UpstreamTimeoutError を発生させる。"""
-        respx.get("https://www.data.go.jp/api/3/action/package_search").mock(
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
             side_effect=httpx.TimeoutException("timeout")
         )
         connector = DataGoJpConnector()
@@ -90,7 +90,7 @@ class TestDataGoJpConnectorSearch:
     @respx.mock
     def test_レート制限でUpstreamRateLimitErrorを発生させる(self):
         """429 を受信した場合 UpstreamRateLimitError を発生させる。"""
-        respx.get("https://www.data.go.jp/api/3/action/package_search").mock(
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
             return_value=httpx.Response(429)
         )
         connector = DataGoJpConnector()
@@ -105,7 +105,7 @@ class TestDataGoJpConnectorSearch:
             "success": True,
             "result": {"count": 0, "results": []},
         }
-        respx.get("https://www.data.go.jp/api/3/action/package_search").mock(
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
             return_value=httpx.Response(200, json=empty_fixture)
         )
         connector = DataGoJpConnector()
@@ -121,7 +121,7 @@ class TestDataGoJpConnectorFetch:
     def test_データ取得でDatasetPayloadを返す(self):
         """fetch は DatasetPayload を返す。"""
         fixture = load_fixture("datagojp_fetch_response.json")
-        respx.get("https://www.data.go.jp/api/3/action/package_show").mock(
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_show").mock(
             return_value=httpx.Response(200, json=fixture)
         )
         connector = DataGoJpConnector()
@@ -134,7 +134,7 @@ class TestDataGoJpConnectorFetch:
     @respx.mock
     def test_タイムアウトでUpstreamTimeoutErrorを発生させる(self):
         """fetch のタイムアウト時に UpstreamTimeoutError を発生させる。"""
-        respx.get("https://www.data.go.jp/api/3/action/package_show").mock(
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_show").mock(
             side_effect=httpx.TimeoutException("timeout")
         )
         connector = DataGoJpConnector()
@@ -145,7 +145,7 @@ class TestDataGoJpConnectorFetch:
     @respx.mock
     def test_レート制限でUpstreamRateLimitErrorを発生させる(self):
         """429 を受信した場合 UpstreamRateLimitError を発生させる。"""
-        respx.get("https://www.data.go.jp/api/3/action/package_show").mock(
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_show").mock(
             return_value=httpx.Response(429)
         )
         connector = DataGoJpConnector()

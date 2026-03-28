@@ -1,9 +1,12 @@
 """
 data.go.jp（政府オープンデータ）コネクター
 
-エンドポイント: https://www.data.go.jp/api/3/action/
+エンドポイント: https://data.e-gov.go.jp/data/api/3/action/
 認証方式: 不要（CKAN API）
 レスポンス形式: JSON
+
+注意: 旧エンドポイント（www.data.go.jp）は data.e-gov.go.jp に移転済み。
+      移転後のパスは /data/api/3/action/（/api/3/action/ ではない）。
 """
 
 from datetime import datetime, timezone
@@ -17,8 +20,8 @@ from core.errors import (
 )
 from core.models import DatasetMetadata, DatasetPayload
 
-# data.go.jp CKAN API ベース URL
-_BASE_URL = "https://www.data.go.jp/api/3/action"
+# data.go.jp CKAN API ベース URL（data.e-gov.go.jp に移転済み）
+_BASE_URL = "https://data.e-gov.go.jp/data/api/3/action"
 
 # 上流リクエストのタイムアウト（秒）
 _TIMEOUT_SECONDS = 30.0
@@ -181,11 +184,11 @@ def _ckan_package_to_metadata(
     return DatasetMetadata(
         id=dataset_id,
         source_id="datagojp",
-        title=pkg.get("title", ""),
-        description=pkg.get("notes", ""),
-        url=pkg.get("url", ""),
+        title=pkg.get("title") or "",
+        description=pkg.get("notes") or "",
+        url=pkg.get("url") or "",
         tags=tags,
-        updated_at=updated_at,
+        updated_at=updated_at or "",
     )
 
 
