@@ -44,6 +44,13 @@ class CredentialsResponse(BaseModel):
     message: str
 
 
+class CredentialStatusResponse(BaseModel):
+    """GET /auth/credentials/{source_id}/status レスポンスボディ。"""
+
+    source_id: str
+    configured: bool
+
+
 @router.post(
     "/credentials",
     response_model=CredentialsResponse,
@@ -88,4 +95,34 @@ def post_credentials(
     return CredentialsResponse(
         source_id=body.source_id,
         message=f"'{body.source_id}' の APIキーを設定しました。",
+    )
+
+
+@router.get(
+    "/credentials/{source_id}/status",
+    response_model=CredentialStatusResponse,
+    status_code=status.HTTP_200_OK,
+    summary="APIキーの設定状態を確認する",
+    description=(
+        "指定したデータソースの APIキーが設定済みかどうかを返します。"
+        "APIキー自体は返しません。"
+        "未知の source_id も 200 + configured: false を返します。"
+    ),
+)
+def get_credential_status(
+    source_id: str,
+    store: CredentialStore = Depends(get_credential_store),
+) -> CredentialStatusResponse:
+    """APIキーの設定状態を返す。
+
+    Args:
+        source_id: データソース識別子
+        store: 依存注入された CredentialStore
+
+    Returns:
+        CredentialStatusResponse（api_key は含まない）
+    """
+    return CredentialStatusResponse(
+        source_id=source_id,
+        configured=store.has(source_id),
     )

@@ -1,4 +1,4 @@
-# アーキテクチャ — OpenHub Bypass Phase 1
+# アーキテクチャ — OpenHub Bypass
 
 ## ディレクトリ構成
 
@@ -63,9 +63,11 @@ _CONNECTOR_FACTORIES: dict[str, type] = {
 
 ### BYOK モデル
 
-APIキーはサーバー側に永続化しない。リクエストごとに `X-` ヘッダーまたは
+APIキー（e-Stat はアプリケーションID）はサーバー側に永続化しない。
 `POST /auth/credentials` で登録したインメモリストアから取得する。
 プロセス再起動でリセットされる。
+
+キー登録時は検索キャッシュを全クリアする（キャッシュポイズニング防止）。
 
 ### InMemoryCache
 
@@ -97,11 +99,12 @@ httpx.Response(404)    → DatasetNotFoundError  → 404 Not Found
 `shapefile` / `binary` フォーマットは `base64.b64encode` してレスポンスに含める。
 `PayloadResponse.data_encoding` フィールドでクライアントがデコード方式を判断できる。
 
-## 既知の制限（Phase 1）
+## 既知の制限
 
 | 制限 | 内容 | 対応予定 |
 |------|------|---------|
-| `total` が返却件数 | 全ヒット件数は未取得 | Phase 2 |
-| datagojp fetch がメタデータを返す | `package_show` の結果のみ | Phase 2 |
+| `total` が返却件数 | 全ヒット件数は未取得（ページネーション未実装） | Phase 3 |
+| datagojp fetch がメタデータを返す | `package_show` の結果のみ | Phase 3 |
 | シングルワーカー専用 | CredentialStore がプロセス内シングルトン | Phase 3 |
-| fetch キャッシュなし | 同一 ID へのリクエストが毎回上流へ | Phase 2 |
+| fetch キャッシュなし | 同一 ID へのリクエストが毎回上流へ | Phase 3 |
+| APIキー永続化なし | Bypass 再起動でリセット | Phase 3 |

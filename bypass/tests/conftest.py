@@ -13,6 +13,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api.datasets import _search_cache
+from core.credentials import _credential_store
 from core.models import DatasetMetadata, DatasetPayload
 
 # フィクスチャデータのディレクトリ
@@ -29,6 +30,14 @@ def clear_search_cache():
     _search_cache.clear()
     yield
     _search_cache.clear()
+
+
+@pytest.fixture(autouse=True)
+def clear_credential_store():
+    """各テストの前後に CredentialStore をクリアする。"""
+    _credential_store._keys = {}
+    yield
+    _credential_store._keys = {}
 
 
 # ---------------------------------------------------------------------------

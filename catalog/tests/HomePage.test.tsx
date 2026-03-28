@@ -10,6 +10,11 @@ vi.mock("next/navigation", () => ({
 vi.mock("../lib/api", () => ({
   searchDatasets: vi.fn(),
   browseByCategory: vi.fn(),
+  getCredentialStatus: vi.fn().mockResolvedValue(true),
+}));
+
+vi.mock("../components/EStatBanner", () => ({
+  default: () => null,
 }));
 
 import { browseByCategory } from "../lib/api";

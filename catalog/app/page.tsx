@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import SearchBar from "../components/SearchBar";
 import CategoryTabs from "../components/CategoryTabs";
 import DatasetBrowser from "../components/DatasetBrowser";
+import EStatBanner from "../components/EStatBanner";
 import SkeletonCard from "../components/SkeletonCard";
 
 interface HomePageProps {
@@ -42,6 +43,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       </div>
 
       <div className="mx-auto max-w-5xl w-full px-4 py-8">
+        <EStatBanner />
         <CategoryTabs currentCategory={category} />
         <Suspense fallback={<SkeletonGrid />}>
           <DatasetBrowser category={category} />

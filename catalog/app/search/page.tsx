@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import SearchBar from "../../components/SearchBar";
 import SourceFilterTabs from "../../components/SourceFilterTabs";
 import SearchResults from "../../components/SearchResults";
+import EStatBanner from "../../components/EStatBanner";
 import SkeletonCard from "../../components/SkeletonCard";
 
 
@@ -27,6 +28,7 @@ export default async function SearchResultsPage({ searchParams }: SearchPageProp
       <div className="mb-6">
         <SearchBar initialQuery={q} />
       </div>
+      <EStatBanner />
       <div className="mb-4">
         <SourceFilterTabs currentSource={source} currentQuery={q} />
       </div>

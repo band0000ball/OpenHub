@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OpenHub Catalog — Phase 2
 
-## Getting Started
+日本の行政オープンデータを横断検索できる WebUI。
+[OpenHub Bypass](../bypass/) REST API の BFF（フロントエンド）として動作する。
 
-First, run the development server:
+## 概要
+
+- カテゴリタブ付きデータセット一覧（トップページ）
+- キーワード検索（全ソース横断）
+- データセット詳細ページ
+- e-Stat アプリケーションID 設定ページ（Catalog から Bypass に登録）
+
+## セットアップ
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd catalog
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`.env.local` に Bypass の URL を設定:
+```
+BYPASS_BASE_URL=http://127.0.0.1:8000
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 起動
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+事前に OpenHub Bypass を起動しておく:
+```bash
+# bypass/ で
+python main.py
+```
 
-## Learn More
+Catalog を起動:
+```bash
+# catalog/ で
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+http://localhost:3000 でアクセス。
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 主要ページ
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| URL | 説明 |
+|-----|------|
+| `/` | トップ：カテゴリタブ＋データセット一覧 |
+| `/?category=population` | カテゴリ絞り込み（人口・世帯） |
+| `/search?q=<keyword>` | キーワード検索結果 |
+| `/datasets/<id>` | データセット詳細 |
+| `/settings` | e-Stat アプリケーションID 設定 |
 
-## Deploy on Vercel
+## カテゴリ一覧
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| id | ラベル | キーワード |
+|----|--------|-----------|
+| `all` | 全て | （並列フェッチ） |
+| `population` | 人口・世帯 | 人口 |
+| `economy` | 経済・産業 | 経済 |
+| `environment` | 環境・気象 | 環境 |
+| `education` | 教育・文化 | 教育 |
+| `healthcare` | 医療・福祉 | 医療 |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## テスト
+
+```bash
+npm test              # Vitest（ユニット）
+npm run test:e2e      # Playwright（E2E）
+```
+
+## 技術スタック
+
+- Next.js 15 App Router
+- TypeScript
+- Tailwind CSS
+- Vitest + React Testing Library（ユニット）
+- Playwright（E2E）
