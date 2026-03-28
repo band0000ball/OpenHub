@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "result": {
+    "id": "test-population-dataset-001",
+    "name": "population-2020",
+    "title": "令和2年 人口統計データ",
+    "notes": "2020年時点の全国人口統計データセット。都道府県別の詳細データを含む。",
+    "url": "https://www.data.go.jp/data/dataset/population-2020",
+    "metadata_created": "2021-04-01T00:00:00.000000",
+    "metadata_modified": "2024-01-10T09:00:00.000000",
+    "organization": {
+      "id": "org-001",
+      "name": "mlit",
+      "title": "国土交通省"
+    },
+    "tags": [
+      {"id": "tag-001", "name": "人口"},
+      {"id": "tag-002", "name": "統計"},
+      {"id": "tag-003", "name": "2020年"}
+    ],
+    "resources": [
+      {
+        "id": "res-001",
+        "url": "https://www.data.go.jp/data/dataset/population-2020/resource/res-001",
+        "format": "CSV",
+        "name": "人口統計CSV",
+        "last_modified": "2024-01-10T09:00:00.000000"
+      }
+    ],
+    "extras": []
+  }
+}

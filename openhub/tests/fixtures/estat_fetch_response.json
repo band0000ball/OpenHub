@@ -1,0 +1,63 @@
+{
+  "GET_STATS_DATA": {
+    "RESULT": {
+      "STATUS": 0,
+      "ERROR_MSG": "正常終了",
+      "DATE": "2024-01-15T10:00:00.000+09:00"
+    },
+    "PARAMETER": {
+      "LANG": "J",
+      "STATS_DATA_ID": "0003191203",
+      "DATA_FORMAT": "J",
+      "START_POSITION": 1,
+      "METAGET_FLG": "Y"
+    },
+    "STATISTICAL_DATA": {
+      "RESULT_INF": {
+        "FROM_NUMBER": 1,
+        "TO_NUMBER": 5,
+        "NEXT_KEY": 6
+      },
+      "TABLE_INF": {
+        "@id": "0003191203",
+        "STAT_NAME": {
+          "@code": "00200521",
+          "$": "国勢調査"
+        },
+        "GOV_ORG": {
+          "@code": "00200",
+          "$": "総務省"
+        },
+        "STATISTICS_NAME": "令和2年国勢調査　人口等基本集計",
+        "TITLE": "人口・世帯 人口推計",
+        "CYCLE": "5年",
+        "SURVEY_DATE": "202010",
+        "OPEN_DATE": "2021-11-30",
+        "UPDATED_DATE": "2022-02-15"
+      },
+      "CLASS_INF": {
+        "CLASS_OBJ": [
+          {
+            "@id": "tab",
+            "@name": "表章項目",
+            "CLASS": [
+              {"@code": "010", "@name": "人口", "@level": "1", "@unit": "人"},
+              {"@code": "020", "@name": "男", "@level": "2", "@unit": "人"},
+              {"@code": "030", "@name": "女", "@level": "2", "@unit": "人"}
+            ]
+          }
+        ]
+      },
+      "DATA_INF": {
+        "NOTE": "",
+        "VALUE": [
+          {"@tab": "010", "@cat01": "00", "$": "125708000"},
+          {"@tab": "020", "@cat01": "00", "$": "61350000"},
+          {"@tab": "030", "@cat01": "00", "$": "64358000"},
+          {"@tab": "010", "@cat01": "01", "$": "1068027"},
+          {"@tab": "020", "@cat01": "01", "$": "548542"}
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "GET_STATS_LIST": {
+    "RESULT": {
+      "STATUS": 0,
+      "ERROR_MSG": "正常終了",
+      "DATE": "2024-01-15T10:00:00.000+09:00"
+    },
+    "PARAMETER": {
+      "SEARCH_WORD": "人口",
+      "LANG": "J",
+      "CNT": 5,
+      "START_POSITION": 1
+    },
+    "DATALIST_INF": {
+      "NUMBER": 3,
+      "RESULT_INF": {
+        "FROM_NUMBER": 1,
+        "TO_NUMBER": 3
+      },
+      "TABLE_INF": [
+        {
+          "@id": "0003191203",
+          "STAT_NAME": {
+            "@code": "00200521",
+            "$": "国勢調査"
+          },
+          "GOV_ORG": {
+            "@code": "00200",
+            "$": "総務省"
+          },
+          "STATISTICS_NAME": "令和2年国勢調査　人口等基本集計",
+          "TITLE": {
+            "@no": "1",
+            "$": "人口・世帯 人口推計"
+          },
+          "CYCLE": "5年",
+          "SURVEY_DATE": "202010",
+          "OPEN_DATE": "2021-11-30",
+          "SMALL_AREA": 0,
+          "COLLECT_AREA": "全国",
+          "MAIN_CATEGORY": {
+            "@code": "02",
+            "$": "人口・世帯"
+          },
+          "SUB_CATEGORY": {
+            "@code": "01",
+            "$": "人口"
+          },
+          "OVERALL_TOTAL_NUMBER": 1945,
+          "UPDATED_DATE": "2022-02-15",
+          "STATISTICS_NAME_SPEC": {
+            "TABULATION_CATEGORY": "人口等基本集計",
+            "TABULATION_SUB_CATEGORY1": "全国"
+          },
+          "DESCRIPTION": "",
+          "TITLE_SPEC": {
+            "TABLE_CATEGORY": "人口・世帯",
+            "TABLE_NAME": "人口推計"
+          }
+        },
+        {
+          "@id": "0003191204",
+          "STAT_NAME": {
+            "@code": "00200521",
+            "$": "国勢調査"
+          },
+          "GOV_ORG": {
+            "@code": "00200",
+            "$": "総務省"
+          },
+          "STATISTICS_NAME": "令和2年国勢調査　人口等基本集計",
+          "TITLE": {
+            "@no": "2",
+            "$": "年齢・男女別人口"
+          },
+          "CYCLE": "5年",
+          "SURVEY_DATE": "202010",
+          "OPEN_DATE": "2021-11-30",
+          "SMALL_AREA": 0,
+          "COLLECT_AREA": "全国",
+          "MAIN_CATEGORY": {
+            "@code": "02",
+            "$": "人口・世帯"
+          },
+          "SUB_CATEGORY": {
+            "@code": "01",
+            "$": "人口"
+          },
+          "OVERALL_TOTAL_NUMBER": 2341,
+          "UPDATED_DATE": "2022-02-15",
+          "STATISTICS_NAME_SPEC": {
+            "TABULATION_CATEGORY": "人口等基本集計",
+            "TABULATION_SUB_CATEGORY1": "全国"
+          },
+          "DESCRIPTION": "",
+          "TITLE_SPEC": {
+            "TABLE_CATEGORY": "人口・世帯",
+            "TABLE_NAME": "年齢・男女別人口"
+          }
+        },
+        {
+          "@id": "0003191205",
+          "STAT_NAME": {
+            "@code": "00200521",
+            "$": "国勢調査"
+          },
+          "GOV_ORG": {
+            "@code": "00200",
+            "$": "総務省"
+          },
+          "STATISTICS_NAME": "令和2年国勢調査　人口等基本集計",
+          "TITLE": {
+            "@no": "3",
+            "$": "世帯の種類・世帯員数別世帯数"
+          },
+          "CYCLE": "5年",
+          "SURVEY_DATE": "202010",
+          "OPEN_DATE": "2021-11-30",
+          "SMALL_AREA": 0,
+          "COLLECT_AREA": "全国",
+          "MAIN_CATEGORY": {
+            "@code": "02",
+            "$": "人口・世帯"
+          },
+          "SUB_CATEGORY": {
+            "@code": "02",
+            "$": "世帯"
+          },
+          "OVERALL_TOTAL_NUMBER": 876,
+          "UPDATED_DATE": "2022-02-15",
+          "STATISTICS_NAME_SPEC": {
+            "TABULATION_CATEGORY": "人口等基本集計",
+            "TABULATION_SUB_CATEGORY1": "全国"
+          },
+          "DESCRIPTION": "",
+          "TITLE_SPEC": {
+            "TABLE_CATEGORY": "人口・世帯",
+            "TABLE_NAME": "世帯の種類"
+          }
+        }
+      ]
+    }
+  }
+}

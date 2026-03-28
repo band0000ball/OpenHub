@@ -1,0 +1,68 @@
+{
+  "success": true,
+  "result": {
+    "count": 2,
+    "sort": "score desc, metadata_modified desc",
+    "facets": {},
+    "results": [
+      {
+        "id": "test-population-dataset-001",
+        "name": "population-2020",
+        "title": "令和2年 人口統計データ",
+        "notes": "2020年時点の全国人口統計データセット。都道府県別の詳細データを含む。",
+        "url": "https://www.data.go.jp/data/dataset/population-2020",
+        "metadata_created": "2021-04-01T00:00:00.000000",
+        "metadata_modified": "2024-01-10T09:00:00.000000",
+        "organization": {
+          "id": "org-001",
+          "name": "mlit",
+          "title": "国土交通省"
+        },
+        "tags": [
+          {"id": "tag-001", "name": "人口"},
+          {"id": "tag-002", "name": "統計"},
+          {"id": "tag-003", "name": "2020年"}
+        ],
+        "resources": [
+          {
+            "id": "res-001",
+            "url": "https://www.data.go.jp/data/dataset/population-2020/resource/res-001",
+            "format": "CSV",
+            "name": "人口統計CSV",
+            "last_modified": "2024-01-10T09:00:00.000000"
+          }
+        ],
+        "extras": []
+      },
+      {
+        "id": "test-population-dataset-002",
+        "name": "population-forecast-2025",
+        "title": "2025年 人口推計データ",
+        "notes": "2025年の全国人口推計データセット。",
+        "url": "https://www.data.go.jp/data/dataset/population-forecast-2025",
+        "metadata_created": "2022-03-15T00:00:00.000000",
+        "metadata_modified": "2023-12-20T12:00:00.000000",
+        "organization": {
+          "id": "org-002",
+          "name": "cao",
+          "title": "内閣府"
+        },
+        "tags": [
+          {"id": "tag-001", "name": "人口"},
+          {"id": "tag-004", "name": "推計"},
+          {"id": "tag-005", "name": "2025年"}
+        ],
+        "resources": [
+          {
+            "id": "res-002",
+            "url": "https://www.data.go.jp/data/dataset/population-forecast-2025/resource/res-002",
+            "format": "JSON",
+            "name": "人口推計JSON",
+            "last_modified": "2023-12-20T12:00:00.000000"
+          }
+        ],
+        "extras": []
+      }
+    ]
+  }
+}
