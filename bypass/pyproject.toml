@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "openhub-bypass"
@@ -20,6 +20,10 @@ dev = [
     "pytest-asyncio>=0.23.0",
     "respx>=0.21.0",
 ]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["api*", "core*", "connectors*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

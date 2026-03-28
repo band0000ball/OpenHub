@@ -79,6 +79,10 @@ class DataGoJpConnector:
 
         _raise_for_upstream_error(response)
 
+        content_type = response.headers.get("content-type", "")
+        if not response.content or "json" not in content_type:
+            return []
+
         return _parse_search_response(response.json())
 
     def fetch(self, dataset_id: str, api_key: str | None) -> DatasetPayload:
@@ -143,12 +147,16 @@ def _parse_fetch_response(dataset_id: str, response: httpx.Response) -> DatasetP
     注意: data フィールドには package_show のレスポンス全体（メタデータ）が入る。
     実データファイルの取得は Phase 2 で resources[].url への別途リクエストとして実装予定。
     """
-    body = response.json()
-    pkg = body.get("result", {})
+    content_type = response.headers.get("content-type", "")
+    if not response.content or "json" not in content_type:
+        pkg: dict = {}
+    else:
+        body = response.json()
+        pkg = body.get("result", {})
     metadata = _ckan_package_to_metadata(pkg, override_id=dataset_id)
 
     # リソースからフォーマットを推定
-    resources = pkg.get("resources", [])
+    resources: list = pkg.get("resources", [])
     fmt = _infer_format(resources[0].get("format", "") if resources else "")
 
     return DatasetPayload(
