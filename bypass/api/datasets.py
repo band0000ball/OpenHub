@@ -47,6 +47,11 @@ _search_cache: InMemoryCache[list[DatasetMetadata]] = InMemoryCache(
     ttl_seconds=_SEARCH_CACHE_TTL
 )
 
+
+def get_search_cache() -> InMemoryCache[list[DatasetMetadata]]:
+    """検索キャッシュを返す（auth エンドポイントからのクリア用）。"""
+    return _search_cache
+
 # 有効な source_id のセット
 VALID_SOURCES = frozenset(["estat", "datagojp"])
 
@@ -171,6 +176,15 @@ def search_all_sources(
                     "event": "search_skipped",
                     "source_id": connector.source_id,
                     "reason": "api_key_not_configured",
+                })
+            )
+        except (UpstreamTimeoutError, UpstreamRateLimitError) as exc:
+            # 上流エラーは警告ログを残して続行（他ソースの結果は返す）
+            logger.warning(
+                json.dumps({
+                    "event": "search_upstream_error",
+                    "source_id": connector.source_id,
+                    "reason": str(exc),
                 })
             )
 

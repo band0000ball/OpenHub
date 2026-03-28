@@ -143,7 +143,7 @@ class TestConnectorServerErrors:
     def test_datagojp_500エラーでUpstreamTimeoutErrorを発生させる(self):
         """data.go.jp が 500 を返した場合 UpstreamTimeoutError を発生させる。"""
         from connectors.datagojp import DataGoJpConnector
-        respx.get("https://www.data.go.jp/api/3/action/package_search").mock(
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
             return_value=httpx.Response(503, json={"error": "service unavailable"})
         )
         connector = DataGoJpConnector()
@@ -167,7 +167,7 @@ class TestConnectorServerErrors:
     def test_datagojp_fetch_500エラーでUpstreamTimeoutErrorを発生させる(self):
         """data.go.jp fetch が 500 を返した場合 UpstreamTimeoutError を発生させる。"""
         from connectors.datagojp import DataGoJpConnector
-        respx.get("https://www.data.go.jp/api/3/action/package_show").mock(
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_show").mock(
             return_value=httpx.Response(503)
         )
         connector = DataGoJpConnector()

@@ -11,6 +11,7 @@ POST /auth/credentials エンドポイント
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
+from api.datasets import get_search_cache
 from core.credentials import CredentialStore, get_credential_store
 
 router = APIRouter(prefix="/auth", tags=["認証"])
@@ -79,6 +80,10 @@ def post_credentials(
 
     # APIキーを保存（api_key の値はログに出力しない）
     store.set(body.source_id, body.api_key)
+
+    # APIキー変更後は検索キャッシュを全クリアする
+    # （古いキャッシュに空の検索結果が残り、新しいキーが反映されないのを防ぐ）
+    get_search_cache().clear()
 
     return CredentialsResponse(
         source_id=body.source_id,
