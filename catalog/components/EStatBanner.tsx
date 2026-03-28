@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { auth } from "../auth";
 import { getCredentialStatus } from "../lib/api";
 
 export default async function EStatBanner() {
-  const configured = await getCredentialStatus("estat");
+  const session = await auth();
+  const configured = await getCredentialStatus("estat", session?.accessToken);
   if (configured) return null;
 
   return (

@@ -12,6 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 
 from api.datasets import get_search_cache
+from core.auth import get_current_user
 from core.credentials import CredentialStore, get_credential_store
 
 router = APIRouter(prefix="/auth", tags=["認証"])
@@ -64,6 +65,8 @@ class CredentialStatusResponse(BaseModel):
 )
 def post_credentials(
     body: CredentialsRequest,
+    # Sprint 3.1: user_id を受け取るが Sprint 3.2 でユーザー分離を実装するまで未使用
+    user_id: str = Depends(get_current_user),  # noqa: ARG001
     store: CredentialStore = Depends(get_credential_store),
 ) -> CredentialsResponse:
     """APIキーを登録する。
@@ -111,6 +114,8 @@ def post_credentials(
 )
 def get_credential_status(
     source_id: str,
+    # Sprint 3.1: user_id を受け取るが Sprint 3.2 でユーザー分離を実装するまで未使用
+    user_id: str = Depends(get_current_user),  # noqa: ARG001
     store: CredentialStore = Depends(get_credential_store),
 ) -> CredentialStatusResponse:
     """APIキーの設定状態を返す。

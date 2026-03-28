@@ -71,4 +71,32 @@ describe("getCredentialStatus", () => {
     const calledUrl = mockFetch.mock.calls[0][0] as string;
     expect(calledUrl).toContain("/auth/credentials/estat/status");
   });
+
+  it("sends Authorization header when accessToken is provided", async () => {
+    const mockFetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ source_id: "estat", configured: true }),
+    });
+    vi.stubGlobal("fetch", mockFetch);
+
+    await getCredentialStatus("estat", "my-access-token");
+
+    const calledInit = mockFetch.mock.calls[0][1] as RequestInit;
+    const headers = calledInit.headers as Record<string, string>;
+    expect(headers["Authorization"]).toBe("Bearer my-access-token");
+  });
+
+  it("does not send Authorization header when accessToken is not provided", async () => {
+    const mockFetch = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ source_id: "estat", configured: false }),
+    });
+    vi.stubGlobal("fetch", mockFetch);
+
+    await getCredentialStatus("estat");
+
+    const calledInit = mockFetch.mock.calls[0][1] as RequestInit;
+    const headers = calledInit.headers as Record<string, string>;
+    expect(headers["Authorization"]).toBeUndefined();
+  });
 });

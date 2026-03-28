@@ -1,6 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
+import type { Session } from "next-auth";
 import EStatBanner from "../components/EStatBanner";
+
+// vi.hoisted で巻き上げ：vi.mock ファクトリ内から参照するため
+const { mockAuth } = vi.hoisted(() => ({
+  mockAuth: vi.fn<() => Promise<Session | null>>(),
+}));
+
+vi.mock("../auth", () => ({
+  auth: mockAuth,
+  signIn: vi.fn(),
+  signOut: vi.fn(),
+  handlers: { GET: vi.fn(), POST: vi.fn() },
+}));
 
 vi.mock("../lib/api", () => ({
   searchDatasets: vi.fn(),
@@ -15,6 +28,8 @@ const mockGetCredentialStatus = vi.mocked(getCredentialStatus);
 describe("EStatBanner", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // デフォルト: 未認証
+    mockAuth.mockResolvedValue(null);
   });
 
   it("shows banner when e-Stat key is not configured", async () => {
@@ -46,11 +61,27 @@ describe("EStatBanner", () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it("calls getCredentialStatus with 'estat'", async () => {
+  it("calls getCredentialStatus with 'estat' and undefined when unauthenticated", async () => {
     mockGetCredentialStatus.mockResolvedValueOnce(false);
 
     await EStatBanner();
 
-    expect(mockGetCredentialStatus).toHaveBeenCalledWith("estat");
+    expect(mockGetCredentialStatus).toHaveBeenCalledWith("estat", undefined);
+  });
+
+  it("passes accessToken to getCredentialStatus when authenticated", async () => {
+    mockAuth.mockResolvedValueOnce({
+      user: { name: "test-user" },
+      expires: "2099-01-01",
+      accessToken: "cognito-access-token-xyz",
+    } as Session & { accessToken: string });
+    mockGetCredentialStatus.mockResolvedValueOnce(true);
+
+    await EStatBanner();
+
+    expect(mockGetCredentialStatus).toHaveBeenCalledWith(
+      "estat",
+      "cognito-access-token-xyz",
+    );
   });
 });
