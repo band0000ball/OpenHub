@@ -17,7 +17,7 @@
 ## セットアップ
 
 ```bash
-cd openhub
+cd bypass
 pip install -e ".[dev]"
 ```
 

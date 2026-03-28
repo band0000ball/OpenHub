@@ -3,7 +3,7 @@
 ## ディレクトリ構成
 
 ```
-openhub/
+bypass/
 ├── main.py                  # FastAPI アプリファクトリ・エントリーポイント
 ├── api/
 │   ├── auth.py              # POST/DELETE /auth/credentials
