@@ -42,7 +42,8 @@ API ドキュメント（Swagger UI）: http://127.0.0.1:8000/docs
 ### 認証
 
 ```
-POST /auth/credentials    APIキー（アプリケーションID）を登録する（登録後はキャッシュが自動クリア）
+POST /auth/credentials                        APIキー（アプリケーションID）を登録する（登録後はキャッシュが自動クリア）
+GET  /auth/credentials/{source_id}/status     APIキーの設定状態を確認する（configured: bool のみ返す）
 ```
 
 **リクエスト例（e-Stat のアプリケーションIDを登録）:**
