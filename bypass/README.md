@@ -1,4 +1,4 @@
-# OpenHub Bypass — Phase 1
+# OpenHub Bypass
 
 日本の行政オープンデータを横断検索・取得する REST API ゲートウェイ。
 
@@ -7,12 +7,14 @@
 複数の行政オープンデータポータルを統一 API で横断検索し、データを取得できる。
 **BYOK（Bring Your Own Key）モデル**：APIキーはサーバーに永続化せず、セッション内でのみ保持。
 
-## 対応データソース（Phase 1）
+OpenHub Catalog（Next.js WebUI）と連携して動作する BFF（Backend for Frontend）。
+
+## 対応データソース
 
 | ソース | source_id | 認証 | 説明 |
 |--------|-----------|------|------|
-| e-Stat 政府統計の総合窓口 | `estat` | APIキー必須 | 国勢調査・経済統計等 |
-| data.go.jp 政府オープンデータ | `datagojp` | 不要 | CKAN ベースの汎用ポータル |
+| e-Stat 政府統計の総合窓口 | `estat` | アプリケーションID 必須 | 国勢調査・経済統計等 |
+| data.go.jp 政府オープンデータ | `datagojp` | 不要 | CKAN ベースの汎用ポータル（data.e-gov.go.jp） |
 
 ## セットアップ
 
@@ -24,7 +26,7 @@ pip install -e ".[dev]"
 ## 起動
 
 ```bash
-# Phase 1: ローカル専用（シングルワーカー）
+# ローカル専用（シングルワーカー）
 python main.py
 # または
 uvicorn main:app --host 127.0.0.1 --port 8000 --workers 1
@@ -40,16 +42,16 @@ API ドキュメント（Swagger UI）: http://127.0.0.1:8000/docs
 ### 認証
 
 ```
-POST   /auth/credentials          APIキーを登録する
-DELETE /auth/credentials/{id}     APIキーを削除する
+POST /auth/credentials                        APIキー（アプリケーションID）を登録する（登録後はキャッシュが自動クリア）
+GET  /auth/credentials/{source_id}/status     APIキーの設定状態を確認する（configured: bool のみ返す）
 ```
 
-**リクエスト例（e-Stat のキーを登録）:**
+**リクエスト例（e-Stat のアプリケーションIDを登録）:**
 ```json
 POST /auth/credentials
 {
   "source_id": "estat",
-  "api_key": "your_estat_api_key"
+  "api_key": "your_estat_application_id"
 }
 ```
 
@@ -68,10 +70,6 @@ GET /datasets/{id}/fetch          データセット取得
 | `limit` | int | 20 | 取得件数（1〜100） |
 | `offset` | int | 0 | オフセット |
 
-**SearchResponse の `total` について:**
-現フェーズでは `total` は**返却件数**（= `len(items)`）を示す。
-全ヒット件数ではない。ページネーション対応は Phase 2 で実装予定。
-
 **dataset_id フォーマット:**
 ```
 {source_id}:{original_id}
@@ -79,9 +77,8 @@ GET /datasets/{id}/fetch          データセット取得
     datagojp:mlit-test-dataset
 ```
 
-**data.go.jp の fetch について:**
-`/fetch` エンドポイントは現在 CKAN の `package_show` レスポンス（メタデータ）を返す。
-実データファイルの直接取得は Phase 2 で `resources[].url` への別途リクエストとして実装予定。
+**SearchResponse の `total` について:**
+現在 `total` は**返却件数**（= `len(items)`）を示す。全ヒット件数ではない。
 
 ## テスト
 
@@ -99,7 +96,7 @@ ESTAT_API_KEY=your_key pytest tests/ -m integration
 
 | フェーズ | 内容 |
 |---------|------|
-| Phase 1 | e-Stat + data.go.jp（本リリース） |
-| Phase 2 | 国土数値情報 + WebUI（OpenHub Catalog） |
-| Phase 3 | e-Gov 法令 + e-Gov パブコメ |
+| Phase 1 | e-Stat + data.go.jp（リリース済み） |
+| Phase 2 | Catalog WebUI との連携・バグ修正群（リリース済み） |
+| Phase 3 | 国土数値情報 + e-Gov 法令 |
 | Phase 4 | RESAS + 気象データ（JMA） |

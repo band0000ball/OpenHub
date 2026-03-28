@@ -60,6 +60,30 @@ export async function browseByCategory(categoryId: string): Promise<DatasetMetad
   return result.items;
 }
 
+const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
+
+export async function getCredentialStatus(
+  sourceId: string,
+  accessToken?: string,
+): Promise<boolean> {
+  const baseUrl = process.env.BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
+  const headers: Record<string, string> = {};
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  }
+  try {
+    const response = await fetch(
+      `${baseUrl}/auth/credentials/${encodeURIComponent(sourceId)}/status`,
+      { cache: "no-store", headers },
+    );
+    if (!response.ok) return false;
+    const data = (await response.json()) as { configured: boolean };
+    return data.configured;
+  } catch {
+    return false;
+  }
+}
+
 export async function fetchDataset(id: string): Promise<PayloadResponse> {
   const url = `${getBaseUrl()}/api/datasets/${encodeURIComponent(id)}`;
   const response = await fetch(url, { cache: "no-store" });

@@ -106,3 +106,41 @@ class TestPostAuthCredentials:
             json={"source_id": "datagojp", "api_key": "optional_key"},
         )
         assert response.status_code == 200
+
+
+class TestGetCredentialStatus:
+    """GET /auth/credentials/{source_id}/status エンドポイントのテスト。"""
+
+    def test_未設定のsource_idでconfigured_falseを返す(self, client: TestClient):
+        """キーが未登録の source_id は configured: false を返す。"""
+        response = client.get("/auth/credentials/estat/status")
+        assert response.status_code == 200
+        assert response.json()["configured"] is False
+        assert response.json()["source_id"] == "estat"
+
+    def test_設定済みのsource_idでconfigured_trueを返す(self, client: TestClient):
+        """キーが登録済みの source_id は configured: true を返す。"""
+        client.post(
+            "/auth/credentials",
+            json={"source_id": "estat", "api_key": "test_key"},
+        )
+        response = client.get("/auth/credentials/estat/status")
+        assert response.status_code == 200
+        assert response.json()["configured"] is True
+
+    def test_未知のsource_idでもconfigured_falseを返す(self, client: TestClient):
+        """VALID_SOURCE_IDS に存在しない source_id も 200 + configured: false を返す。"""
+        response = client.get("/auth/credentials/unknown/status")
+        assert response.status_code == 200
+        assert response.json()["configured"] is False
+
+    def test_レスポンスにAPIキーを含まない(self, client: TestClient):
+        """configured: true のときもレスポンスに api_key を含めない。"""
+        client.post(
+            "/auth/credentials",
+            json={"source_id": "estat", "api_key": "secret_key_value"},
+        )
+        response = client.get("/auth/credentials/estat/status")
+        body = response.json()
+        assert "secret_key_value" not in str(body)
+        assert "api_key" not in body

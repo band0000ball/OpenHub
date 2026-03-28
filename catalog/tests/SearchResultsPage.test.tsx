@@ -12,6 +12,11 @@ vi.mock("next/navigation", () => ({
 // Mock the lib/api module
 vi.mock("../lib/api", () => ({
   searchDatasets: vi.fn(),
+  getCredentialStatus: vi.fn().mockResolvedValue(true),
+}));
+
+vi.mock("../components/EStatBanner", () => ({
+  default: () => null,
 }));
 
 import { searchDatasets } from "../lib/api";

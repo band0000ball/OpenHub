@@ -13,6 +13,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api.datasets import _search_cache
+from core.credentials import _credential_store
 from core.models import DatasetMetadata, DatasetPayload
 
 # フィクスチャデータのディレクトリ
@@ -29,6 +30,14 @@ def clear_search_cache():
     _search_cache.clear()
     yield
     _search_cache.clear()
+
+
+@pytest.fixture(autouse=True)
+def clear_credential_store():
+    """各テストの前後に CredentialStore をクリアする。"""
+    _credential_store._keys = {}
+    yield
+    _credential_store._keys = {}
 
 
 # ---------------------------------------------------------------------------
@@ -67,9 +76,18 @@ def sample_payload(sample_metadata: DatasetMetadata) -> DatasetPayload:
 
 @pytest.fixture
 def app():
-    """テスト用 FastAPI アプリケーション。"""
+    """テスト用 FastAPI アプリケーション。
+
+    get_current_user をオーバーライドして JWT 検証をスキップする。
+    Sprint 3.1 で追加した認証ガードにより、認証なしの既存テストが壊れないようにする。
+    """
+    from core.auth import get_current_user
     from main import create_app
-    return create_app()
+
+    app = create_app()
+    # テスト用固定ユーザー ID を返す（実際の JWT 検証は test_core_auth.py でテスト済み）
+    app.dependency_overrides[get_current_user] = lambda: "test_user"
+    return app
 
 
 @pytest.fixture
