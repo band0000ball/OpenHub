@@ -27,6 +27,7 @@ from connectors.datagojp import DataGoJpConnector
 from connectors.estat import EStatConnector
 from core.cache import InMemoryCache
 from core.connector import DataSourceConnector
+from core.auth import get_current_user_optional
 from core.credentials import CredentialStore, get_credential_store
 from core.errors import (
     AuthenticationError,
@@ -123,6 +124,7 @@ def get_datasets_search(
     source: str | None = Query(None, description="ソース絞り込み（例: 'estat'）"),
     limit: int = Query(20, ge=1, le=100, description="取得件数（1〜100）"),
     offset: int = Query(0, ge=0, description="オフセット（0以上）"),
+    user_id: str | None = Depends(get_current_user_optional),
     store: CredentialStore = Depends(get_credential_store),
 ) -> SearchResponse:
     """全ソースを横断検索する。キャッシュヒット時は上流に問い合わせない。
@@ -143,7 +145,7 @@ def get_datasets_search(
         _log_access(request, query=q, source_id=source or "all", x_source="cache")
         return _build_search_response(cached, limit, offset)
 
-    results = search_all_sources(q, source, limit, offset, store)
+    results = search_all_sources(q, source, limit, offset, store, user_id)
 
     _search_cache.set(cache_key, results)
     _log_access(request, query=q, source_id=source or "all", x_source="upstream")
@@ -157,12 +159,13 @@ def search_all_sources(
     limit: int,
     offset: int,
     store: CredentialStore,
+    user_id: str | None = None,
 ) -> list[DatasetMetadata]:
     """指定ソース（または全ソース）を検索して結果を返す。
 
     テストから直接モック可能な独立関数として定義する。
     """
-    connectors = _build_connectors(source, store)
+    connectors = _build_connectors(source, store, user_id)
     filters = {"limit": limit, "offset": offset}
     results: list[DatasetMetadata] = []
 
@@ -203,6 +206,7 @@ def search_all_sources(
 def get_dataset_fetch(
     request: Request,
     dataset_id: str,
+    user_id: str | None = Depends(get_current_user_optional),
     store: CredentialStore = Depends(get_credential_store),
 ) -> PayloadResponse:
     """指定データセットを上流 API から取得する。
@@ -224,7 +228,7 @@ def get_dataset_fetch(
         )
 
     source_id = dataset_id.split(":")[0]
-    api_key = store.get(source_id)
+    api_key = store.get(user_id, source_id)
 
     payload = fetch_dataset(dataset_id, source_id, api_key)
     _log_access(request, dataset_id=dataset_id, source_id=source_id, x_source="upstream")
@@ -260,6 +264,7 @@ def fetch_dataset(
 def _build_connectors(
     source: str | None,
     store: CredentialStore,
+    user_id: str | None = None,
 ) -> list[DataSourceConnector]:
     """使用するコネクターのリストを構築する。"""
     factories = (
@@ -271,7 +276,7 @@ def _build_connectors(
     connectors = []
     for source_id, factory in factories.items():
         connector = factory()
-        connector.initialize(store.get(source_id))
+        connector.initialize(store.get(user_id, source_id))
         connectors.append(connector)
 
     return connectors

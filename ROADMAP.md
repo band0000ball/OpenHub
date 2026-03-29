@@ -46,17 +46,19 @@
 
 ---
 
-## 📋 Phase 3 — 安定化・UX 改善
+## Phase 3 — 認証・安定化・UX 改善
 
-**目標**: 日常利用に耐える品質と UX を確立する
+**目標**: Amazon Cognito 認証基盤を確立し、日常利用に耐える品質と UX を整える
 
-| # | 機能 | 優先度 | 備考 |
-|---|------|--------|------|
-| 3.1 | APIキー永続化（Bypass 再起動後も保持） | 高 | `~/.openhub/credentials.json` 暗号化保存案 |
-| 3.2 | ページネーション（検索結果・一覧） | 中 | Bypass の `total` が未実装のため必要 |
-| 3.3 | data.go.jp 文字化け調査・修正 | 中 | e-gov.go.jp レスポンスの文字コード |
-| 3.4 | e-Stat アプリケーションID 取得案内 | 低 | 外部リンク + 取得手順の UI |
-| 3.5 | E2E テスト（Playwright） | 中 | 主要フロー（検索・詳細・設定）をカバー |
+| # | 機能 | 優先度 | 状態 | 備考 |
+|---|------|--------|------|------|
+| 3.1 | Cognito JWT 認証基盤 | 高 | ✅ | Bypass JWT 検証 + Catalog NextAuth.js v5 |
+| 3.2 | DynamoDB CredentialStore（APIキー永続化・ユーザー分離） | 高 | ✅ | CREDENTIAL_STORE_BACKEND で切り替え |
+| 3.3 | Lambda + Amplify デプロイ（Mangum adapter） | 高 | 📋 | Bypass → Lambda、Catalog → Amplify |
+| 3.4 | ページネーション（検索結果・一覧） | 中 | 📋 | Bypass の `total` が未実装のため必要 |
+| 3.5 | data.go.jp 文字化け調査・修正 | 中 | 📋 | e-gov.go.jp レスポンスの文字コード |
+| 3.6 | e-Stat アプリケーションID 取得案内 | 低 | 📋 | 外部リンク + 取得手順の UI |
+| 3.7 | E2E テスト（Playwright） | 中 | 📋 | 主要フロー（検索・詳細・設定）をカバー |
 
 ---
 
@@ -94,4 +96,4 @@
 
 ---
 
-*最終更新: 2026-03-28*
+*最終更新: 2026-03-29（Sprint 3.2 完了）*

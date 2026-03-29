@@ -17,10 +17,19 @@ cd catalog
 npm install
 ```
 
-`.env.local` に Bypass の URL を設定:
+`.env.local` に以下を設定:
 ```
 BYPASS_BASE_URL=http://127.0.0.1:8000
+
+# Amazon Cognito（Sprint 3.1 以降、認証が必要な場合）
+AUTH_COGNITO_ID=your_cognito_app_client_id
+AUTH_COGNITO_SECRET=your_cognito_app_client_secret
+AUTH_COGNITO_ISSUER=https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_XXXXXXXX
+NEXTAUTH_SECRET=your_nextauth_secret_32chars_or_more
+NEXTAUTH_URL=http://localhost:3000
 ```
+
+> ローカルで認証なしで動かす場合は `BYPASS_BASE_URL` のみ設定し、Bypass 側で `DISABLE_AUTH=true` を指定する。
 
 ## 起動
 
@@ -40,13 +49,14 @@ http://localhost:3000 でアクセス。
 
 ## 主要ページ
 
-| URL | 説明 |
-|-----|------|
-| `/` | トップ：カテゴリタブ＋データセット一覧 |
-| `/?category=population` | カテゴリ絞り込み（人口・世帯） |
-| `/search?q=<keyword>` | キーワード検索結果 |
-| `/datasets/<id>` | データセット詳細 |
-| `/settings` | e-Stat アプリケーションID 設定 |
+| URL | 説明 | 認証 |
+|-----|------|------|
+| `/` | トップ：カテゴリタブ＋データセット一覧 | 不要 |
+| `/?category=population` | カテゴリ絞り込み（人口・世帯） | 不要 |
+| `/search?q=<keyword>` | キーワード検索結果 | 不要 |
+| `/datasets/<id>` | データセット詳細 | 不要 |
+| `/settings` | e-Stat アプリケーションID 設定 | **必須**（`proxy.ts` でガード） |
+| `/login` | Cognito サインイン（自動リダイレクト） | — |
 
 ## カテゴリ一覧
 
@@ -68,8 +78,21 @@ npm run test:e2e      # Playwright（E2E）
 
 ## 技術スタック
 
-- Next.js 15 App Router
+- Next.js 16 App Router
 - TypeScript
 - Tailwind CSS
+- NextAuth.js v5 + Amazon Cognito（JWT 認証）
 - Vitest + React Testing Library（ユニット）
 - Playwright（E2E）
+
+## 認証アーキテクチャ（Sprint 3.1）
+
+| ファイル | 役割 |
+|---------|------|
+| `auth.ts` | NextAuth.js v5 設定（Cognito プロバイダー・JWT セッション・accessToken コールバック） |
+| `proxy.ts` | 認証ガード（`/settings` → 未認証時 `/login` にリダイレクト） |
+| `app/api/auth/[...nextauth]/route.ts` | NextAuth Route Handler |
+| `app/login/page.tsx` | Cognito サインインページ（マウント時 `signIn("cognito")` を呼び出す） |
+| `types/next-auth.d.ts` | `Session.accessToken` 型拡張 |
+
+> **Note**: Next.js 16 では `middleware.ts` が deprecated。認証ガードは `proxy.ts` に記述する。
