@@ -108,3 +108,51 @@ def get_current_user(token: str | None = Depends(oauth2_scheme)) -> str:
             detail="無効なトークンです。",
             headers={"WWW-Authenticate": "Bearer"},
         ) from e
+
+
+def get_current_user_optional(token: str | None = Depends(oauth2_scheme)) -> str | None:
+    """認証オプション版 Dependency。トークンなし・無効時は None を返す（401 にしない）。
+
+    DISABLE_AUTH=true の場合は "local_dev_user" を返して検証をスキップする。
+    トークンなし・期限切れ・不正なトークン・kid 不一致の場合はすべて None を返す。
+
+    Args:
+        token: Bearer トークン文字列（Authorization ヘッダーなしの場合 None）
+
+    Returns:
+        user_id (Cognito sub) / "local_dev_user" (DISABLE_AUTH=true) / None
+    """
+    if os.environ.get("DISABLE_AUTH", "false").lower() == "true":
+        return LOCAL_DEV_USER
+
+    if token is None:
+        return None
+
+    region = os.environ.get("COGNITO_REGION", "ap-northeast-1")
+    pool_id = os.environ.get("COGNITO_USER_POOL_ID", "")
+    client_id = os.environ.get("COGNITO_CLIENT_ID", "")
+    issuer = f"https://cognito-idp.{region}.amazonaws.com/{pool_id}"
+    jwks_url = (
+        f"https://cognito-idp.{region}.amazonaws.com/{pool_id}/.well-known/jwks.json"
+    )
+
+    try:
+        jwks = _get_jwks(jwks_url)
+        header = jwt.get_unverified_header(token)
+        kid = header.get("kid")
+        key = next((k for k in jwks["keys"] if k.get("kid") == kid), None)
+
+        if key is None:
+            return None
+
+        payload = jwt.decode(
+            token,
+            key,
+            algorithms=["RS256"],
+            audience=client_id,
+            issuer=issuer,
+        )
+        return str(payload["sub"])
+
+    except (HTTPException, JWTError, ExpiredSignatureError):
+        return None

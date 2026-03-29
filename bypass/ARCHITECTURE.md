@@ -6,19 +6,20 @@
 bypass/
 ├── main.py                  # FastAPI アプリファクトリ・エントリーポイント
 ├── api/
-│   ├── auth.py              # POST/DELETE /auth/credentials
+│   ├── auth.py              # POST/DELETE /auth/credentials（JWT 保護）
 │   └── datasets.py          # GET /datasets/search, GET /datasets/{id}/fetch
 ├── connectors/
 │   ├── estat.py             # e-Stat コネクター
 │   └── datagojp.py          # data.go.jp（CKAN）コネクター
 ├── core/
+│   ├── auth.py              # Cognito JWT 検証 FastAPI Dependency（get_current_user）
 │   ├── connector.py         # DataSourceConnector Protocol 定義
 │   ├── models.py            # DatasetMetadata / DatasetPayload（frozen dataclass）
 │   ├── errors.py            # ドメイン例外クラス
 │   ├── cache.py             # InMemoryCache（TTL 付き、スレッドセーフ）
 │   └── credentials.py       # CredentialStore（インメモリ APIキー管理）
 └── tests/
-    ├── conftest.py           # 共有フィクスチャ（autouse キャッシュクリア含む）
+    ├── conftest.py           # 共有フィクスチャ（autouse キャッシュクリア・auth override 含む）
     ├── fixtures/             # テスト用 JSON フィクスチャ
     └── test_*.py             # テストファイル
 ```
@@ -28,12 +29,14 @@ bypass/
 ```
 ┌─────────────────────────────────────┐
 │  FastAPI Router (api/)              │  ← HTTP 層：バリデーション・シリアライズ
+│    └── Depends(get_current_user)    │  ← JWT 検証（認証が必要なエンドポイント）
 ├─────────────────────────────────────┤
 │  Domain Services (datasets.py)      │  ← ビジネスロジック：キャッシュ・エラー変換
 ├─────────────────────────────────────┤
 │  Connectors (connectors/)           │  ← 上流 API アダプター
 ├─────────────────────────────────────┤
-│  Core (core/)                       │  ← ドメインモデル・インフラ
+│  Core (core/)                       │  ← ドメインモデル・インフラ・認証
+│    └── auth.py: JWT Dependency      │  ← JWKS 取得・RS256 検証・sub 返却
 └─────────────────────────────────────┘
 ```
 
@@ -93,6 +96,25 @@ httpx.Response(404)    → DatasetNotFoundError  → 404 Not Found
 ```
 
 `from None` を使い、httpx 例外チェーンに含まれる URL（APIキー含む可能性）の漏洩を防ぐ。
+
+### Cognito JWT 認証（Sprint 3.1）
+
+`/auth/credentials` エンドポイントは Cognito が発行する RS256 JWT で保護されている。
+
+```
+Authorization: Bearer <Cognito JWT>
+```
+
+`core/auth.py` の `get_current_user` FastAPI Dependency が検証を担当:
+1. `JWKS_URL`（Cognito の `.well-known/jwks.json`）から公開鍵セットを取得
+2. `lru_cache(maxsize=1)` でプロセス内キャッシュ（Cognito レート制限回避）
+3. JWT ヘッダーの `kid` で一致する公開鍵を選択
+4. `python-jose` で RS256 署名・有効期限・audience・issuer を検証
+5. 検証成功時は `payload["sub"]`（Cognito user_id）を返す
+
+ローカル開発は `DISABLE_AUTH=true` 環境変数でスキップ（`"local_dev_user"` を返す）。
+
+テストでは `app.dependency_overrides[get_current_user] = lambda: "test_user"` で既存テストを保護。
 
 ### バイナリフォーマット対応
 

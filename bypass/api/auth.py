@@ -13,7 +13,7 @@ from pydantic import BaseModel, Field
 
 from api.datasets import get_search_cache
 from core.auth import get_current_user
-from core.credentials import CredentialStore, get_credential_store
+from core.credentials import CredentialStore, CredentialStoreProtocol, get_credential_store
 
 router = APIRouter(prefix="/auth", tags=["認証"])
 
@@ -65,14 +65,14 @@ class CredentialStatusResponse(BaseModel):
 )
 def post_credentials(
     body: CredentialsRequest,
-    # Sprint 3.1: user_id を受け取るが Sprint 3.2 でユーザー分離を実装するまで未使用
-    user_id: str = Depends(get_current_user),  # noqa: ARG001
+    user_id: str = Depends(get_current_user),
     store: CredentialStore = Depends(get_credential_store),
 ) -> CredentialsResponse:
     """APIキーを登録する。
 
     Args:
         body: リクエストボディ
+        user_id: 認証済みユーザーID
         store: 依存注入された CredentialStore
 
     Returns:
@@ -89,7 +89,7 @@ def post_credentials(
         )
 
     # APIキーを保存（api_key の値はログに出力しない）
-    store.set(body.source_id, body.api_key)
+    store.save(user_id, body.source_id, body.api_key)
 
     # APIキー変更後は検索キャッシュを全クリアする
     # （古いキャッシュに空の検索結果が残り、新しいキーが反映されないのを防ぐ）
@@ -114,14 +114,14 @@ def post_credentials(
 )
 def get_credential_status(
     source_id: str,
-    # Sprint 3.1: user_id を受け取るが Sprint 3.2 でユーザー分離を実装するまで未使用
-    user_id: str = Depends(get_current_user),  # noqa: ARG001
+    user_id: str = Depends(get_current_user),
     store: CredentialStore = Depends(get_credential_store),
 ) -> CredentialStatusResponse:
     """APIキーの設定状態を返す。
 
     Args:
         source_id: データソース識別子
+        user_id: 認証済みユーザーID
         store: 依存注入された CredentialStore
 
     Returns:
@@ -129,5 +129,5 @@ def get_credential_status(
     """
     return CredentialStatusResponse(
         source_id=source_id,
-        configured=store.has(source_id),
+        configured=store.is_configured(user_id, source_id),
     )

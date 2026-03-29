@@ -35,9 +35,26 @@ uvicorn main:app --host 127.0.0.1 --port 8000 --workers 1
 > **注意**: `--workers 2` 以上は非対応。CredentialStore はプロセス内シングルトンのため、
 > 複数ワーカーではAPIキーが共有されない。
 
+### 認証の設定
+
+本番（Cognito あり）は以下の環境変数が必要:
+```bash
+COGNITO_REGION=ap-northeast-1
+COGNITO_USER_POOL_ID=ap-northeast-1_XXXXXXXXX
+COGNITO_CLIENT_ID=your_cognito_app_client_id
+```
+
+ローカル開発（Cognito なし）は認証をスキップできる:
+```bash
+DISABLE_AUTH=true python main.py
+```
+
 API ドキュメント（Swagger UI）: http://127.0.0.1:8000/docs
 
 ## API エンドポイント
+
+> **認証が必要なエンドポイント**（`DISABLE_AUTH=true` 以外）は `Authorization: Bearer <JWT>` ヘッダーが必要。
+> JWT は Amazon Cognito が発行する RS256 トークン。
 
 ### 認証
 
@@ -98,5 +115,6 @@ ESTAT_API_KEY=your_key pytest tests/ -m integration
 |---------|------|
 | Phase 1 | e-Stat + data.go.jp（リリース済み） |
 | Phase 2 | Catalog WebUI との連携・バグ修正群（リリース済み） |
-| Phase 3 | 国土数値情報 + e-Gov 法令 |
-| Phase 4 | RESAS + 気象データ（JMA） |
+| Sprint 3.1 | Cognito JWT 認証基盤（リリース済み） |
+| Sprint 3.2 | DynamoDB CredentialStore（APIキー永続化・ユーザー分離） |
+| Phase 4 | データソース拡張（国土数値情報・e-Gov 法令等） |
