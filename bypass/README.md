@@ -109,6 +109,21 @@ GET /datasets/{id}/fetch          データセット取得
 **SearchResponse の `total` について:**
 現在 `total` は**返却件数**（= `len(items)`）を示す。全ヒット件数ではない。
 
+## Lambda デプロイ（Sprint 3.3）
+
+AWS Lambda + Mangum アダプターでデプロイする。
+
+```bash
+cd bypass
+pip install -e ".[lambda]"
+pip freeze > requirements.txt   # SAM ビルド前に毎回実行
+sam build
+sam deploy --guided
+# → Function URL が発行される
+```
+
+`template.yaml` に SAM テンプレートが含まれている。`samconfig.toml` と `.env.lambda` は `.gitignore` 済み。
+
 ## テスト
 
 ```bash
@@ -129,4 +144,5 @@ ESTAT_API_KEY=your_key pytest tests/ -m integration
 | Phase 2 | Catalog WebUI との連携・バグ修正群（リリース済み） |
 | Sprint 3.1 | Cognito JWT 認証基盤（リリース済み） |
 | Sprint 3.2 | DynamoDB CredentialStore（APIキー永続化・ユーザー分離）（リリース済み） |
+| Sprint 3.3 | Lambda + Amplify デプロイ基盤（リリース済み） |
 | Phase 4 | データソース拡張（国土数値情報・e-Gov 法令等） |
