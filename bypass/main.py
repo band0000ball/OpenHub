@@ -48,7 +48,7 @@ def create_app() -> FastAPI:
         version="0.1.0",
     )
 
-    # CORS: Phase 1 は localhost のみ許可
+    # CORS: localhost + Amplify ホスティングを許可
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
@@ -58,6 +58,7 @@ def create_app() -> FastAPI:
             "http://127.0.0.1",
             "http://127.0.0.1:3000",
             "http://127.0.0.1:8000",
+            "https://*.amplifyapp.com",  # Amplify デプロイ用
         ],
         allow_credentials=True,
         allow_methods=["*"],

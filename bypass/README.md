@@ -5,7 +5,7 @@
 ## 概要
 
 複数の行政オープンデータポータルを統一 API で横断検索し、データを取得できる。
-**BYOK（Bring Your Own Key）モデル**：APIキーはサーバーに永続化せず、セッション内でのみ保持。
+**BYOK（Bring Your Own Key）モデル**：APIキーは Cognito user_id で分離して管理。`CREDENTIAL_STORE_BACKEND=dynamodb` で DynamoDB に永続化（デフォルトはインメモリ）。
 
 OpenHub Catalog（Next.js WebUI）と連携して動作する BFF（Backend for Frontend）。
 
@@ -47,6 +47,18 @@ COGNITO_CLIENT_ID=your_cognito_app_client_id
 ローカル開発（Cognito なし）は認証をスキップできる:
 ```bash
 DISABLE_AUTH=true python main.py
+```
+
+DynamoDB CredentialStore（本番用）:
+```bash
+CREDENTIAL_STORE_BACKEND=dynamodb
+DYNAMODB_TABLE_NAME=openhub-credentials
+AWS_REGION=ap-northeast-1
+```
+
+デモ・ローカル（デフォルト、AWS 不要）:
+```bash
+# CREDENTIAL_STORE_BACKEND=memory が既定値（設定不要）
 ```
 
 API ドキュメント（Swagger UI）: http://127.0.0.1:8000/docs
@@ -116,5 +128,5 @@ ESTAT_API_KEY=your_key pytest tests/ -m integration
 | Phase 1 | e-Stat + data.go.jp（リリース済み） |
 | Phase 2 | Catalog WebUI との連携・バグ修正群（リリース済み） |
 | Sprint 3.1 | Cognito JWT 認証基盤（リリース済み） |
-| Sprint 3.2 | DynamoDB CredentialStore（APIキー永続化・ユーザー分離） |
+| Sprint 3.2 | DynamoDB CredentialStore（APIキー永続化・ユーザー分離）（リリース済み） |
 | Phase 4 | データソース拡張（国土数値情報・e-Gov 法令等） |
