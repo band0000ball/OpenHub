@@ -45,4 +45,4 @@ Resources:
 Outputs:
   FunctionUrl:
     Description: Lambda Function URL
-    Value: !GetAtt BypassFunction.FunctionUrl
+    Value: !GetAtt BypassFunctionUrl.FunctionUrl
