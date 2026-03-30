@@ -1,7 +1,12 @@
+import { auth } from "../../../auth";
+
 const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
 
 export async function POST(request: Request): Promise<Response> {
   const baseUrl = process.env.BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
+
+  const session = await auth();
+  const accessToken = (session as { accessToken?: string } | null)?.accessToken;
 
   let body: unknown;
   try {
@@ -10,10 +15,15 @@ export async function POST(request: Request): Promise<Response> {
     return Response.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  }
+
   try {
     const upstreamResponse = await fetch(`${baseUrl}/auth/credentials`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(body),
     });
 
