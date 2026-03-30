@@ -28,7 +28,6 @@ Resources:
           AllowMethods:
             - GET
             - POST
-            - OPTIONS
           AllowHeaders:
             - Authorization
             - Content-Type
