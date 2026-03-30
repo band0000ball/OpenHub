@@ -14,7 +14,7 @@ function getSearchUrl(params: URLSearchParams): string {
     return `/api/search?${params.toString()}`;
   }
   // サーバーサイド: Lambda を直接呼び出し（Amplify SSR の自己呼び出し問題を回避）
-  const bypassUrl = process.env.BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL_SERVER;
+  const bypassUrl = process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL_SERVER;
   return `${bypassUrl}/datasets/search?${params.toString()}`;
 }
 
@@ -69,7 +69,7 @@ export async function getCredentialStatus(
   sourceId: string,
   accessToken?: string,
 ): Promise<boolean> {
-  const baseUrl = process.env.BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
   const headers: Record<string, string> = {};
   if (accessToken) {
     headers["Authorization"] = `Bearer ${accessToken}`;
@@ -90,7 +90,7 @@ export async function getCredentialStatus(
 export async function fetchDataset(id: string): Promise<PayloadResponse> {
   const url = typeof window !== "undefined"
     ? `/api/datasets/${encodeURIComponent(id)}`
-    : `${process.env.BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL_SERVER}/datasets/${encodeURIComponent(id)}/fetch`;
+    : `${process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL_SERVER}/datasets/${encodeURIComponent(id)}/fetch`;
   const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok) {

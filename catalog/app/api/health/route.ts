@@ -3,7 +3,7 @@
  * BYPASS_BASE_URL の設定確認と Lambda への疎通確認に使用する。
  */
 export async function GET(): Promise<Response> {
-  const bypassUrl = process.env.BYPASS_BASE_URL ?? "(not set)";
+  const bypassUrl = process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? "(not set)";
   const masked = bypassUrl.startsWith("http")
     ? bypassUrl.slice(0, 30) + "..."
     : bypassUrl;

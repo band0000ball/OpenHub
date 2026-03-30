@@ -30,11 +30,11 @@ const mockPayloadResponse = {
 describe("GET /api/datasets/[id]", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.BYPASS_BASE_URL = "http://localhost:8000";
+    process.env.NEXT_PUBLIC_BYPASS_BASE_URL = "http://localhost:8000";
   });
 
   afterEach(() => {
-    delete process.env.BYPASS_BASE_URL;
+    delete process.env.NEXT_PUBLIC_BYPASS_BASE_URL;
   });
 
   it("fetches dataset by id and returns payload", async () => {
@@ -81,7 +81,7 @@ describe("GET /api/datasets/[id]", () => {
   });
 
   it("uses default BYPASS_BASE_URL when env not set", async () => {
-    delete process.env.BYPASS_BASE_URL;
+    delete process.env.NEXT_PUBLIC_BYPASS_BASE_URL;
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockPayloadResponse,

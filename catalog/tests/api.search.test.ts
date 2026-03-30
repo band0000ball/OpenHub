@@ -32,11 +32,11 @@ const mockSearchResponse = {
 describe("GET /api/search", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    process.env.BYPASS_BASE_URL = "http://localhost:8000";
+    process.env.NEXT_PUBLIC_BYPASS_BASE_URL = "http://localhost:8000";
   });
 
   afterEach(() => {
-    delete process.env.BYPASS_BASE_URL;
+    delete process.env.NEXT_PUBLIC_BYPASS_BASE_URL;
   });
 
   it("forwards query parameters to bypass and returns search results", async () => {
@@ -61,7 +61,7 @@ describe("GET /api/search", () => {
   });
 
   it("uses default BYPASS_BASE_URL when env var not set", async () => {
-    delete process.env.BYPASS_BASE_URL;
+    delete process.env.NEXT_PUBLIC_BYPASS_BASE_URL;
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockSearchResponse,
