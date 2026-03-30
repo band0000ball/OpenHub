@@ -8,6 +8,12 @@ applications:
             - npm ci
         build:
           commands:
+            - echo "NEXT_PUBLIC_BYPASS_BASE_URL=$NEXT_PUBLIC_BYPASS_BASE_URL" >> .env.production.local
+            - echo "AUTH_SECRET=$AUTH_SECRET" >> .env.production.local
+            - echo "AUTH_URL=$AUTH_URL" >> .env.production.local
+            - echo "AUTH_COGNITO_ID=$AUTH_COGNITO_ID" >> .env.production.local
+            - echo "AUTH_COGNITO_SECRET=$AUTH_COGNITO_SECRET" >> .env.production.local
+            - echo "AUTH_COGNITO_ISSUER=$AUTH_COGNITO_ISSUER" >> .env.production.local
             - npm run build
       artifacts:
         baseDirectory: .next
