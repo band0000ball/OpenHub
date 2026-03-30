@@ -12,7 +12,7 @@ import { NextResponse } from "next/server"
 import { auth } from "./auth"
 
 export default auth((req) => {
-  if (!req.auth) {
+  if (!req.auth?.user) {
     return NextResponse.redirect(new URL("/login", req.nextUrl))
   }
   // 認証済み → パススルー（何も返さない）
