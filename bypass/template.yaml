@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: OpenHub Bypass — Lambda Function URL デプロイ
+Description: OpenHub Bypass Lambda Function URL
 
 Parameters:
   CognitoRegion:
@@ -24,12 +24,10 @@ Resources:
         AuthType: NONE
         Cors:
           AllowOrigins:
-            - "https://*.amplifyapp.com"
-            - "http://localhost:3000"
+            - "*"
           AllowMethods:
             - GET
             - POST
-            - OPTIONS
           AllowHeaders:
             - Authorization
             - Content-Type
@@ -45,6 +43,6 @@ Resources:
             TableName: openhub-credentials
 
 Outputs:
-  BypassFunctionUrl:
+  FunctionUrl:
     Description: Lambda Function URL
     Value: !GetAtt BypassFunctionUrl.FunctionUrl

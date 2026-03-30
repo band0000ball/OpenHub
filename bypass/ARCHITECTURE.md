@@ -5,6 +5,9 @@
 ```
 bypass/
 ├── main.py                  # FastAPI アプリファクトリ・エントリーポイント
+├── lambda_handler.py        # AWS Lambda エントリーポイント（Mangum アダプター）
+├── template.yaml            # AWS SAM テンプレート
+├── requirements.txt         # SAM ビルド用依存関係（pip freeze）
 ├── api/
 │   ├── auth.py              # POST/DELETE /auth/credentials（JWT 保護）
 │   └── datasets.py          # GET /datasets/search, GET /datasets/{id}/fetch
@@ -128,6 +131,24 @@ Authorization: Bearer <Cognito JWT>
 ローカル開発は `DISABLE_AUTH=true` 環境変数でスキップ（`"local_dev_user"` を返す）。
 
 テストでは `app.dependency_overrides[get_current_user] = lambda: "test_user"` で既存テストを保護。
+
+### Lambda + Amplify デプロイ（Sprint 3.3）
+
+Bypass は `lambda_handler.py` の Mangum アダプター経由で AWS Lambda にデプロイされる。
+
+```
+[ブラウザ]
+    ├── HTTPS → [Amplify] catalog/ (Next.js SSR)
+    │               └── API 呼び出し
+    └── HTTPS → [Lambda Function URL] bypass/ (FastAPI + Mangum)
+                    ├── JWT 検証 → [Cognito]
+                    └── APIキー保存・取得 → [DynamoDB]
+```
+
+- `lambda_handler.py`: `Mangum(app, lifespan="off")` でラップ
+- `template.yaml`: Timeout:60s（e-Stat 上流レイテンシ考慮）、MemorySize:256MB
+- Lambda Function URL CORS + FastAPI CORSMiddleware の両方に `https://*.amplifyapp.com` を設定
+- `samconfig.toml` / `.env.lambda` は `.gitignore` で除外（機密情報保護）
 
 ### バイナリフォーマット対応
 
