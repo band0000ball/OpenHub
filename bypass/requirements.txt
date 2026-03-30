@@ -1,8 +1,3 @@
-# Lambda 実行に必要な最小依存関係
-# pyproject.toml の dependencies + lambda グループから生成
-# dev グループ（pytest, moto, boto3 等）は含まない
-# Windows 専用パッケージ（pywin32, win32_setctime 等）は含まない
-
 fastapi>=0.110.0
 uvicorn>=0.29.0
 httpx>=0.27.0
