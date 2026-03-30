@@ -8,6 +8,7 @@ applications:
             - npm ci
         build:
           commands:
+            - if [ -z "$AUTH_SECRET" ]; then echo "[DIAG] AUTH_SECRET is EMPTY"; else echo "[DIAG] AUTH_SECRET is SET (len=${#AUTH_SECRET})"; fi
             - echo "NEXT_PUBLIC_BYPASS_BASE_URL=$NEXT_PUBLIC_BYPASS_BASE_URL" >> .env.production.local
             - echo "AUTH_SECRET=$AUTH_SECRET" >> .env.production.local
             - echo "AUTH_URL=$AUTH_URL" >> .env.production.local
