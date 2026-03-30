@@ -51,7 +51,7 @@ narwhals==2.12.0
 nbformat==5.10.4
 numpy==2.3.5
 openai==2.8.1
--e git+https://github.com/band0000ball/OpenHub.git@8be4311d3a31557ff67ed04bf633aac182fb9e31#egg=openhub_bypass&subdirectory=bypass
+-e git+https://github.com/band0000ball/OpenHub.git@ccfcafbada761d48b0c3c7e4959efa85de03c161#egg=openhub_bypass&subdirectory=bypass
 outcome==1.3.0.post0
 packaging==25.0
 parso==0.8.5
@@ -78,7 +78,6 @@ pytest-cov==7.1.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 python-jose==3.5.0
-pywin32==311
 PyYAML==6.0.3
 referencing==0.37.0
 regex==2025.7.34
