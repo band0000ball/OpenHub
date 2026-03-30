@@ -45,6 +45,6 @@ Resources:
             TableName: openhub-credentials
 
 Outputs:
-  BypassFunctionUrl:
+  FunctionUrl:
     Description: Lambda Function URL
-    Value: !GetAtt BypassFunctionUrl.FunctionUrl
+    Value: !GetAtt BypassFunction.FunctionUrl
