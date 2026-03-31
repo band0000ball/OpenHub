@@ -20,6 +20,7 @@ const cognitoDomain = process.env.AUTH_COGNITO_DOMAIN
 const cognitoIssuer = process.env.AUTH_COGNITO_ISSUER
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
   logger: {
     error(error) {
       console.error("[NextAuth] Error:", error)
