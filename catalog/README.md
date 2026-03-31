@@ -19,14 +19,15 @@ npm install
 
 `.env.local` に以下を設定:
 ```
-BYPASS_BASE_URL=http://127.0.0.1:8000
+NEXT_PUBLIC_BYPASS_BASE_URL=http://127.0.0.1:8000
 
-# Amazon Cognito（Sprint 3.1 以降、認証が必要な場合）
+# Amazon Cognito（認証が必要な場合）
 AUTH_COGNITO_ID=your_cognito_app_client_id
 AUTH_COGNITO_SECRET=your_cognito_app_client_secret
 AUTH_COGNITO_ISSUER=https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_XXXXXXXX
-NEXTAUTH_SECRET=your_nextauth_secret_32chars_or_more
-NEXTAUTH_URL=http://localhost:3000
+AUTH_COGNITO_DOMAIN=https://<prefix>.auth.ap-northeast-1.amazoncognito.com
+AUTH_SECRET=your_auth_secret_32chars_or_more
+AUTH_URL=http://localhost:3000
 ```
 
 > ローカルで認証なしで動かす場合は `BYPASS_BASE_URL` のみ設定し、Bypass 側で `DISABLE_AUTH=true` を指定する。
