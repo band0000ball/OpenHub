@@ -53,23 +53,30 @@ vi.mock("next-auth", () => ({
 }))
 
 describe("auth — requireEnv", () => {
-  it("AUTH_COGNITO_DOMAIN が未設定のとき import でエラーをスローする", async () => {
-    const original = {
-      AUTH_COGNITO_DOMAIN: process.env.AUTH_COGNITO_DOMAIN,
-      AUTH_COGNITO_ISSUER: process.env.AUTH_COGNITO_ISSUER,
-      AUTH_COGNITO_ID: process.env.AUTH_COGNITO_ID,
-    }
-    delete process.env.AUTH_COGNITO_DOMAIN
-    process.env.AUTH_COGNITO_ISSUER = "https://example.com/pool"
-    process.env.AUTH_COGNITO_ID = "client-id"
+  it.each([
+    "AUTH_COGNITO_DOMAIN",
+    "AUTH_COGNITO_ISSUER",
+    "AUTH_COGNITO_ID",
+    "AUTH_COGNITO_SECRET",
+  ])("%s が未設定のとき import でエラーをスローする", async (missingKey) => {
+    const allKeys = [
+      "AUTH_COGNITO_DOMAIN",
+      "AUTH_COGNITO_ISSUER",
+      "AUTH_COGNITO_ID",
+      "AUTH_COGNITO_SECRET",
+    ]
+    const original: Record<string, string | undefined> = {}
+    allKeys.forEach((k) => {
+      original[k] = process.env[k]
+      process.env[k] = "dummy-value"
+    })
+    delete process.env[missingKey]
 
-    // モジュールキャッシュをクリアして再 import する
     vi.resetModules()
     await expect(import("../auth")).rejects.toThrow(
-      'Required environment variable "AUTH_COGNITO_DOMAIN" is not set'
+      `Required environment variable "${missingKey}" is not set`
     )
 
-    // 環境変数を元に戻す
     Object.assign(process.env, original)
     vi.resetModules()
   })
@@ -80,6 +87,7 @@ describe("auth — jwt コールバック", () => {
     process.env.AUTH_COGNITO_DOMAIN = "https://example.auth.ap-northeast-1.amazoncognito.com"
     process.env.AUTH_COGNITO_ISSUER = "https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_test"
     process.env.AUTH_COGNITO_ID = "test-client-id"
+    process.env.AUTH_COGNITO_SECRET = "test-client-secret"
     vi.resetModules()
     await import("../auth")
   })
@@ -125,6 +133,7 @@ describe("auth — session コールバック", () => {
     process.env.AUTH_COGNITO_DOMAIN = "https://example.auth.ap-northeast-1.amazoncognito.com"
     process.env.AUTH_COGNITO_ISSUER = "https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_test"
     process.env.AUTH_COGNITO_ID = "test-client-id"
+    process.env.AUTH_COGNITO_SECRET = "test-client-secret"
     vi.resetModules()
     await import("../auth")
   })
@@ -163,6 +172,7 @@ describe("auth — profile()", () => {
     process.env.AUTH_COGNITO_DOMAIN = "https://example.auth.ap-northeast-1.amazoncognito.com"
     process.env.AUTH_COGNITO_ISSUER = "https://cognito-idp.ap-northeast-1.amazonaws.com/ap-northeast-1_test"
     process.env.AUTH_COGNITO_ID = "test-client-id"
+    process.env.AUTH_COGNITO_SECRET = "test-client-secret"
     vi.resetModules()
     await import("../auth")
   })

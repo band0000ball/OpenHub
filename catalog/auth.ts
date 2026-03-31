@@ -49,7 +49,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       name: "Cognito",
       type: "oauth",
       clientId: requireEnv("AUTH_COGNITO_ID"),
-      clientSecret: process.env.AUTH_COGNITO_SECRET ?? "",
+      clientSecret: requireEnv("AUTH_COGNITO_SECRET"),
       issuer: cognitoIssuer,
       authorization: {
         url: `${cognitoDomain}/oauth2/authorize`,
