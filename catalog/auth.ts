@@ -16,10 +16,24 @@
 
 import NextAuth from "next-auth"
 
-const cognitoDomain = process.env.AUTH_COGNITO_DOMAIN
-const cognitoIssuer = process.env.AUTH_COGNITO_ISSUER
+/**
+ * 必須環境変数を取得する。未設定の場合は起動時にエラーをスローする。
+ */
+function requireEnv(key: string): string {
+  const value = process.env[key]
+  if (!value) throw new Error(`Required environment variable "${key}" is not set`)
+  return value
+}
+
+const cognitoDomain = requireEnv("AUTH_COGNITO_DOMAIN")
+const cognitoIssuer = requireEnv("AUTH_COGNITO_ISSUER")
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  /**
+   * trustHost: Amplify は X-Forwarded-Host を設定するため、
+   * reverse proxy 配下では必須。ローカル開発では AUTH_URL を
+   * 明示設定することで代替可能。
+   */
   trustHost: true,
   logger: {
     error(error) {
@@ -34,7 +48,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       id: "cognito",
       name: "Cognito",
       type: "oauth",
-      clientId: process.env.AUTH_COGNITO_ID,
+      clientId: requireEnv("AUTH_COGNITO_ID"),
       clientSecret: process.env.AUTH_COGNITO_SECRET ?? "",
       issuer: cognitoIssuer,
       authorization: {
@@ -43,14 +57,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       token: `${cognitoDomain}/oauth2/token`,
       userinfo: `${cognitoDomain}/oauth2/userInfo`,
+      /**
+       * jwks_endpoint: type:"oauth" では NextAuth が JWT 署名検証に
+       * 使用するかどうかは実装依存。type:"oidc" への移行が安定したら
+       * 削除して OIDC discovery に任せることを検討する。
+       */
       jwks_endpoint: `${cognitoIssuer}/.well-known/jwks.json`,
       checks: ["pkce", "state"],
       profile(profile) {
+        const sub = profile.sub
+        const email = profile.email
+        if (typeof sub !== "string" || typeof email !== "string") {
+          throw new Error("Invalid Cognito profile: missing sub or email")
+        }
         return {
-          id: profile.sub as string,
-          name: (profile.name ?? profile.email) as string,
-          email: profile.email as string,
-          image: (profile.picture ?? null) as string | null,
+          id: sub,
+          name: typeof profile.name === "string" ? profile.name : email,
+          email,
+          image: typeof profile.picture === "string" ? profile.picture : null,
         }
       },
     },

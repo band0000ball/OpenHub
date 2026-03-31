@@ -8,6 +8,13 @@ applications:
             - npm ci
         build:
           commands:
+            # [NOTE] echo でシークレット値を .env.production.local に書き出している。
+            # Amplify はビルドログで環境変数値をマスクしないため、ビルドログ閲覧権限を
+            # 持つユーザーには AUTH_COGNITO_SECRET 等が見える可能性がある。
+            # 将来的には Amplify ネイティブの環境変数注入（SSM Parameter Store 連携）への
+            # 移行を検討すること。
+            # [trustHost] catalog/auth.ts の trustHost: true は Amplify の reverse proxy が
+            # X-Forwarded-Host を設定するため必要。ローカル開発では AUTH_URL で代替可能。
             - if [ -z "$AUTH_SECRET" ]; then echo "[DIAG] AUTH_SECRET is EMPTY"; else echo "[DIAG] AUTH_SECRET is SET (len=${#AUTH_SECRET})"; fi
             - echo "NEXT_PUBLIC_BYPASS_BASE_URL=$NEXT_PUBLIC_BYPASS_BASE_URL" >> .env.production.local
             - echo "AUTH_SECRET=$AUTH_SECRET" >> .env.production.local
