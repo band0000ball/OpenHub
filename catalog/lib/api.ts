@@ -6,7 +6,7 @@ import {
   findCategory,
 } from "./categories";
 
-const DEFAULT_BYPASS_BASE_URL_SERVER = "http://localhost:8000";
+const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
 
 function getSearchUrl(params: URLSearchParams): string {
   if (typeof window !== "undefined") {
@@ -14,7 +14,7 @@ function getSearchUrl(params: URLSearchParams): string {
     return `/api/search?${params.toString()}`;
   }
   // サーバーサイド: Lambda を直接呼び出し（Amplify SSR の自己呼び出し問題を回避）
-  const bypassUrl = process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL_SERVER;
+  const bypassUrl = process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
   return `${bypassUrl}/datasets/search?${params.toString()}`;
 }
 
@@ -63,8 +63,6 @@ export async function browseByCategory(categoryId: string): Promise<DatasetMetad
   return result.items;
 }
 
-const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
-
 export async function getCredentialStatus(
   sourceId: string,
   accessToken?: string,
@@ -90,7 +88,7 @@ export async function getCredentialStatus(
 export async function fetchDataset(id: string): Promise<PayloadResponse> {
   const url = typeof window !== "undefined"
     ? `/api/datasets/${encodeURIComponent(id)}`
-    : `${process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL_SERVER}/datasets/${encodeURIComponent(id)}/fetch`;
+    : `${process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL}/datasets/${encodeURIComponent(id)}/fetch`;
   const response = await fetch(url, { cache: "no-store" });
 
   if (!response.ok) {

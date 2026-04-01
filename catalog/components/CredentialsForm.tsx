@@ -56,9 +56,11 @@ export default function CredentialsForm() {
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
           placeholder="e-Stat アプリケーションIDを入力"
+          aria-required="true"
+          aria-describedby="api-key-hint api-key-status"
           className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
-        <p className="mt-1 text-xs text-gray-400">
+        <p id="api-key-hint" className="mt-1 text-xs text-gray-400">
           アプリケーションIDは{" "}
           <a
             href="https://api.e-stat.go.jp/"
@@ -72,17 +74,19 @@ export default function CredentialsForm() {
         </p>
       </div>
 
-      {status === "success" && (
-        <p role="status" className="rounded-lg bg-green-50 px-4 py-2 text-sm text-green-700">
-          {message}
-        </p>
-      )}
+      <div id="api-key-status" aria-live="polite" aria-atomic="true">
+        {status === "success" && (
+          <p role="status" className="rounded-lg bg-green-50 px-4 py-2 text-sm text-green-700">
+            {message}
+          </p>
+        )}
 
-      {status === "error" && (
-        <p role="alert" className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-700">
-          {message}
-        </p>
-      )}
+        {status === "error" && (
+          <p role="alert" className="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-700">
+            {message}
+          </p>
+        )}
+      </div>
 
       <button
         type="submit"

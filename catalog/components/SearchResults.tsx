@@ -52,8 +52,7 @@ export default async function SearchResults({ q, source, page }: SearchResultsPr
         />
       </div>
     );
-  } catch (error) {
-    console.error("[SearchResults] search failed:", error);
+  } catch {
     return (
       <p role="alert" className="py-8 text-center text-red-600">
         検索に失敗しました。再試行してください

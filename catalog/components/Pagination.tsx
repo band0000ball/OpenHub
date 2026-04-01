@@ -46,7 +46,7 @@ export default function Pagination({
       )}
 
       {totalPages !== null && (
-        <span className="text-sm text-gray-600">
+        <span aria-current="page" className="text-sm text-gray-600">
           {safePage} / {totalPages} ページ
         </span>
       )}
