@@ -3,6 +3,7 @@
 
 DatasetMetadata  : データセットのメタ情報
 DatasetPayload   : データセット本体（バイナリまたはテキスト）
+SearchResult     : コネクター検索結果（ページネーション情報付き）
 """
 
 from dataclasses import dataclass, field
@@ -28,6 +29,24 @@ class DatasetMetadata:
     url: str          # 元データURL
     tags: tuple[str, ...]  # タグ一覧
     updated_at: str   # ISO 8601 形式の最終更新日時
+
+
+# ---------------------------------------------------------------------------
+# 検索結果（ページネーション情報付き）
+# ---------------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class SearchResult:
+    """コネクター検索結果。ページネーション情報を含む。
+
+    total_count: 上流から取得した全ヒット件数。取得できない場合は None。
+    has_next: 次ページが存在する場合 True。total_count が None の場合のフォールバック。
+    frozen=True によりイミュータブルを強制する。
+    """
+
+    items: tuple  # tuple[DatasetMetadata, ...] — 前方参照を避けるため型注釈は省略
+    total_count: int | None
+    has_next: bool
 
 
 # ---------------------------------------------------------------------------

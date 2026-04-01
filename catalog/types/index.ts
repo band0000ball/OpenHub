@@ -10,7 +10,8 @@ export interface DatasetMetadata {
 
 export interface SearchResponse {
   items: DatasetMetadata[];
-  total: number;
+  total: number | null;
+  has_next: boolean;
   limit: number;
   offset: number;
 }

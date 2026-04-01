@@ -18,7 +18,7 @@ from core.errors import (
     UpstreamRateLimitError,
     UpstreamTimeoutError,
 )
-from core.models import DatasetMetadata, DatasetPayload
+from core.models import DatasetMetadata, DatasetPayload, SearchResult
 
 # data.go.jp CKAN API ベース URL（data.e-gov.go.jp に移転済み）
 _BASE_URL = "https://data.e-gov.go.jp/data/api/3/action"
@@ -51,7 +51,7 @@ class DataGoJpConnector:
         """
         self._api_key = api_key  # 将来の拡張に備えて保持
 
-    def search(self, query: str, filters: dict) -> list[DatasetMetadata]:
+    def search(self, query: str, filters: dict) -> SearchResult:
         """data.go.jp CKAN API でデータセットを検索する。
 
         Args:
@@ -59,17 +59,20 @@ class DataGoJpConnector:
             filters: limit, offset 等のフィルター辞書
 
         Returns:
-            DatasetMetadata のリスト
+            SearchResult（items + ページネーション情報）
 
         Raises:
             UpstreamTimeoutError: タイムアウト
             UpstreamRateLimitError: レート制限
         """
+        limit = filters.get("limit", 20)
+        offset = filters.get("offset", 0)
+
         # CKAN は limit=rows, offset=start
         params = {
             "q": query,
-            "rows": filters.get("limit", 20),
-            "start": filters.get("offset", 0),
+            "rows": limit,
+            "start": offset,
         }
 
         try:
@@ -84,9 +87,9 @@ class DataGoJpConnector:
 
         content_type = response.headers.get("content-type", "")
         if not response.content or "json" not in content_type:
-            return []
+            return SearchResult(items=(), total_count=None, has_next=False)
 
-        return _parse_search_response(response.json())
+        return _parse_search_response(response.json(), limit=limit, offset=offset)
 
     def fetch(self, dataset_id: str, api_key: str | None) -> DatasetPayload:
         """data.go.jp からデータセット情報を取得する。
@@ -134,14 +137,27 @@ def _raise_for_upstream_error(response: httpx.Response) -> None:
         )
 
 
-def _parse_search_response(body: dict) -> list[DatasetMetadata]:
-    """CKAN 検索レスポンスを DatasetMetadata のリストに変換する。"""
+def _parse_search_response(body: dict, limit: int = 20, offset: int = 0) -> SearchResult:
+    """CKAN 検索レスポンスを SearchResult に変換する。"""
     try:
-        results = body["result"]["results"]
+        result_block = body["result"]
+        packages = result_block["results"]
+        total_count_raw = result_block.get("count")
     except (KeyError, TypeError):
-        return []
+        return SearchResult(items=(), total_count=None, has_next=False)
 
-    return [_ckan_package_to_metadata(pkg) for pkg in results]
+    items = tuple(_ckan_package_to_metadata(pkg) for pkg in packages)
+    try:
+        total_count = int(total_count_raw) if total_count_raw is not None else None
+    except (ValueError, TypeError):
+        total_count = None
+
+    if total_count is not None:
+        has_next = offset + len(items) < total_count
+    else:
+        has_next = len(items) == limit
+
+    return SearchResult(items=items, total_count=total_count, has_next=has_next)
 
 
 def _parse_fetch_response(dataset_id: str, response: httpx.Response) -> DatasetPayload:

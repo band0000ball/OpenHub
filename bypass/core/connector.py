@@ -7,7 +7,7 @@ DataSourceConnector プロトコル定義
 
 from typing import Protocol, runtime_checkable
 
-from .models import DatasetMetadata, DatasetPayload
+from .models import DatasetMetadata, DatasetPayload, SearchResult
 
 
 @runtime_checkable
@@ -31,7 +31,7 @@ class DataSourceConnector(Protocol):
         """
         ...
 
-    def search(self, query: str, filters: dict) -> list[DatasetMetadata]:
+    def search(self, query: str, filters: dict) -> SearchResult:
         """クエリとフィルターでデータセットを検索する。
 
         Args:
@@ -39,7 +39,7 @@ class DataSourceConnector(Protocol):
             filters: source, limit, offset 等のフィルター辞書
 
         Returns:
-            マッチしたデータセットのメタデータ一覧
+            SearchResult（items + ページネーション情報）
         """
         ...
 

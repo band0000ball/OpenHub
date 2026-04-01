@@ -35,7 +35,7 @@ from core.errors import (
     UpstreamRateLimitError,
     UpstreamTimeoutError,
 )
-from core.models import DatasetMetadata, DatasetPayload
+from core.models import DatasetMetadata, DatasetPayload, SearchResult
 
 router = APIRouter(prefix="/datasets", tags=["データセット"])
 
@@ -44,12 +44,12 @@ logger = logging.getLogger(__name__)
 
 # 検索結果キャッシュ（24時間 TTL）
 _SEARCH_CACHE_TTL = 60 * 60 * 24
-_search_cache: InMemoryCache[list[DatasetMetadata]] = InMemoryCache(
+_search_cache: InMemoryCache[SearchResult] = InMemoryCache(
     ttl_seconds=_SEARCH_CACHE_TTL
 )
 
 
-def get_search_cache() -> InMemoryCache[list[DatasetMetadata]]:
+def get_search_cache() -> InMemoryCache[SearchResult]:
     """検索キャッシュを返す（auth エンドポイントからのクリア用）。"""
     return _search_cache
 
@@ -92,7 +92,8 @@ class SearchResponse(BaseModel):
     """GET /datasets/search レスポンス。"""
 
     items: list[MetadataSchema]
-    total: int  # 本ページの返却件数。全ヒット件数ではない（Phase 2 でページネーション対応予定）
+    total: int | None  # 全ヒット件数。上流が返せない場合は None
+    has_next: bool     # 次ページが存在する場合 True
     limit: int
     offset: int
 
@@ -145,12 +146,12 @@ def get_datasets_search(
         _log_access(request, query=q, source_id=source or "all", x_source="cache")
         return _build_search_response(cached, limit, offset)
 
-    results = search_all_sources(q, source, limit, offset, store, user_id)
+    search_result = search_all_sources(q, source, limit, offset, store, user_id)
 
-    _search_cache.set(cache_key, results)
+    _search_cache.set(cache_key, search_result)
     _log_access(request, query=q, source_id=source or "all", x_source="upstream")
 
-    return _build_search_response(results, limit, offset)
+    return _build_search_response(search_result, limit, offset)
 
 
 def search_all_sources(
@@ -160,18 +161,29 @@ def search_all_sources(
     offset: int,
     store: CredentialStore,
     user_id: str | None = None,
-) -> list[DatasetMetadata]:
+) -> SearchResult:
     """指定ソース（または全ソース）を検索して結果を返す。
 
     テストから直接モック可能な独立関数として定義する。
+    複数ソース横断時は total_count を合算する。
+    いずれかのソースの total_count が None の場合は全体も None とし has_next で判定する。
     """
     connectors = _build_connectors(source, store, user_id)
     filters = {"limit": limit, "offset": offset}
-    results: list[DatasetMetadata] = []
+
+    all_items: list[DatasetMetadata] = []
+    total_count: int | None = 0
+    has_next = False
 
     for connector in connectors:
         try:
-            results.extend(connector.search(query, filters))
+            result = connector.search(query, filters)
+            all_items.extend(result.items)
+            if total_count is not None and result.total_count is not None:
+                total_count += result.total_count
+            else:
+                total_count = None
+            has_next = has_next or result.has_next
         except AuthenticationError:
             # APIキー未設定のソースはスキップ（エラーにしない）
             logger.warning(
@@ -183,6 +195,7 @@ def search_all_sources(
             )
         except (UpstreamTimeoutError, UpstreamRateLimitError) as exc:
             # 上流エラーは警告ログを残して続行（他ソースの結果は返す）
+            total_count = None  # 失敗ソースの件数不明のため None にフォールバック
             logger.warning(
                 json.dumps({
                     "event": "search_upstream_error",
@@ -191,7 +204,7 @@ def search_all_sources(
                 })
             )
 
-    return results
+    return SearchResult(items=tuple(all_items), total_count=total_count, has_next=has_next)
 
 
 # ---------------------------------------------------------------------------
@@ -291,15 +304,16 @@ def _get_connector_by_source_id(source_id: str) -> DataSourceConnector | None:
 
 
 def _build_search_response(
-    results: list[DatasetMetadata],
+    result: SearchResult,
     limit: int,
     offset: int,
 ) -> SearchResponse:
-    """検索結果を SearchResponse に変換する。"""
-    items = [_metadata_to_schema(m) for m in results]
+    """SearchResult を SearchResponse に変換する。"""
+    items = [_metadata_to_schema(m) for m in result.items]
     return SearchResponse(
         items=items,
-        total=len(items),
+        total=result.total_count,
+        has_next=result.has_next,
         limit=limit,
         offset=offset,
     )

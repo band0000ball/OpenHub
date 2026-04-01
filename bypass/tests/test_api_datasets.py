@@ -17,7 +17,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from fastapi.testclient import TestClient
 
-from core.models import DatasetMetadata, DatasetPayload
+from core.models import DatasetMetadata, DatasetPayload, SearchResult
 
 
 # ---------------------------------------------------------------------------
@@ -38,6 +38,20 @@ def make_metadata(n: int = 1) -> list[DatasetMetadata]:
         )
         for i in range(1, n + 1)
     ]
+
+
+def make_search_result(
+    n: int = 1,
+    total_count: int | None = None,
+    has_next: bool = False,
+) -> SearchResult:
+    """テスト用 SearchResult を生成する。"""
+    items = tuple(make_metadata(n))
+    return SearchResult(
+        items=items,
+        total_count=total_count if total_count is not None else n,
+        has_next=has_next,
+    )
 
 
 def make_payload(metadata: DatasetMetadata) -> DatasetPayload:
@@ -61,12 +75,13 @@ class TestGetDatasetsSearch:
     def test_正常検索で200とメタデータリストを返す(self, client: TestClient):
         """q パラメータ付きの正常リクエストで 200 OK とデータリストを返す。"""
         with patch("api.datasets.search_all_sources") as mock_search:
-            mock_search.return_value = make_metadata(3)
+            mock_search.return_value = make_search_result(3, total_count=3)
             response = client.get("/datasets/search?q=人口")
         assert response.status_code == 200
         body = response.json()
         assert "items" in body
         assert "total" in body
+        assert "has_next" in body
         assert len(body["items"]) == 3
 
     def test_qパラメータ未指定で422を返す(self, client: TestClient):
@@ -82,7 +97,7 @@ class TestGetDatasetsSearch:
     def test_limitデフォルトは20(self, client: TestClient):
         """limit 未指定時のデフォルト値は 20。"""
         with patch("api.datasets.search_all_sources") as mock_search:
-            mock_search.return_value = make_metadata(5)
+            mock_search.return_value = make_search_result(5)
             response = client.get("/datasets/search?q=テスト")
         assert response.status_code == 200
         # limit=20 で呼ばれることを確認
@@ -107,7 +122,7 @@ class TestGetDatasetsSearch:
     def test_sourceフィルタで特定ソースのみ検索(self, client: TestClient):
         """source=estat の場合、e-Stat のみを検索する。"""
         with patch("api.datasets.search_all_sources") as mock_search:
-            mock_search.return_value = make_metadata(2)
+            mock_search.return_value = make_search_result(2)
             response = client.get("/datasets/search?q=人口&source=estat")
         assert response.status_code == 200
 
@@ -119,7 +134,7 @@ class TestGetDatasetsSearch:
     def test_キャッシュヒット時は上流に問い合わせない(self, client: TestClient):
         """同一クエリの2回目以降はキャッシュから返す（モックが1回のみ呼ばれる）。"""
         with patch("api.datasets.search_all_sources") as mock_search:
-            mock_search.return_value = make_metadata(2)
+            mock_search.return_value = make_search_result(2)
             client.get("/datasets/search?q=キャッシュテスト")
             client.get("/datasets/search?q=キャッシュテスト")
         assert mock_search.call_count == 1, "キャッシュヒット時は上流を呼ばない"
@@ -127,16 +142,44 @@ class TestGetDatasetsSearch:
     def test_レスポンスにoffsetとlimitが含まれる(self, client: TestClient):
         """ページネーション情報がレスポンスに含まれる。"""
         with patch("api.datasets.search_all_sources") as mock_search:
-            mock_search.return_value = make_metadata(3)
+            mock_search.return_value = make_search_result(3)
             response = client.get("/datasets/search?q=テスト&limit=10&offset=0")
         body = response.json()
         assert "limit" in body
         assert "offset" in body
+        assert "has_next" in body
+
+    def test_total_countが全件数を返す(self, client: TestClient):
+        """total フィールドが全ヒット件数を返す。"""
+        with patch("api.datasets.search_all_sources") as mock_search:
+            mock_search.return_value = make_search_result(3, total_count=100)
+            response = client.get("/datasets/search?q=テスト&limit=3&offset=0")
+        body = response.json()
+        assert body["total"] == 100
+
+    def test_has_nextがTrueのとき次ページあり(self, client: TestClient):
+        """has_next が True のとき次ページが存在する。"""
+        with patch("api.datasets.search_all_sources") as mock_search:
+            mock_search.return_value = make_search_result(3, total_count=10, has_next=True)
+            response = client.get("/datasets/search?q=テスト&limit=3&offset=0")
+        body = response.json()
+        assert body["has_next"] is True
+
+    def test_total_countがNoneのときtotalがNullを返す(self, client: TestClient):
+        """total_count が None のとき total フィールドは null を返す。"""
+        with patch("api.datasets.search_all_sources") as mock_search:
+            mock_search.return_value = SearchResult(
+                items=tuple(make_metadata(2)), total_count=None, has_next=True
+            )
+            response = client.get("/datasets/search?q=テスト")
+        body = response.json()
+        assert body["total"] is None
+        assert body["has_next"] is True
 
     def test_検索結果ゼロ件で空リストを返す(self, client: TestClient):
         """ヒットなしの場合は空リストを返す（エラーではない）。"""
         with patch("api.datasets.search_all_sources") as mock_search:
-            mock_search.return_value = []
+            mock_search.return_value = SearchResult(items=(), total_count=0, has_next=False)
             response = client.get("/datasets/search?q=存在しないデータ")
         assert response.status_code == 200
         assert response.json()["items"] == []
