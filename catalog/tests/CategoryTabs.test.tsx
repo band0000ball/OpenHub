@@ -1,19 +1,22 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import CategoryTabs from "../components/CategoryTabs";
 
-const mockPush = vi.fn();
-
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: mockPush }),
-  useSearchParams: () => new URLSearchParams(""),
+vi.mock("next/link", () => ({
+  default: ({ href, children, className, role, "aria-selected": ariaSelected }: {
+    href: string;
+    children: React.ReactNode;
+    className?: string;
+    role?: string;
+    "aria-selected"?: boolean;
+  }) => (
+    <a href={href} className={className} role={role} aria-selected={ariaSelected}>
+      {children}
+    </a>
+  ),
 }));
 
 describe("CategoryTabs", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("renders 6 tabs", () => {
     render(<CategoryTabs currentCategory="all" />);
     expect(screen.getAllByRole("tab")).toHaveLength(6);
@@ -38,16 +41,16 @@ describe("CategoryTabs", () => {
     expect(populationTab).toHaveAttribute("aria-selected", "false");
   });
 
-  it("navigates to / when 全て tab is clicked", () => {
+  it("全て tab links to /", () => {
     render(<CategoryTabs currentCategory="population" />);
-    fireEvent.click(screen.getByRole("tab", { name: "全て" }));
-    expect(mockPush).toHaveBeenCalledWith("/");
+    const allTab = screen.getByRole("tab", { name: "全て" });
+    expect(allTab).toHaveAttribute("href", "/");
   });
 
-  it("navigates to /?category=population when 人口・世帯 tab is clicked", () => {
+  it("人口・世帯 tab links to /?category=population", () => {
     render(<CategoryTabs currentCategory="all" />);
-    fireEvent.click(screen.getByRole("tab", { name: "人口・世帯" }));
-    expect(mockPush).toHaveBeenCalledWith("/?category=population");
+    const populationTab = screen.getByRole("tab", { name: "人口・世帯" });
+    expect(populationTab).toHaveAttribute("href", "/?category=population");
   });
 
   it("has a tablist container", () => {

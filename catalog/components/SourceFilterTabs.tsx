@@ -1,6 +1,4 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Tab {
   label: string;
@@ -22,26 +20,20 @@ export default function SourceFilterTabs({
   currentSource,
   currentQuery,
 }: SourceFilterTabsProps) {
-  const router = useRouter();
-
-  const handleTabClick = (value: string) => {
-    const params = new URLSearchParams({ q: currentQuery });
-    if (value) {
-      params.set("source", value);
-    }
-    router.push(`/search?${params.toString()}`);
-  };
-
   return (
     <div role="tablist" className="flex gap-1 border-b border-gray-200">
       {TABS.map((tab) => {
         const isSelected = currentSource === tab.value;
+        const params = new URLSearchParams({ q: currentQuery });
+        if (tab.value) {
+          params.set("source", tab.value);
+        }
         return (
-          <button
+          <Link
             key={tab.value}
             role="tab"
             aria-selected={isSelected}
-            onClick={() => handleTabClick(tab.value)}
+            href={`/search?${params.toString()}`}
             className={[
               "px-4 py-2 text-sm font-medium rounded-t-md transition-colors",
               isSelected
@@ -50,7 +42,7 @@ export default function SourceFilterTabs({
             ].join(" ")}
           >
             {tab.label}
-          </button>
+          </Link>
         );
       })}
     </div>
