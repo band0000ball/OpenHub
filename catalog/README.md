@@ -1,4 +1,4 @@
-# OpenHub Catalog — Phase 2
+# OpenHub Catalog — Phase 3
 
 日本の行政オープンデータを横断検索できる WebUI。
 [OpenHub Bypass](../bypass/) REST API の BFF（フロントエンド）として動作する。
@@ -6,9 +6,10 @@
 ## 概要
 
 - カテゴリタブ付きデータセット一覧（トップページ）
-- キーワード検索（全ソース横断）
+- キーワード検索（全ソース横断・ページネーション対応）
 - データセット詳細ページ
-- e-Stat アプリケーションID 設定ページ（Catalog から Bypass に登録）
+- e-Stat アプリケーションID 設定ページ（取得手順案内付き）
+- Amazon Cognito 認証（設定ページへのアクセスに必要）
 
 ## セットアップ
 
