@@ -19,7 +19,13 @@ export default async function EStatBanner() {
     >
       <p>
         e-Stat のデータを表示するには{" "}
-        <strong>アプリケーションID</strong> の設定が必要です。
+        <strong>アプリケーションID</strong> の設定が必要です。{" "}
+        <Link
+          href="/settings#estat-guide"
+          className="underline hover:text-yellow-900"
+        >
+          取得方法はこちら
+        </Link>
       </p>
       <Link
         href="/settings"

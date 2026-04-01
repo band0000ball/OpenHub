@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import EStatGuideSteps from "./EStatGuideSteps";
+import { ESTAT_URLS } from "../lib/estat-guide";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -63,7 +65,7 @@ export default function CredentialsForm() {
         <p id="api-key-hint" className="mt-1 text-xs text-gray-400">
           アプリケーションIDは{" "}
           <a
-            href="https://api.e-stat.go.jp/"
+            href={ESTAT_URLS.apiTop}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-600 underline"
@@ -95,6 +97,8 @@ export default function CredentialsForm() {
       >
         {status === "loading" ? "保存中…" : "保存"}
       </button>
+
+      <EStatGuideSteps />
     </form>
   );
 }

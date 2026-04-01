@@ -48,8 +48,18 @@ describe("EStatBanner", () => {
     const component = await EStatBanner();
     render(component);
 
-    const link = screen.getByRole("link");
+    const link = screen.getByRole("link", { name: /設定ページへ/i });
     expect(link).toHaveAttribute("href", "/settings");
+  });
+
+  it("shows guide link to settings page with anchor in banner", async () => {
+    mockGetCredentialStatus.mockResolvedValueOnce(false);
+
+    const component = await EStatBanner();
+    render(component);
+
+    const link = screen.getByRole("link", { name: /取得方法/i });
+    expect(link).toHaveAttribute("href", "/settings#estat-guide");
   });
 
   it("renders nothing when e-Stat key is configured", async () => {

@@ -75,6 +75,16 @@ describe("CredentialsForm", () => {
     });
   });
 
+  it("取得手順セクションが表示される", () => {
+    render(<CredentialsForm />);
+    expect(screen.getByText(/アプリケーションIDの取得手順/)).toBeInTheDocument();
+  });
+
+  it("取得手順が番号付きリストで表示される", () => {
+    const { container } = render(<CredentialsForm />);
+    expect(container.querySelector("ol")).toBeInTheDocument();
+  });
+
   it("calls POST /api/credentials with correct body", async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
