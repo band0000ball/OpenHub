@@ -1,19 +1,22 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import SourceFilterTabs from "../components/SourceFilterTabs";
 
-const mockPush = vi.fn();
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: mockPush }),
-  useSearchParams: () => new URLSearchParams("q=人口&source="),
+vi.mock("next/link", () => ({
+  default: ({ href, children, className, role, "aria-selected": ariaSelected }: {
+    href: string;
+    children: React.ReactNode;
+    className?: string;
+    role?: string;
+    "aria-selected"?: boolean;
+  }) => (
+    <a href={href} className={className} role={role} aria-selected={ariaSelected}>
+      {children}
+    </a>
+  ),
 }));
 
 describe("SourceFilterTabs", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it("renders tablist with correct role", () => {
     render(<SourceFilterTabs currentSource="" currentQuery="人口" />);
     expect(screen.getByRole("tablist")).toBeInTheDocument();
@@ -50,44 +53,29 @@ describe("SourceFilterTabs", () => {
     expect(dataTab).toHaveAttribute("aria-selected", "true");
   });
 
-  it("navigates to /search with source param on tab click", async () => {
-    const user = userEvent.setup();
+  it("e-Stat tab href contains source=estat and current query", () => {
     render(<SourceFilterTabs currentSource="" currentQuery="人口" />);
-
     const eStatTab = screen.getByRole("tab", { name: "e-Stat" });
-    await user.click(eStatTab);
-
-    expect(mockPush).toHaveBeenCalledWith(
-      expect.stringContaining("/search?")
-    );
-    const calledUrl = mockPush.mock.calls[0][0];
-    const params = new URLSearchParams(calledUrl.split("?")[1]);
+    const href = eStatTab.getAttribute("href") ?? "";
+    const params = new URLSearchParams(href.split("?")[1]);
     expect(params.get("source")).toBe("estat");
     expect(params.get("q")).toBe("人口");
   });
 
-  it("navigates without source param when 全て tab clicked", async () => {
-    const user = userEvent.setup();
+  it("全て tab href has no source param but includes query", () => {
     render(<SourceFilterTabs currentSource="estat" currentQuery="人口" />);
-
     const allTab = screen.getByRole("tab", { name: "全て" });
-    await user.click(allTab);
-
-    const calledUrl = mockPush.mock.calls[0][0];
-    const params = new URLSearchParams(calledUrl.split("?")[1]);
+    const href = allTab.getAttribute("href") ?? "";
+    const params = new URLSearchParams(href.split("?")[1]);
     expect(params.get("q")).toBe("人口");
     expect(params.has("source")).toBe(false);
   });
 
-  it("navigates with datagojp source", async () => {
-    const user = userEvent.setup();
+  it("data.go.jp tab href contains source=datagojp", () => {
     render(<SourceFilterTabs currentSource="" currentQuery="人口" />);
-
     const dataTab = screen.getByRole("tab", { name: "data.go.jp" });
-    await user.click(dataTab);
-
-    const calledUrl = mockPush.mock.calls[0][0];
-    const params = new URLSearchParams(calledUrl.split("?")[1]);
+    const href = dataTab.getAttribute("href") ?? "";
+    const params = new URLSearchParams(href.split("?")[1]);
     expect(params.get("source")).toBe("datagojp");
   });
 });
