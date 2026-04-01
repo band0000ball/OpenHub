@@ -6,7 +6,7 @@ import EStatBanner from "../components/EStatBanner";
 import SkeletonCard from "../components/SkeletonCard";
 
 interface HomePageProps {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; page?: string }>;
 }
 
 function SkeletonGrid() {
@@ -20,7 +20,8 @@ function SkeletonGrid() {
 }
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const { category = "all" } = await searchParams;
+  const { category = "all", page: pageStr = "1" } = await searchParams;
+  const page = Math.max(1, parseInt(pageStr, 10) || 1);
 
   return (
     <main className="flex flex-col min-h-screen bg-gray-50">
@@ -46,7 +47,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <EStatBanner />
         <CategoryTabs currentCategory={category} />
         <Suspense fallback={<SkeletonGrid />}>
-          <DatasetBrowser category={category} />
+          <DatasetBrowser category={category} page={page} />
         </Suspense>
       </div>
     </main>
