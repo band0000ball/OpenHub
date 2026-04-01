@@ -64,6 +64,7 @@
 | 3.10 | credentials route 型安全化 | 低 | 📋 | `as` キャストを除去し NextAuth Session 型を正しく参照 |
 | 3.11 | DatasetBrowser ロジック分離 | 低 | 📋 | データ取得・ページ計算をカスタムフックに切り出し |
 | 3.12 | 実行時バリデーション（Zod） | 低 | 📋 | `response.json() as T` を Zod パースに置き換え |
+| 3.13 | Bypass テストカバレッジ回復（80%+） | 中 | 📋 | Phase 3 追加コード（auth / DynamoDB / e-Stat / lambda_handler）のテストを追加 |
 
 ---
 
@@ -101,4 +102,4 @@
 
 ---
 
-*最終更新: 2026-04-01（Sprint 3.4 完了・Phase B/C 追加）*
+*最終更新: 2026-04-02（Phase 3.5 完了・3.13 追加）*
