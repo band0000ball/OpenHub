@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-04-02
+
+### Added
+
+- **e-Stat アプリケーションID 取得案内 UI（Phase 3.6）**: 設定ページに番号付き取得手順（折りたたみ式）を追加。
+  e-Stat バナーに「取得方法はこちら」リンクを追加。URL・手順テキストを `lib/estat-guide.ts` で一元管理。
+
+### Fixed
+
+- **フロントエンド品質改善（Phase A）**:
+  - `app/error.tsx` を新規作成。RSC クラッシュ時にエラー画面と再試行ボタンを表示するグローバルエラー境界を追加。
+  - `app/layout.tsx` の `lang` 属性を `"en"` → `"ja"` に修正。
+  - `components/CredentialsForm.tsx` に `aria-required`・`aria-live="polite"`・`aria-describedby` を追加。
+  - `components/Pagination.tsx` に `aria-current="page"` を追加。
+  - `lib/api.ts` の `DEFAULT_BYPASS_BASE_URL` 定数の重複を解消。
+  - `components/SearchResults.tsx` の `console.error` を除去。
+
+- **data.go.jp エンコーディング調査（Phase 3.5）**: e-gov.go.jp API が `application/json;charset=utf-8` を返し、
+  現行実装（`response.json()`）が日本語を正しくデコードすることを確認。エンコーディングエッジケーステストを追加。
+
 ## 2026-04-01
 
 ### Added
