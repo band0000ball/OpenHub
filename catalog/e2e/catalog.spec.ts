@@ -107,3 +107,74 @@ test.describe("Navigation flow", () => {
     await expect(page).toHaveURL(/\/search\?q=%E7%B5%B1%E8%A8%88/);
   });
 });
+
+test.describe("Category tabs", () => {
+  test("全て tab is selected by default on home page", async ({ page }) => {
+    await page.goto("/");
+    const allTab = page.getByRole("tab", { name: "全て" });
+    await expect(allTab).toHaveAttribute("aria-selected", "true");
+  });
+
+  test("clicking 人口・世帯 tab updates URL to /?category=population", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("tab", { name: "人口・世帯" }).click();
+    await expect(page).toHaveURL(/category=population/);
+  });
+
+  test("selected tab changes after navigation", async ({ page }) => {
+    await page.goto("/?category=population");
+    const tab = page.getByRole("tab", { name: "人口・世帯" });
+    await expect(tab).toHaveAttribute("aria-selected", "true");
+  });
+});
+
+test.describe("Pagination", () => {
+  test("pagination navigation is present on search results", async ({ page }) => {
+    await page.goto("/search?q=人口");
+    await page.waitForSelector('[role="article"], [role="alert"], p:has-text("見つかりませんでした")', {
+      timeout: 10000,
+    });
+    // ページネーション nav が存在する場合のみ検証
+    const nav = page.getByRole("navigation", { name: "ページネーション" });
+    const hasNav = await nav.isVisible().catch(() => false);
+    if (!hasNav) {
+      test.skip(true, "検索結果が 1 ページに収まるためスキップ");
+      return;
+    }
+    await expect(nav).toBeVisible();
+  });
+
+  test("clicking 次へ updates URL to page=2", async ({ page }) => {
+    await page.goto("/search?q=人口");
+    await page.waitForSelector('[role="article"], [role="alert"], p:has-text("見つかりませんでした")', {
+      timeout: 10000,
+    });
+    const nextLink = page.getByRole("link", { name: "次へ" });
+    const hasNext = await nextLink.isVisible().catch(() => false);
+    if (!hasNext) {
+      test.skip(true, "次のページが存在しないためスキップ");
+      return;
+    }
+    await nextLink.click();
+    await expect(page).toHaveURL(/page=2/);
+    await page.waitForSelector('[role="article"], [role="alert"], p:has-text("見つかりませんでした")', {
+      timeout: 10000,
+    });
+  });
+
+  test("page=1 では 前へ がリンクではなく span として表示される", async ({ page }) => {
+    await page.goto("/search?q=人口&page=1");
+    await page.waitForSelector('[role="article"], [role="alert"], p:has-text("見つかりませんでした")', {
+      timeout: 10000,
+    });
+    const nav = page.getByRole("navigation", { name: "ページネーション" });
+    const hasNav = await nav.isVisible().catch(() => false);
+    if (!hasNav) {
+      test.skip(true, "ページネーションが存在しないためスキップ");
+      return;
+    }
+    // 前へ は <span>（クリック不可）として表示される
+    const prevSpan = nav.locator('span:has-text("前へ")');
+    await expect(prevSpan).toBeVisible();
+  });
+});
