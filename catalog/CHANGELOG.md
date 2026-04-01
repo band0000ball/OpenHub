@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-04-01
+
+### Added
+
+- **ページネーション（Bypass API）**: `SearchResponse` に `total`・`has_next`・`limit`・`offset` を追加。
+  全ソース横断検索時は各ソースの `total` を合算し、いずれかのソースが失敗した場合は `total=null`・`has_next` フラグで判定する。
+- **ページネーション（Catalog UI）**: 検索結果ページにページ送りコントロール（`Pagination` コンポーネント）を追加。
+  URL パラメータ `?page=N` でページを指定できる。`total` が不明な場合は `has_next` フラグでボタンの有効/無効を制御する。
+- **`Pagination` コンポーネント**: `catalog/components/Pagination.tsx` を新規作成。
+
 ## 2026-03-31
 
 ### Fixed
