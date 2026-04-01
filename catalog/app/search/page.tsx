@@ -7,7 +7,7 @@ import SkeletonCard from "../../components/SkeletonCard";
 
 
 interface SearchPageProps {
-  searchParams: Promise<{ q?: string; source?: string }>;
+  searchParams: Promise<{ q?: string; source?: string; page?: string }>;
 }
 
 function SkeletonResults() {
@@ -21,7 +21,8 @@ function SkeletonResults() {
 }
 
 export default async function SearchResultsPage({ searchParams }: SearchPageProps) {
-  const { q = "", source = "" } = await searchParams;
+  const { q = "", source = "", page: pageStr = "1" } = await searchParams;
+  const page = Math.max(1, parseInt(pageStr, 10) || 1);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">
@@ -33,7 +34,7 @@ export default async function SearchResultsPage({ searchParams }: SearchPageProp
         <SourceFilterTabs currentSource={source} currentQuery={q} />
       </div>
       <Suspense fallback={<SkeletonResults />}>
-        <SearchResults q={q} source={source} />
+        <SearchResults q={q} source={source} page={page} />
       </Suspense>
     </main>
   );

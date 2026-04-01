@@ -24,7 +24,7 @@ from core.errors import (
     UpstreamRateLimitError,
     UpstreamTimeoutError,
 )
-from core.models import DatasetMetadata, DatasetPayload
+from core.models import DatasetMetadata, DatasetPayload, SearchResult
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
@@ -51,21 +51,65 @@ class TestEStatConnectorSearch:
             connector.search("人口", {})
 
     @respx.mock
-    def test_検索結果をDatasetMetadataに変換する(self):
-        """API レスポンスを DatasetMetadata のリストに正しく変換する。"""
+    def test_検索結果をSearchResultに変換する(self):
+        """API レスポンスを SearchResult に正しく変換する。"""
         fixture = load_fixture("estat_search_response.json")
         respx.get("https://api.e-stat.go.jp/rest/3.0/app/json/getStatsList").mock(
             return_value=httpx.Response(200, json=fixture)
         )
         connector = EStatConnector()
         connector.initialize("test_key")
-        results = connector.search("人口", {"limit": 5, "offset": 0})
+        result = connector.search("人口", {"limit": 5, "offset": 0})
 
-        assert len(results) > 0
-        assert all(isinstance(r, DatasetMetadata) for r in results)
-        assert all(r.source_id == "estat" for r in results)
+        assert isinstance(result, SearchResult)
+        assert len(result.items) > 0
+        assert all(isinstance(r, DatasetMetadata) for r in result.items)
+        assert all(r.source_id == "estat" for r in result.items)
         # ID フォーマット検証
-        assert all(r.id.startswith("estat:") for r in results)
+        assert all(r.id.startswith("estat:") for r in result.items)
+
+    @respx.mock
+    def test_total_countがNUMBERから取得される(self):
+        """DATALIST_INF.NUMBER が total_count に正しく設定される。"""
+        fixture = load_fixture("estat_search_response.json")  # NUMBER=3
+        respx.get("https://api.e-stat.go.jp/rest/3.0/app/json/getStatsList").mock(
+            return_value=httpx.Response(200, json=fixture)
+        )
+        connector = EStatConnector()
+        connector.initialize("test_key")
+        result = connector.search("人口", {"limit": 5, "offset": 0})
+
+        assert result.total_count == 3
+
+    @respx.mock
+    def test_has_nextがFalseになる_全件取得済み(self):
+        """offset + len(items) == total_count のとき has_next は False。"""
+        fixture = load_fixture("estat_search_response.json")  # 3件取得、total=3
+        respx.get("https://api.e-stat.go.jp/rest/3.0/app/json/getStatsList").mock(
+            return_value=httpx.Response(200, json=fixture)
+        )
+        connector = EStatConnector()
+        connector.initialize("test_key")
+        result = connector.search("人口", {"limit": 5, "offset": 0})
+
+        assert result.has_next is False
+
+    @respx.mock
+    def test_has_nextがTrueになる_次ページあり(self):
+        """offset + len(items) < total_count のとき has_next は True。"""
+        fixture = load_fixture("estat_search_response.json")  # 3件取得、total=3
+        # total_count を大きくするため NUMBER を上書き
+        import copy
+        fixture_with_more = copy.deepcopy(fixture)
+        fixture_with_more["GET_STATS_LIST"]["DATALIST_INF"]["NUMBER"] = 10
+        respx.get("https://api.e-stat.go.jp/rest/3.0/app/json/getStatsList").mock(
+            return_value=httpx.Response(200, json=fixture_with_more)
+        )
+        connector = EStatConnector()
+        connector.initialize("test_key")
+        result = connector.search("人口", {"limit": 3, "offset": 0})
+
+        assert result.has_next is True
 
     @respx.mock
     def test_limitとoffsetがクエリパラメータに含まれる(self):
@@ -115,10 +159,8 @@ class TestEStatConnectorSearch:
             connector.search("人口", {})
 
     @respx.mock
-    def test_検索結果ゼロ件で空リストを返す(self):
-        """ヒットなしのレスポンスで空リストを返す（例外ではない）。"""
-        fixture = load_fixture("estat_search_response.json")
-        # 結果なしを模擬
+    def test_検索結果ゼロ件でitemsが空のSearchResultを返す(self):
+        """ヒットなしのレスポンスで items が空の SearchResult を返す（例外ではない）。"""
         empty_fixture = {
             "GET_STATS_LIST": {
                 "RESULT": {"STATUS": 0, "ERROR_MSG": "正常終了"},
@@ -131,8 +173,11 @@ class TestEStatConnectorSearch:
         )
         connector = EStatConnector()
         connector.initialize("test_key")
-        results = connector.search("存在しない検索語", {})
-        assert results == []
+        result = connector.search("存在しない検索語", {})
+        assert isinstance(result, SearchResult)
+        assert len(result.items) == 0
+        assert result.total_count == 0
+        assert result.has_next is False
 
 
 class TestEStatConnectorFetch:
@@ -192,5 +237,5 @@ def test_estat_実APIで検索できる():
 
     connector = EStatConnector()
     connector.initialize(api_key)
-    results = connector.search("人口", {"limit": 3})
-    assert len(results) > 0
+    result = connector.search("人口", {"limit": 3})
+    assert len(result.items) > 0

@@ -19,7 +19,7 @@ import respx
 
 from connectors.datagojp import DataGoJpConnector
 from core.errors import UpstreamRateLimitError, UpstreamTimeoutError
-from core.models import DatasetMetadata, DatasetPayload
+from core.models import DatasetMetadata, DatasetPayload, SearchResult
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
@@ -45,20 +45,51 @@ class TestDataGoJpConnectorSearch:
         assert connector.source_id == "datagojp"
 
     @respx.mock
-    def test_検索結果をDatasetMetadataに変換する(self):
-        """CKAN API レスポンスを DatasetMetadata のリストに変換する。"""
+    def test_検索結果をSearchResultに変換する(self):
+        """CKAN API レスポンスを SearchResult に変換する。"""
         fixture = load_fixture("datagojp_search_response.json")
         respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
             return_value=httpx.Response(200, json=fixture)
         )
         connector = DataGoJpConnector()
         connector.initialize(None)
-        results = connector.search("人口", {"limit": 5, "offset": 0})
+        result = connector.search("人口", {"limit": 5, "offset": 0})
 
-        assert len(results) > 0
-        assert all(isinstance(r, DatasetMetadata) for r in results)
-        assert all(r.source_id == "datagojp" for r in results)
-        assert all(r.id.startswith("datagojp:") for r in results)
+        assert isinstance(result, SearchResult)
+        assert len(result.items) > 0
+        assert all(isinstance(r, DatasetMetadata) for r in result.items)
+        assert all(r.source_id == "datagojp" for r in result.items)
+        assert all(r.id.startswith("datagojp:") for r in result.items)
+
+    @respx.mock
+    def test_total_countがresult_countから取得される(self):
+        """result.count が total_count に正しく設定される。"""
+        fixture = load_fixture("datagojp_search_response.json")
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
+            return_value=httpx.Response(200, json=fixture)
+        )
+        connector = DataGoJpConnector()
+        connector.initialize(None)
+        result = connector.search("人口", {"limit": 5, "offset": 0})
+
+        assert result.total_count == fixture["result"]["count"]
+
+    @respx.mock
+    def test_has_nextがTrueになる_次ページあり(self):
+        """offset + len(items) < total_count のとき has_next は True。"""
+        fixture = load_fixture("datagojp_search_response.json")
+        # count を items 数より大きくする
+        import copy
+        fixture_with_more = copy.deepcopy(fixture)
+        fixture_with_more["result"]["count"] = 100
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
+            return_value=httpx.Response(200, json=fixture_with_more)
+        )
+        connector = DataGoJpConnector()
+        connector.initialize(None)
+        result = connector.search("人口", {"limit": 5, "offset": 0})
+
+        assert result.has_next is True
 
     @respx.mock
     def test_limitとoffsetがrowsとstartに変換される(self):
@@ -99,8 +130,8 @@ class TestDataGoJpConnectorSearch:
             connector.search("人口", {})
 
     @respx.mock
-    def test_検索結果ゼロ件で空リストを返す(self):
-        """ヒットなしのレスポンスで空リストを返す。"""
+    def test_検索結果ゼロ件でitemsが空のSearchResultを返す(self):
+        """ヒットなしのレスポンスで items が空の SearchResult を返す。"""
         empty_fixture = {
             "success": True,
             "result": {"count": 0, "results": []},
@@ -110,8 +141,11 @@ class TestDataGoJpConnectorSearch:
         )
         connector = DataGoJpConnector()
         connector.initialize(None)
-        results = connector.search("存在しない検索語", {})
-        assert results == []
+        result = connector.search("存在しない検索語", {})
+        assert isinstance(result, SearchResult)
+        assert len(result.items) == 0
+        assert result.total_count == 0
+        assert result.has_next is False
 
 
 class TestDataGoJpConnectorFetch:

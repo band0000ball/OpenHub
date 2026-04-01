@@ -29,22 +29,19 @@ class TestSearchAllSourcesSkipAuth:
 
     def test_APIキー未設定ソースはスキップされ結果が返される(self, client: TestClient):
         """e-Stat APIキー未設定でも他ソースの結果を返す（スキップ、エラーにしない）。"""
-        from core.models import DatasetMetadata
-        from tests.test_api_datasets import make_metadata
+        from core.models import SearchResult
+        from tests.test_api_datasets import make_search_result
 
         # estat は AuthenticationError を発生させ、datagojp は結果を返す
         with pytest.MonkeyPatch().context() as mp:
             from connectors.estat import EStatConnector
             from connectors.datagojp import DataGoJpConnector
 
-            original_estat_search = EStatConnector.search
-            original_datagojp_search = DataGoJpConnector.search
-
             def estat_raises(self, query, filters):
                 raise AuthenticationError("APIキー未設定")
 
             def datagojp_returns(self, query, filters):
-                return make_metadata(2)
+                return make_search_result(2)
 
             mp.setattr(EStatConnector, "search", estat_raises)
             mp.setattr(DataGoJpConnector, "search", datagojp_returns)
@@ -206,9 +203,9 @@ class TestEStatSingleResultParsing:
         )
         connector = EStatConnector()
         connector.initialize("test_key")
-        results = connector.search("人口", {})
-        assert len(results) == 1
-        assert results[0].id == "estat:0003191203"
+        result = connector.search("人口", {})
+        assert len(result.items) == 1
+        assert result.items[0].id == "estat:0003191203"
 
 
 class TestEStatFetchWithTextTitle:

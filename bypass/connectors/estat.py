@@ -17,7 +17,7 @@ from core.errors import (
     UpstreamRateLimitError,
     UpstreamTimeoutError,
 )
-from core.models import DatasetMetadata, DatasetPayload
+from core.models import DatasetMetadata, DatasetPayload, SearchResult
 
 # e-Stat API ベース URL
 _BASE_URL = "https://api.e-stat.go.jp/rest/3.0/app/json"
@@ -46,7 +46,7 @@ class EStatConnector:
         """
         self._api_key = api_key
 
-    def search(self, query: str, filters: dict) -> list[DatasetMetadata]:
+    def search(self, query: str, filters: dict) -> SearchResult:
         """e-Stat API で統計表情報を検索する。
 
         Args:
@@ -54,7 +54,7 @@ class EStatConnector:
             filters: limit, offset 等のフィルター辞書
 
         Returns:
-            DatasetMetadata のリスト
+            SearchResult（items + ページネーション情報）
 
         Raises:
             AuthenticationError: APIキー未設定または認証失敗
@@ -67,11 +67,14 @@ class EStatConnector:
                 "POST /auth/credentials で estat の APIキーを設定してください。"
             )
 
+        limit = filters.get("limit", 20)
+        offset = filters.get("offset", 0)
+
         params = {
             "appId": self._api_key,
             "searchWord": query,
-            "limit": filters.get("limit", 20),
-            "startPosition": filters.get("offset", 0) + 1,  # e-Stat は 1-based
+            "limit": limit,
+            "startPosition": offset + 1,  # e-Stat は 1-based
             "lang": "J",
         }
 
@@ -85,7 +88,7 @@ class EStatConnector:
 
         _raise_for_upstream_error(response)
 
-        return _parse_search_response(response.json())
+        return _parse_search_response(response.json(), limit=limit, offset=offset)
 
     def fetch(self, dataset_id: str, api_key: str | None) -> DatasetPayload:
         """e-Stat API からデータセット本体を取得する。
@@ -147,13 +150,14 @@ def _raise_for_upstream_error(response: httpx.Response) -> None:
         )
 
 
-def _parse_search_response(body: dict) -> list[DatasetMetadata]:
-    """e-Stat 検索レスポンスを DatasetMetadata のリストに変換する。"""
+def _parse_search_response(body: dict, limit: int = 20, offset: int = 0) -> SearchResult:
+    """e-Stat 検索レスポンスを SearchResult に変換する。"""
     try:
         datalist = body["GET_STATS_LIST"]["DATALIST_INF"]
         table_inf = datalist.get("TABLE_INF", [])
+        total_count_raw = datalist.get("NUMBER")
     except (KeyError, TypeError):
-        return []
+        return SearchResult(items=(), total_count=None, has_next=False)
 
     # 単一結果の場合 dict になるので list に統一
     if isinstance(table_inf, dict):
@@ -182,7 +186,17 @@ def _parse_search_response(body: dict) -> list[DatasetMetadata]:
         )
         results.append(metadata)
 
-    return results
+    try:
+        total_count = int(total_count_raw) if total_count_raw is not None else None
+    except (ValueError, TypeError):
+        total_count = None
+
+    if total_count is not None:
+        has_next = offset + len(results) < total_count
+    else:
+        has_next = len(results) == limit
+
+    return SearchResult(items=tuple(results), total_count=total_count, has_next=has_next)
 
 
 def _parse_fetch_response(dataset_id: str, response: httpx.Response) -> DatasetPayload:

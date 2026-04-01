@@ -1,14 +1,20 @@
 import DatasetCard from "./DatasetCard";
+import Pagination from "./Pagination";
 import { searchDatasets } from "../lib/api";
+
+const LIMIT = 20;
 
 interface SearchResultsProps {
   q: string;
   source: string;
+  page: number;
 }
 
-export default async function SearchResults({ q, source }: SearchResultsProps) {
+export default async function SearchResults({ q, source, page }: SearchResultsProps) {
+  const offset = (page - 1) * LIMIT;
+
   try {
-    const results = await searchDatasets(q, source || undefined, 20, 0);
+    const results = await searchDatasets(q, source || undefined, LIMIT, offset);
 
     if (results.items.length === 0) {
       return (
@@ -18,19 +24,36 @@ export default async function SearchResults({ q, source }: SearchResultsProps) {
       );
     }
 
+    const totalPages = results.total !== null
+      ? Math.ceil(results.total / LIMIT)
+      : null;
+
+    const queryParams: Record<string, string> = { q };
+    if (source) queryParams.source = source;
+
     return (
       <div>
         <p className="mb-4 text-sm text-gray-500">
-          {results.total} 件のデータセットが見つかりました
+          {results.total !== null
+            ? `${results.total} 件のデータセットが見つかりました`
+            : "データセットが見つかりました"}
         </p>
         <div className="grid gap-4">
           {results.items.map((dataset) => (
             <DatasetCard key={dataset.id} dataset={dataset} />
           ))}
         </div>
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          hasNext={results.has_next}
+          basePath="/search"
+          queryParams={queryParams}
+        />
       </div>
     );
-  } catch {
+  } catch (error) {
+    console.error("[SearchResults] search failed:", error);
     return (
       <p role="alert" className="py-8 text-center text-red-600">
         検索に失敗しました。再試行してください

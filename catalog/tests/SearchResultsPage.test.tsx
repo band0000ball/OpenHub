@@ -44,6 +44,7 @@ const mockResults = {
     },
   ],
   total: 2,
+  has_next: false,
   limit: 20,
   offset: 0,
 };
@@ -56,7 +57,7 @@ describe("SearchResults component", () => {
   it("renders dataset cards for each result", async () => {
     mockSearchDatasets.mockResolvedValueOnce(mockResults);
 
-    const component = await SearchResults({ q: "人口", source: "" });
+    const component = await SearchResults({ q: "人口", source: "", page: 1 });
     render(component);
 
     expect(screen.getAllByRole("article")).toHaveLength(2);
@@ -67,7 +68,7 @@ describe("SearchResults component", () => {
   it("displays total count", async () => {
     mockSearchDatasets.mockResolvedValueOnce(mockResults);
 
-    const component = await SearchResults({ q: "人口", source: "" });
+    const component = await SearchResults({ q: "人口", source: "", page: 1 });
     render(component);
 
     expect(screen.getByText(/2 件のデータセットが見つかりました/)).toBeInTheDocument();
@@ -77,11 +78,12 @@ describe("SearchResults component", () => {
     mockSearchDatasets.mockResolvedValueOnce({
       items: [],
       total: 0,
+      has_next: false,
       limit: 20,
       offset: 0,
     });
 
-    const component = await SearchResults({ q: "存在しないキーワード", source: "" });
+    const component = await SearchResults({ q: "存在しないキーワード", source: "", page: 1 });
     render(component);
 
     expect(
@@ -93,7 +95,7 @@ describe("SearchResults component", () => {
   it("renders error state when search fails", async () => {
     mockSearchDatasets.mockRejectedValueOnce(new Error("Network error"));
 
-    const component = await SearchResults({ q: "人口", source: "" });
+    const component = await SearchResults({ q: "人口", source: "", page: 1 });
     render(component);
 
     const alert = screen.getByRole("alert");
@@ -105,11 +107,12 @@ describe("SearchResults component", () => {
     mockSearchDatasets.mockResolvedValueOnce({
       items: [mockResults.items[0]],
       total: 1,
+      has_next: false,
       limit: 20,
       offset: 0,
     });
 
-    await SearchResults({ q: "人口", source: "estat" });
+    await SearchResults({ q: "人口", source: "estat", page: 1 });
 
     expect(mockSearchDatasets).toHaveBeenCalledWith(
       "人口",
@@ -122,7 +125,7 @@ describe("SearchResults component", () => {
   it("passes undefined source when source is empty string", async () => {
     mockSearchDatasets.mockResolvedValueOnce(mockResults);
 
-    await SearchResults({ q: "人口", source: "" });
+    await SearchResults({ q: "人口", source: "", page: 1 });
 
     expect(mockSearchDatasets).toHaveBeenCalledWith(
       "人口",
@@ -151,7 +154,7 @@ describe("SearchResultsPage", () => {
   });
 
   it("renders with empty params", async () => {
-    mockSearchDatasets.mockResolvedValueOnce({ items: [], total: 0, limit: 20, offset: 0 });
+    mockSearchDatasets.mockResolvedValueOnce({ items: [], total: 0, has_next: false, limit: 20, offset: 0 });
 
     const page = await SearchResultsPage({
       searchParams: Promise.resolve({}),
