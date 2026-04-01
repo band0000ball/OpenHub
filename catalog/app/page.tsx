@@ -44,7 +44,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       </div>
 
       <div className="mx-auto max-w-5xl w-full px-4 py-8">
-        <EStatBanner />
+        <Suspense fallback={null}>
+          <EStatBanner />
+        </Suspense>
         <CategoryTabs currentCategory={category} />
         <Suspense fallback={<SkeletonGrid />}>
           <DatasetBrowser category={category} page={page} />

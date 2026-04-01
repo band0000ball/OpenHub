@@ -3,7 +3,12 @@ import { auth } from "../auth";
 import { getCredentialStatus } from "../lib/api";
 
 export default async function EStatBanner() {
-  const session = await auth();
+  let session = null;
+  try {
+    session = await auth();
+  } catch {
+    // auth() が throw しても画面クラッシュさせない（RSC ナビゲーション保護）
+  }
   const configured = await getCredentialStatus("estat", session?.accessToken);
   if (configured) return null;
 
