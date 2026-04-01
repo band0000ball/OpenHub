@@ -107,7 +107,9 @@ GET /datasets/{id}/fetch          データセット取得
 ```
 
 **SearchResponse の `total` について:**
-現在 `total` は**返却件数**（= `len(items)`）を示す。全ヒット件数ではない。
+`total` は**全ヒット件数**を示す。上流 API が件数を返せない場合は `null`。
+`has_next` は次ページが存在する場合に `true`（`total=null` 時の判定はこちらを使用）。
+複数ソース横断時（`source` 未指定）は各ソースの `total` を合算する。いずれかが失敗した場合は `total=null`。
 
 ## Lambda デプロイ（Sprint 3.3）
 
@@ -145,4 +147,5 @@ ESTAT_API_KEY=your_key pytest tests/ -m integration
 | Sprint 3.1 | Cognito JWT 認証基盤（リリース済み） |
 | Sprint 3.2 | DynamoDB CredentialStore（APIキー永続化・ユーザー分離）（リリース済み） |
 | Sprint 3.3 | Lambda + Amplify デプロイ基盤（リリース済み） |
+| Sprint 3.4 | ページネーション（SearchResponse に total/has_next/limit/offset）（リリース済み） |
 | Phase 4 | データソース拡張（国土数値情報・e-Gov 法令等） |

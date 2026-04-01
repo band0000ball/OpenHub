@@ -54,7 +54,7 @@ http://localhost:3000 でアクセス。
 |-----|------|------|
 | `/` | トップ：カテゴリタブ＋データセット一覧 | 不要 |
 | `/?category=population` | カテゴリ絞り込み（人口・世帯） | 不要 |
-| `/search?q=<keyword>` | キーワード検索結果 | 不要 |
+| `/search?q=<keyword>` | キーワード検索結果（`&page=N` でページ指定） | 不要 |
 | `/datasets/<id>` | データセット詳細 | 不要 |
 | `/settings` | e-Stat アプリケーションID 設定 | **必須**（`proxy.ts` でガード） |
 | `/login` | Cognito サインイン（自動リダイレクト） | — |
