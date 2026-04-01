@@ -74,7 +74,7 @@ describe("auth — requireEnv", () => {
 
     vi.resetModules()
     await expect(import("../auth")).rejects.toThrow(
-      `Required environment variable "${missingKey}" is not set`
+      "Missing required Cognito environment variables"
     )
 
     Object.assign(process.env, original)
