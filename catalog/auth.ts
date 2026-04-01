@@ -15,9 +15,12 @@
  */
 
 import NextAuth from "next-auth"
+import { authConfig } from "./auth.config"
 
 /**
- * 必須環境変数を取得する。未設定の場合は起動時にエラーをスローする。
+ * 必須環境変数を取得する。未設定の場合はリクエスト時にエラーをスローする。
+ * auth.ts は Node.js ランタイム（API Routes / Server Components）専用。
+ * middleware（proxy.ts）は auth.config.ts を使うこと。
  */
 function requireEnv(key: string): string {
   const value = process.env[key]
@@ -25,16 +28,8 @@ function requireEnv(key: string): string {
   return value
 }
 
-const cognitoDomain = requireEnv("AUTH_COGNITO_DOMAIN")
-const cognitoIssuer = requireEnv("AUTH_COGNITO_ISSUER")
-
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  /**
-   * trustHost: Amplify は X-Forwarded-Host を設定するため、
-   * reverse proxy 配下では必須。ローカル開発では AUTH_URL を
-   * 明示設定することで代替可能。
-   */
-  trustHost: true,
+  ...authConfig,
   logger: {
     error(error) {
       console.error("[NextAuth] Error:", error)
@@ -50,19 +45,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       type: "oauth",
       clientId: requireEnv("AUTH_COGNITO_ID"),
       clientSecret: requireEnv("AUTH_COGNITO_SECRET"),
-      issuer: cognitoIssuer,
+      issuer: requireEnv("AUTH_COGNITO_ISSUER"),
       authorization: {
-        url: `${cognitoDomain}/oauth2/authorize`,
+        url: `${requireEnv("AUTH_COGNITO_DOMAIN")}/oauth2/authorize`,
         params: { scope: "openid profile email", response_type: "code" },
       },
-      token: `${cognitoDomain}/oauth2/token`,
-      userinfo: `${cognitoDomain}/oauth2/userInfo`,
+      token: `${requireEnv("AUTH_COGNITO_DOMAIN")}/oauth2/token`,
+      userinfo: `${requireEnv("AUTH_COGNITO_DOMAIN")}/oauth2/userInfo`,
       /**
        * jwks_endpoint: type:"oauth" では NextAuth が JWT 署名検証に
        * 使用するかどうかは実装依存。type:"oidc" への移行が安定したら
        * 削除して OIDC discovery に任せることを検討する。
        */
-      jwks_endpoint: `${cognitoIssuer}/.well-known/jwks.json`,
+      jwks_endpoint: `${requireEnv("AUTH_COGNITO_ISSUER")}/.well-known/jwks.json`,
       checks: ["pkce", "state"],
       profile(profile) {
         const sub = profile.sub
@@ -79,22 +74,4 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     },
   ],
-  session: { strategy: "jwt" },
-  callbacks: {
-    jwt({ token, account }) {
-      if (account?.access_token) {
-        return { ...token, accessToken: account.access_token }
-      }
-      return token
-    },
-    session({ session, token }) {
-      return {
-        ...session,
-        accessToken: token.accessToken as string | undefined,
-      }
-    },
-  },
-  pages: {
-    signIn: "/login",
-  },
 })

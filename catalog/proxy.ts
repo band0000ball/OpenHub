@@ -8,8 +8,16 @@
  * next-auth の `auth` Proxy ラッパーを使用して req.auth でセッション状態を参照する。
  */
 
+import NextAuth from "next-auth"
 import { NextResponse } from "next/server"
-import { auth } from "./auth"
+import { authConfig } from "./auth.config"
+
+/**
+ * auth.config.ts（Edge-safe）を使って NextAuth を初期化する。
+ * auth.ts（requireEnv あり）を直接インポートすると middleware の
+ * module evaluation 時に throw して全ページが落ちるため使わない。
+ */
+const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
   if (!req.auth?.user) {
