@@ -12,20 +12,28 @@
  *   AUTH_COGNITO_ISSUER  = https://cognito-idp.<region>.amazonaws.com/<UserPoolId>
  *   AUTH_COGNITO_DOMAIN  = https://<prefix>.auth.<region>.amazoncognito.com
  *   AUTH_SECRET          = <ランダム文字列>
+ *
+ * Lambda@Edge 対応:
+ *   Lambda@Edge は process.env をサポートしないため、next.config.ts の env フィールドで
+ *   ビルド時に値を埋め込む。process.env.X（静的ドット記法）のみ Turbopack がインライン展開
+ *   するため、動的アクセス（process.env[key]）は使用しないこと。
  */
 
 import NextAuth from "next-auth"
 import { authConfig } from "./auth.config"
 
-/**
- * 必須環境変数を取得する。未設定の場合はリクエスト時にエラーをスローする。
- * auth.ts は Node.js ランタイム（API Routes / Server Components）専用。
- * middleware（proxy.ts）は auth.config.ts を使うこと。
- */
-function requireEnv(key: string): string {
-  const value = process.env[key]
-  if (!value) throw new Error(`Required environment variable "${key}" is not set`)
-  return value
+// 静的アクセス（ドット記法）で参照することで、Turbopack が next.config.ts の env 値を
+// ビルド時にリテラルとして埋め込む。動的アクセス（process.env[key]）は展開されないため使わない。
+const cognitoId     = process.env.AUTH_COGNITO_ID
+const cognitoSecret = process.env.AUTH_COGNITO_SECRET
+const cognitoIssuer = process.env.AUTH_COGNITO_ISSUER
+const cognitoDomain = process.env.AUTH_COGNITO_DOMAIN
+
+if (!cognitoId || !cognitoSecret || !cognitoIssuer || !cognitoDomain) {
+  throw new Error(
+    "Missing required Cognito environment variables: " +
+    "AUTH_COGNITO_ID, AUTH_COGNITO_SECRET, AUTH_COGNITO_ISSUER, AUTH_COGNITO_DOMAIN"
+  )
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -43,21 +51,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       id: "cognito",
       name: "Cognito",
       type: "oauth",
-      clientId: requireEnv("AUTH_COGNITO_ID"),
-      clientSecret: requireEnv("AUTH_COGNITO_SECRET"),
-      issuer: requireEnv("AUTH_COGNITO_ISSUER"),
+      clientId: cognitoId,
+      clientSecret: cognitoSecret,
+      issuer: cognitoIssuer,
       authorization: {
-        url: `${requireEnv("AUTH_COGNITO_DOMAIN")}/oauth2/authorize`,
+        url: `${cognitoDomain}/oauth2/authorize`,
         params: { scope: "openid profile email", response_type: "code" },
       },
-      token: `${requireEnv("AUTH_COGNITO_DOMAIN")}/oauth2/token`,
-      userinfo: `${requireEnv("AUTH_COGNITO_DOMAIN")}/oauth2/userInfo`,
+      token: `${cognitoDomain}/oauth2/token`,
+      userinfo: `${cognitoDomain}/oauth2/userInfo`,
       /**
        * jwks_endpoint: type:"oauth" では NextAuth が JWT 署名検証に
        * 使用するかどうかは実装依存。type:"oidc" への移行が安定したら
        * 削除して OIDC discovery に任せることを検討する。
        */
-      jwks_endpoint: `${requireEnv("AUTH_COGNITO_ISSUER")}/.well-known/jwks.json`,
+      jwks_endpoint: `${cognitoIssuer}/.well-known/jwks.json`,
       checks: ["pkce", "state"],
       profile(profile) {
         const sub = profile.sub
