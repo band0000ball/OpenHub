@@ -148,4 +148,5 @@ ESTAT_API_KEY=your_key pytest tests/ -m integration
 | Sprint 3.2 | DynamoDB CredentialStore（APIキー永続化・ユーザー分離）（リリース済み） |
 | Sprint 3.3 | Lambda + Amplify デプロイ基盤（リリース済み） |
 | Sprint 3.4 | ページネーション（SearchResponse に total/has_next/limit/offset）（リリース済み） |
+| Sprint 3.5 | data.go.jp エンコーディング調査（再現不可・実装正常を確認）（リリース済み） |
 | Phase 4 | データソース拡張（国土数値情報・e-Gov 法令等） |
