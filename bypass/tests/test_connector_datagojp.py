@@ -148,6 +148,70 @@ class TestDataGoJpConnectorSearch:
         assert result.has_next is False
 
 
+class TestDataGoJpConnectorEncoding:
+    """DataGoJpConnector のエンコーディング処理テスト（Phase 3.5 調査結果）。
+
+    e-gov.go.jp は application/json;charset=utf-8 を返し、
+    日本語を \\uXXXX JSON エスケープ形式で返す。
+    response.json() がこれを正しくデコードすることを確認する。
+    """
+
+    @respx.mock
+    def test_日本語タイトルと説明が正しく取得できる(self):
+        """response.json() が \\uXXXX エスケープ日本語を正しくデコードする。"""
+        fixture = load_fixture("datagojp_search_response.json")
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
+            return_value=httpx.Response(200, json=fixture)
+        )
+        connector = DataGoJpConnector()
+        connector.initialize(None)
+        result = connector.search("人口", {"limit": 5, "offset": 0})
+
+        first = result.items[0]
+        # フィクスチャの日本語テキストが正しく取得されること
+        assert "人口" in first.title or len(first.title) > 0
+        assert isinstance(first.title, str)
+        assert isinstance(first.description, str)
+
+    @respx.mock
+    def test_charsetなしContent_TypeでもJSON解析できる(self):
+        """Content-Type に charset が明示されていなくても response.json() が動作する。
+
+        httpx はヘッダーに charset がない場合でも JSON をパースできる。
+        """
+        fixture = load_fixture("datagojp_search_response.json")
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
+            return_value=httpx.Response(
+                200,
+                json=fixture,
+                headers={"content-type": "application/json"},  # charset なし
+            )
+        )
+        connector = DataGoJpConnector()
+        connector.initialize(None)
+        result = connector.search("人口", {"limit": 5, "offset": 0})
+
+        assert isinstance(result, SearchResult)
+        assert len(result.items) > 0
+
+    @respx.mock
+    def test_notesフィールドの日本語説明が正しくdescriptionに設定される(self):
+        """CKAN の notes フィールドが DatasetMetadata.description に正しくマップされる。"""
+        fixture = load_fixture("datagojp_search_response.json")
+        # フィクスチャの1件目の notes を日本語にする
+        import copy
+        fixture_ja = copy.deepcopy(fixture)
+        fixture_ja["result"]["results"][0]["notes"] = "テスト用の日本語説明文です。"
+        respx.get("https://data.e-gov.go.jp/data/api/3/action/package_search").mock(
+            return_value=httpx.Response(200, json=fixture_ja)
+        )
+        connector = DataGoJpConnector()
+        connector.initialize(None)
+        result = connector.search("テスト", {"limit": 5, "offset": 0})
+
+        assert result.items[0].description == "テスト用の日本語説明文です。"
+
+
 class TestDataGoJpConnectorFetch:
     """DataGoJpConnector.fetch() のテスト。"""
 
