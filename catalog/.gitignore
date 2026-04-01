@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# playwright auth state（セッション情報を含むためコミットしない）
+/.auth
+
 # next.js
 /.next/
 /out/
