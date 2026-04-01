@@ -27,9 +27,13 @@ export default async function SearchResultsPage({ searchParams }: SearchPageProp
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">
       <div className="mb-6">
-        <SearchBar initialQuery={q} />
+        <Suspense fallback={<div className="h-12 w-full animate-pulse rounded-lg bg-gray-200" />}>
+          <SearchBar initialQuery={q} />
+        </Suspense>
       </div>
-      <EStatBanner />
+      <Suspense fallback={null}>
+        <EStatBanner />
+      </Suspense>
       <div className="mb-4">
         <SourceFilterTabs currentSource={source} currentQuery={q} />
       </div>
