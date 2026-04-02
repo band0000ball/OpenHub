@@ -8,6 +8,10 @@ vi.mock("next/navigation", () => ({
   notFound: vi.fn(),
 }));
 
+vi.mock("../auth", () => ({
+  auth: vi.fn().mockResolvedValue({ accessToken: "test-token" }),
+}));
+
 vi.mock("../lib/api", () => ({
   fetchDataset: vi.fn(),
 }));
@@ -140,6 +144,6 @@ describe("DatasetDetailPage", () => {
       params: Promise.resolve({ id: "estat%3A0003191203" }),
     });
 
-    expect(mockFetchDataset).toHaveBeenCalledWith("estat%3A0003191203");
+    expect(mockFetchDataset).toHaveBeenCalledWith("estat%3A0003191203", "test-token");
   });
 });

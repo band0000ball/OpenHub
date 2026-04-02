@@ -6,13 +6,14 @@ import { findCategory, BROWSE_LIMIT_SINGLE } from "../lib/categories";
 interface DatasetBrowserProps {
   category: string;
   page: number;
+  accessToken?: string;
 }
 
-export default async function DatasetBrowser({ category, page }: DatasetBrowserProps) {
+export default async function DatasetBrowser({ category, page, accessToken }: DatasetBrowserProps) {
   try {
     // "all" カテゴリは複数ソースの並列フェッチのためページネーション非対応
     if (category === "all") {
-      const datasets = await browseByCategory("all");
+      const datasets = await browseByCategory("all", accessToken);
 
       if (datasets.length === 0) {
         return (
@@ -34,7 +35,7 @@ export default async function DatasetBrowser({ category, page }: DatasetBrowserP
     // 個別カテゴリ: offset 付きで検索してページネーション表示
     const categoryInfo = findCategory(category);
     const offset = (page - 1) * BROWSE_LIMIT_SINGLE;
-    const result = await searchDatasets(categoryInfo.keyword, undefined, BROWSE_LIMIT_SINGLE, offset);
+    const result = await searchDatasets(categoryInfo.keyword, undefined, BROWSE_LIMIT_SINGLE, offset, accessToken);
 
     if (result.items.length === 0) {
       return (

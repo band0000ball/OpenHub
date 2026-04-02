@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { auth } from "../../../auth";
 import { fetchDataset } from "../../../lib/api";
 import { SOURCE_LABELS } from "../../../types";
 
@@ -8,9 +9,11 @@ interface DatasetDetailPageProps {
 
 export default async function DatasetDetailPage({ params }: DatasetDetailPageProps) {
   const { id } = await params;
+  const session = await auth();
+  const accessToken = (session as { accessToken?: string } | null)?.accessToken;
 
   try {
-    const payload = await fetchDataset(id);
+    const payload = await fetchDataset(id, accessToken);
     const { metadata } = payload;
     const sourceLabel = SOURCE_LABELS[metadata.source_id] ?? metadata.source_id;
 

@@ -18,11 +18,20 @@ function getSearchUrl(params: URLSearchParams): string {
   return `${bypassUrl}/datasets/search?${params.toString()}`;
 }
 
+function buildHeaders(accessToken?: string): Record<string, string> {
+  const headers: Record<string, string> = {};
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  }
+  return headers;
+}
+
 export async function searchDatasets(
   q: string,
   source?: string,
   limit = 20,
-  offset = 0
+  offset = 0,
+  accessToken?: string,
 ): Promise<SearchResponse> {
   const params = new URLSearchParams({ q, limit: String(limit), offset: String(offset) });
   if (source) {
@@ -30,7 +39,7 @@ export async function searchDatasets(
   }
 
   const url = getSearchUrl(params);
-  const response = await fetch(url, { cache: "no-store" });
+  const response = await fetch(url, { cache: "no-store", headers: buildHeaders(accessToken) });
 
   if (!response.ok) {
     throw new Error(`Search failed: ${response.status}`);
@@ -39,14 +48,17 @@ export async function searchDatasets(
   return response.json() as Promise<SearchResponse>;
 }
 
-export async function browseByCategory(categoryId: string): Promise<DatasetMetadata[]> {
+export async function browseByCategory(
+  categoryId: string,
+  accessToken?: string,
+): Promise<DatasetMetadata[]> {
   const category = findCategory(categoryId);
 
   if (category.id === "all") {
     const subCategories = CATEGORIES.filter((c) => c.id !== "all");
     const results = await Promise.all(
       subCategories.map((c) =>
-        searchDatasets(c.keyword, undefined, BROWSE_LIMIT_PER_CATEGORY, 0)
+        searchDatasets(c.keyword, undefined, BROWSE_LIMIT_PER_CATEGORY, 0, accessToken)
           .then((r) => r.items)
           .catch((): DatasetMetadata[] => [])
       )
@@ -59,7 +71,7 @@ export async function browseByCategory(categoryId: string): Promise<DatasetMetad
     });
   }
 
-  const result = await searchDatasets(category.keyword, undefined, BROWSE_LIMIT_SINGLE, 0);
+  const result = await searchDatasets(category.keyword, undefined, BROWSE_LIMIT_SINGLE, 0, accessToken);
   return result.items;
 }
 
@@ -85,11 +97,11 @@ export async function getCredentialStatus(
   }
 }
 
-export async function fetchDataset(id: string): Promise<PayloadResponse> {
+export async function fetchDataset(id: string, accessToken?: string): Promise<PayloadResponse> {
   const url = typeof window !== "undefined"
     ? `/api/datasets/${encodeURIComponent(id)}`
     : `${process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL}/datasets/${encodeURIComponent(id)}/fetch`;
-  const response = await fetch(url, { cache: "no-store" });
+  const response = await fetch(url, { cache: "no-store", headers: buildHeaders(accessToken) });
 
   if (!response.ok) {
     throw new Error(`Dataset fetch failed: ${response.status}`);

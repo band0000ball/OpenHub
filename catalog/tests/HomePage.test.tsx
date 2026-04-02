@@ -7,6 +7,10 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(""),
 }));
 
+vi.mock("../auth", () => ({
+  auth: vi.fn().mockResolvedValue({ accessToken: "test-token" }),
+}));
+
 vi.mock("../lib/api", () => ({
   searchDatasets: vi.fn(),
   browseByCategory: vi.fn(),
