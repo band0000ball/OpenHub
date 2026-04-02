@@ -21,7 +21,9 @@ const { auth } = NextAuth(authConfig)
 
 export default auth((req) => {
   if (!req.auth?.user) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl))
+    const loginUrl = new URL("/login", req.nextUrl)
+    loginUrl.searchParams.set("callbackUrl", req.nextUrl.pathname + req.nextUrl.search)
+    return NextResponse.redirect(loginUrl)
   }
   // 認証済み → パススルー（何も返さない）
 })

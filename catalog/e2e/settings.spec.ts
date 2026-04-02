@@ -14,7 +14,7 @@ test.describe("Settings page - 未認証", () => {
     // /login は即座に Cognito にリダイレクトするため、/login または Cognito ドメインへの到達を確認
     // 認証が未設定の環境ではリダイレクトが発生しない場合があるためスキップ条件を設ける
     try {
-      await page.waitForURL(/\/(login)|cognito.*\.amazoncognito\.com/, { timeout: 5000 });
+      await page.waitForURL(/\/(login)|amazoncognito\.com/, { timeout: 5000 });
       expect(
         page.url().includes("/login") || page.url().includes("amazoncognito.com")
       ).toBe(true);

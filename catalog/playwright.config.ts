@@ -25,9 +25,16 @@ export default defineConfig({
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
-      testIgnore: /auth\.setup\.ts/,
+      testIgnore: /auth\.(setup|spec)\.ts|settings\.spec\.ts/,
     },
-    // 認証済み状態が必要なテスト
+    // 認証フローテスト（storageState なし — ログインフローを直接テストする）
+    {
+      name: "auth-flow",
+      use: { ...devices["Desktop Chrome"] },
+      dependencies: ["setup"],
+      testMatch: /auth\.spec\.ts/,
+    },
+    // 認証済み状態が必要なテスト（storageState でセッションを再利用する）
     {
       name: "chromium-authenticated",
       use: {
@@ -35,7 +42,7 @@ export default defineConfig({
         storageState: authStatePath,
       },
       dependencies: ["setup"],
-      testMatch: /\.(auth|settings)\.spec\.ts/,
+      testMatch: /settings\.spec\.ts/,
     },
   ],
   webServer: {
@@ -43,16 +50,9 @@ export default defineConfig({
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
-    // E2E テスト用ダミー環境変数（auth.ts の requireEnv を通過させるため）
-    // 実際の Cognito 認証は E2E_TEST_EMAIL/PASSWORD を設定した場合のみ使用する
+    // Bypass を意図的に存在しないポートに向けてエラー表示テストを安定させる
+    // Cognito 認証情報は .env.local から自動ロードされるため、ここでは設定しない
     env: {
-      AUTH_COGNITO_ID: process.env.AUTH_COGNITO_ID ?? "e2e-test-placeholder",
-      AUTH_COGNITO_SECRET: process.env.AUTH_COGNITO_SECRET ?? "e2e-test-placeholder",
-      AUTH_COGNITO_ISSUER: process.env.AUTH_COGNITO_ISSUER ?? "https://cognito-idp.ap-northeast-1.amazonaws.com/e2e-placeholder",
-      AUTH_COGNITO_DOMAIN: process.env.AUTH_COGNITO_DOMAIN ?? "https://e2e-placeholder.auth.ap-northeast-1.amazoncognito.com",
-      AUTH_SECRET: process.env.AUTH_SECRET ?? "e2e-test-secret-32-chars-placeholder",
-      // Bypass を意図的に存在しないポートに向けてエラー表示テストを安定させる
-      // 実際の Bypass サーバーに向けたい場合は環境変数で上書きする
       NEXT_PUBLIC_BYPASS_BASE_URL: process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? "http://localhost:19999",
     },
   },
