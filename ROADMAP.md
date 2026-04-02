@@ -66,6 +66,7 @@
 | 3.12 | 実行時バリデーション（Zod） | 低 | 📋 | `response.json() as T` を Zod パースに置き換え |
 | 3.13 | Bypass テストカバレッジ回復（80%+） | 中 | ✅ | credentials.py 76%→100%、全体 92%→94% |
 | 3.14 | Catalog テスト環境修正（next-auth × Vitest） | 中 | ✅ | `next/server` エイリアス追加 + モック修正で全テスト pass |
+| 3.15 | ログイン後の APIキー取得不能バグ修正 | **高** | 📋 | レガシー CredentialStore と InMemoryCredentialStore の二重管理を解消し、user_id スコープの保存・取得を統一する |
 
 ---
 
