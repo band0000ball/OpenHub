@@ -9,6 +9,10 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams("q=人口"),
 }));
 
+vi.mock("../auth", () => ({
+  auth: vi.fn().mockResolvedValue({ accessToken: "test-token" }),
+}));
+
 // Mock the lib/api module
 vi.mock("../lib/api", () => ({
   searchDatasets: vi.fn(),
@@ -118,7 +122,8 @@ describe("SearchResults component", () => {
       "人口",
       "estat",
       expect.any(Number),
-      expect.any(Number)
+      expect.any(Number),
+      undefined,
     );
   });
 
@@ -131,7 +136,8 @@ describe("SearchResults component", () => {
       "人口",
       undefined,
       expect.any(Number),
-      expect.any(Number)
+      expect.any(Number),
+      undefined,
     );
   });
 });

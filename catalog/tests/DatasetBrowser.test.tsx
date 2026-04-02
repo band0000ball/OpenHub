@@ -64,7 +64,7 @@ describe("DatasetBrowser — all カテゴリ", () => {
 
     expect(screen.getAllByRole("article")).toHaveLength(2);
     expect(screen.getByText("人口統計データ")).toBeInTheDocument();
-    expect(mockBrowse).toHaveBeenCalledWith("all");
+    expect(mockBrowse).toHaveBeenCalledWith("all", undefined);
   });
 
   it("件数ゼロの場合は空状態を表示する", async () => {
@@ -99,7 +99,7 @@ describe("DatasetBrowser — 個別カテゴリ", () => {
     render(component);
 
     expect(screen.getAllByRole("article")).toHaveLength(2);
-    expect(mockSearch).toHaveBeenCalledWith("人口", undefined, 20, 0);
+    expect(mockSearch).toHaveBeenCalledWith("人口", undefined, 20, 0, undefined);
     expect(mockBrowse).not.toHaveBeenCalled();
   });
 
@@ -108,7 +108,7 @@ describe("DatasetBrowser — 個別カテゴリ", () => {
 
     await DatasetBrowser({ category: "population", page: 2 });
 
-    expect(mockSearch).toHaveBeenCalledWith("人口", undefined, 20, 20);
+    expect(mockSearch).toHaveBeenCalledWith("人口", undefined, 20, 20, undefined);
   });
 
   it("has_next=true のとき次へボタンがリンクとして表示される", async () => {

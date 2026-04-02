@@ -8,13 +8,14 @@ interface SearchResultsProps {
   q: string;
   source: string;
   page: number;
+  accessToken?: string;
 }
 
-export default async function SearchResults({ q, source, page }: SearchResultsProps) {
+export default async function SearchResults({ q, source, page, accessToken }: SearchResultsProps) {
   const offset = (page - 1) * LIMIT;
 
   try {
-    const results = await searchDatasets(q, source || undefined, LIMIT, offset);
+    const results = await searchDatasets(q, source || undefined, LIMIT, offset, accessToken);
 
     if (results.items.length === 0) {
       return (

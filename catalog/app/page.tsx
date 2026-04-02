@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { auth } from "../auth";
 import SearchBar from "../components/SearchBar";
 import CategoryTabs from "../components/CategoryTabs";
 import DatasetBrowser from "../components/DatasetBrowser";
@@ -22,6 +23,8 @@ function SkeletonGrid() {
 export default async function HomePage({ searchParams }: HomePageProps) {
   const { category = "all", page: pageStr = "1" } = await searchParams;
   const page = Math.max(1, parseInt(pageStr, 10) || 1);
+  const session = await auth();
+  const accessToken = (session as { accessToken?: string } | null)?.accessToken;
 
   return (
     <main className="flex flex-col min-h-screen bg-gray-50">
@@ -49,7 +52,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </Suspense>
         <CategoryTabs currentCategory={category} />
         <Suspense fallback={<SkeletonGrid />}>
-          <DatasetBrowser category={category} page={page} />
+          <DatasetBrowser category={category} page={page} accessToken={accessToken} />
         </Suspense>
       </div>
     </main>
