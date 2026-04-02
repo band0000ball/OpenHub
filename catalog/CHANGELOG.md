@@ -4,6 +4,22 @@
 
 ### Added
 
+- **E2E テスト拡充（Phase 3.7）**: カテゴリタブ・ページネーション・認証フロー・設定ページの 4 フローを
+  Playwright E2E テストでカバー。Cognito Hosted UI を使った実際のサインインテストを含む。
+  `E2E_TEST_EMAIL` / `E2E_TEST_PASSWORD` 環境変数で認証情報を注入し、未設定時はスキップされる。
+
+- **Playwright 4 プロジェクト構成**: `setup`（認証セットアップ）・`chromium`（認証不要テスト）・
+  `auth-flow`（ログインフロー直接テスト）・`chromium-authenticated`（storageState 再利用テスト）の
+  4 プロジェクトに分離。認証テストの分離と storageState 再利用を実現。
+
+### Fixed
+
+- **認証後リダイレクト先の修正**: `proxy.ts` が `/login` へリダイレクトする際に `callbackUrl` を付与し、
+  `login/page.tsx` がそれを読み取って `signIn("cognito", { callbackUrl })` に渡すよう修正。
+  認証完了後に元のページ（`/settings` 等）に正しく戻るようになった。
+
+### Added
+
 - **e-Stat アプリケーションID 取得案内 UI（Phase 3.6）**: 設定ページに番号付き取得手順（折りたたみ式）を追加。
   e-Stat バナーに「取得方法はこちら」リンクを追加。URL・手順テキストを `lib/estat-guide.ts` で一元管理。
 

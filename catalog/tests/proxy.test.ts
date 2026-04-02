@@ -9,12 +9,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NextResponse } from "next/server";
 
-// auth() を mock する: auth(handler) → handler をそのまま返す（テストで直接呼べるように）
-vi.mock("../auth", () => ({
-  auth: (handler: (req: { auth: unknown; nextUrl: URL }) => unknown) => handler,
-  signIn: vi.fn(),
-  signOut: vi.fn(),
-  handlers: { GET: vi.fn(), POST: vi.fn() },
+// next-auth を mock: NextAuth(config) → { auth: handler => handler } を返す
+// proxy.ts は NextAuth(authConfig) を呼び auth を destructure するため、この形が必要
+vi.mock("next-auth", () => ({
+  default: () => ({
+    auth: (handler: (req: { auth: unknown; nextUrl: URL }) => unknown) => handler,
+  }),
 }));
 
 // proxy.ts を mock セットアップ後にインポート（vi.mock は巻き上げ済み）
