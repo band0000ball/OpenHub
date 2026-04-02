@@ -1,21 +1,16 @@
-# DESIGN — APIキー取得不能バグ修正（Phase 3.15）
+# DESIGN — キャッシュ戦略導入（Phase 3.9）
 
-**Sprint**: Phase 3.15
-**Date**: 2026-04-02
-**Status**: 完了（Ship 済み — PR #20）
+**Sprint**: Phase 3.9
+**Date**: 2026-04-03
+**Status**: Think 完了 / Build 中
 
 ---
 
 ## 背景・課題
 
-ログイン後に登録した e-Stat API キーが検索時に取得できない。
-
-**根因**: `catalog/lib/api.ts` の `searchDatasets()` と `fetchDataset()` が Bypass API 呼び出し時に
-Authorization ヘッダーを付与していない。Bypass 側の `get_current_user_optional` はトークンなしで
-`user_id=None` を返すため、`(user_id, "estat")` で保存したキーが `(None, "estat")` で検索され見つからない。
-
-保存（POST /api/credentials）と状態確認（GET /auth/credentials/.../status）は accessToken を送信しているため動作する。
-**検索・取得パスのみヘッダーが欠落**。
+全 fetch が `cache: "no-store"` で毎回 Bypass にリクエストが飛ぶ。
+行政データ（e-Stat / data.go.jp）は日次〜月次更新のため、数分〜数時間のキャッシュで十分。
+e-Stat API キーは認証・レート制限のみで検索結果に影響しないため、認証状態に関わらず同一キャッシュが使える。
 
 ---
 
@@ -23,42 +18,38 @@ Authorization ヘッダーを付与していない。Bypass 側の `get_current_
 
 ### 目標
 
-- `searchDatasets()` と `fetchDataset()` で accessToken を Bypass に送信する
-- ログイン後に登録した API キーが検索時に使われることを確認する
+- Next.js の `next.revalidate` を使って ISR キャッシュを導入する
+- Bypass API への不要なリクエストを削減する
 
 ### 非目標
 
-- Bypass 側のクレデンシャルストア統一（調査の結果、Bypass 側は正常に動作している）
-- DynamoDB バックエンドの修正
+- Bypass 側の TTL キャッシュ変更（既に 24h キャッシュあり）
+- CDN 設定
 
 ---
 
-## 修正対象
+## キャッシュ戦略
 
-### catalog/lib/api.ts — 必須
-
-- `searchDatasets()`: accessToken パラメータを追加、Authorization ヘッダーを付与
-- `fetchDataset()`: 同上
-- `getSearchUrl()`: サーバーサイドでのヘッダー付与に対応
-
-### catalog/app/search/page.tsx, catalog/app/page.tsx 等 — 呼び出し側
-
-- RSC から `auth()` でセッションを取得し、`accessToken` を各関数に渡す
+| API | 現状 | 変更後 | 理由 |
+|-----|------|--------|------|
+| `searchDatasets()` | no-store | revalidate: 60 | 検索結果は 1 分キャッシュで十分 |
+| `browseByCategory()` | no-store | revalidate: 300 | カテゴリ一覧は 5 分キャッシュ |
+| `fetchDataset()` | no-store | revalidate: 300 | 個別データセットは更新頻度低い |
+| `getCredentialStatus()` | no-store | no-store (維持) | ユーザー固有の設定状態 |
 
 ---
 
 ## 成功指標
 
-- [x] searchDatasets() が Authorization ヘッダーを送信する
-- [x] fetchDataset() が Authorization ヘッダーを送信する
-- [x] 既存テスト全 pass（24 ファイル・165 テスト）
-- [ ] E2E テスト全 pass（本番環境での確認待ち）
+- [ ] searchDatasets / browseByCategory / fetchDataset に revalidate が設定される
+- [ ] getCredentialStatus は no-store を維持する
+- [ ] 既存テスト全 pass
 
 ---
 
 ## リスクと前提
 
-### R1: RSC からの auth() 呼び出し
+### R1: 認証付きリクエストのキャッシュ
 
-サーバーサイドレンダリング中に `auth()` でセッションを取得する必要がある。
-Next.js App Router の RSC では `auth()` が利用可能（next-auth v5 の機能）。
+e-Stat API キーは検索結果に影響しない（認証・レート制限のみ）ことを確認済み。
+認証済み・未認証を問わず同一キャッシュを共有して問題ない。

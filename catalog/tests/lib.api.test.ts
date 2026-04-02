@@ -53,7 +53,7 @@ describe("searchDatasets", () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining("/api/search?"),
-      expect.objectContaining({ cache: "no-store" })
+      expect.objectContaining({ next: { revalidate: 60 } })
     );
     const calledUrl = new URL(mockFetch.mock.calls[0][0], "http://localhost");
     expect(calledUrl.searchParams.get("q")).toBe("人口");
@@ -106,7 +106,7 @@ describe("fetchDataset", () => {
 
     expect(mockFetch).toHaveBeenCalledWith(
       expect.stringContaining(`/api/datasets/${encodeURIComponent("estat:001")}`),
-      expect.objectContaining({ cache: "no-store" })
+      expect.objectContaining({ next: { revalidate: 300 } })
     );
     expect(result).toEqual(mockPayloadResponse);
   });
