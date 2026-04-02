@@ -2,7 +2,7 @@
 
 **Sprint**: Phase 3.15
 **Date**: 2026-04-02
-**Status**: Build 中
+**Status**: 完了（Ship 済み — PR #20）
 
 ---
 
@@ -49,10 +49,10 @@ Authorization ヘッダーを付与していない。Bypass 側の `get_current_
 
 ## 成功指標
 
-- [ ] searchDatasets() が Authorization ヘッダーを送信する
-- [ ] fetchDataset() が Authorization ヘッダーを送信する
-- [ ] 既存テスト全 pass
-- [ ] E2E テスト全 pass
+- [x] searchDatasets() が Authorization ヘッダーを送信する
+- [x] fetchDataset() が Authorization ヘッダーを送信する
+- [x] 既存テスト全 pass（24 ファイル・165 テスト）
+- [ ] E2E テスト全 pass（本番環境での確認待ち）
 
 ---
 

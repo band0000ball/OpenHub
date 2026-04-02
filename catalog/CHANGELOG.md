@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-04-03
+
+### Fixed
+
+- **ログイン後の APIキー取得不能バグ（Phase 3.15）**: `searchDatasets()` / `fetchDataset()` が Bypass API に
+  Authorization ヘッダーを送信していなかったため、ログインユーザーが登録した e-Stat API キーが検索時に
+  使われなかった問題を修正。RSC ページで `auth()` から accessToken を取得し、全 API 呼び出しに付与。
+
 ## 2026-04-02
 
 ### Added
