@@ -35,6 +35,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "."),
+      "next/server": resolve(__dirname, "node_modules/next/server.js"),
     },
   },
 });

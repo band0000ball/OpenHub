@@ -24,7 +24,7 @@ describe("LoginPage", () => {
       render(<LoginPage />);
     });
 
-    expect(mockSignIn).toHaveBeenCalledWith("cognito");
+    expect(mockSignIn).toHaveBeenCalledWith("cognito", { callbackUrl: "/" });
   });
 
   it("ローディングメッセージを表示する", async () => {
