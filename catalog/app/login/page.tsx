@@ -13,7 +13,9 @@ import { useEffect } from "react"
 
 export default function LoginPage() {
   useEffect(() => {
-    signIn("cognito")
+    const params = new URLSearchParams(window.location.search)
+    const callbackUrl = params.get("callbackUrl") ?? "/"
+    signIn("cognito", { callbackUrl })
   }, [])
 
   return (
