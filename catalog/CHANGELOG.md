@@ -14,6 +14,10 @@
 
 ### Fixed
 
+- **Vitest テスト環境修正（Phase 3.14）**: `proxy.test.ts` と `api.credentials.test.ts` が
+  next-auth v5 beta の ESM モジュール解決エラーで失敗していた問題を修正。
+  `vitest.config.ts` に `next/server` エイリアスを追加し、テストのモック対象を正しいモジュールに修正。
+
 - **認証後リダイレクト先の修正**: `proxy.ts` が `/login` へリダイレクトする際に `callbackUrl` を付与し、
   `login/page.tsx` がそれを読み取って `signIn("cognito", { callbackUrl })` に渡すよう修正。
   認証完了後に元のページ（`/settings` 等）に正しく戻るようになった。

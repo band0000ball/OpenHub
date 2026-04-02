@@ -2,7 +2,7 @@
 
 **Sprint**: Phase 3.14
 **Date**: 2026-04-02
-**Status**: Think 完了 / Plan 待ち
+**Status**: 完了（Ship 済み — PR #18）
 
 ---
 
@@ -46,10 +46,10 @@ Did you mean to import "next/server.js"?
 
 ## 成功指標
 
-- [ ] `npx vitest run` で全テストが pass する
-- [ ] proxy.test.ts のテストケースが実行される
-- [ ] api.credentials.test.ts のテストケースが実行される
-- [ ] 既存テスト（auth.test.ts 等）に影響がない
+- [x] `npx vitest run` で全テストが pass する（24 ファイル・165 テスト）
+- [x] proxy.test.ts のテストケースが実行される
+- [x] api.credentials.test.ts のテストケースが実行される
+- [x] 既存テスト（auth.test.ts 等）に影響がない
 
 ---
 
