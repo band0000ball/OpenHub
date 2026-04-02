@@ -14,6 +14,9 @@
 
 ### Fixed
 
+- **Bypass テストカバレッジ回復（Phase 3.13）**: `core/credentials.py` の Protocol 互換メソッドと
+  `get_credential_store()` ファクトリのテストを追加。credentials.py 76% → 100%、全体 92% → 94%。
+
 - **Vitest テスト環境修正（Phase 3.14）**: `proxy.test.ts` と `api.credentials.test.ts` が
   next-auth v5 beta の ESM モジュール解決エラーで失敗していた問題を修正。
   `vitest.config.ts` に `next/server` エイリアスを追加し、テストのモック対象を正しいモジュールに修正。
