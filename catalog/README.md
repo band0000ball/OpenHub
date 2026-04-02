@@ -78,6 +78,13 @@ npm test              # Vitest（ユニット）
 npm run test:e2e      # Playwright（E2E）
 ```
 
+認証フローを含む E2E テストを実行する場合:
+```bash
+E2E_TEST_EMAIL=your@email.com E2E_TEST_PASSWORD='YourPassword' npm run test:e2e
+```
+
+> 認証情報が未設定の場合、認証関連テストは自動的にスキップされる。
+
 ## 技術スタック
 
 - Next.js 16 App Router
@@ -94,7 +101,7 @@ npm run test:e2e      # Playwright（E2E）
 | `auth.ts` | NextAuth.js v5 設定（Cognito プロバイダー・JWT セッション・accessToken コールバック） |
 | `proxy.ts` | 認証ガード（`/settings` → 未認証時 `/login` にリダイレクト） |
 | `app/api/auth/[...nextauth]/route.ts` | NextAuth Route Handler |
-| `app/login/page.tsx` | Cognito サインインページ（マウント時 `signIn("cognito")` を呼び出す） |
+| `app/login/page.tsx` | Cognito サインインページ（`callbackUrl` パラメータを読み取り `signIn("cognito", { callbackUrl })` を呼び出す） |
 | `types/next-auth.d.ts` | `Session.accessToken` 型拡張 |
 
 > **Note**: Next.js 16 では `middleware.ts` が deprecated。認証ガードは `proxy.ts` に記述する。
