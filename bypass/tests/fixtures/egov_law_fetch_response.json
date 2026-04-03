@@ -1,0 +1,62 @@
+{
+  "attached_files_info": {},
+  "law_info": {
+    "law_type": "Act",
+    "law_id": "415AC0000000057",
+    "law_num": "平成十五年法律第五十七号",
+    "law_num_era": "Heisei",
+    "law_num_year": 15,
+    "law_num_type": "Act",
+    "law_num_num": "057",
+    "promulgation_date": "2003-05-30"
+  },
+  "revision_info": {
+    "law_revision_id": "415AC0000000057_20250401",
+    "law_type": "Act",
+    "law_title": "個人情報の保護に関する法律",
+    "law_title_kana": "こじんじょうほうのほごにかんするほうりつ",
+    "abbrev": "個人情報保護法",
+    "category": "行政",
+    "updated": "2025-04-01T00:01:25+09:00"
+  },
+  "law_full_text": {
+    "tag": "Law",
+    "attr": {},
+    "children": [
+      {
+        "tag": "LawBody",
+        "attr": {},
+        "children": [
+          {
+            "tag": "LawTitle",
+            "attr": {},
+            "children": ["個人情報の保護に関する法律"]
+          },
+          {
+            "tag": "MainProvision",
+            "attr": {},
+            "children": [
+              {
+                "tag": "Article",
+                "attr": {"Num": "1"},
+                "children": [
+                  {
+                    "tag": "Paragraph",
+                    "attr": {"Num": "1"},
+                    "children": [
+                      {
+                        "tag": "Sentence",
+                        "attr": {},
+                        "children": ["この法律は、個人情報の適正かつ効果的な活用が新たな産業の創出に資するものであることを鑑み"]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
