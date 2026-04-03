@@ -1,12 +1,11 @@
-import { auth } from "../../../auth";
+import { getAccessToken } from "../../../lib/auth-helpers";
 
 const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
 
 export async function POST(request: Request): Promise<Response> {
   const baseUrl = process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
 
-  const session = await auth();
-  const accessToken = (session as { accessToken?: string } | null)?.accessToken;
+  const accessToken = await getAccessToken();
 
   let body: unknown;
   try {

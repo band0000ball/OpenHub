@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-// auth.ts → next-auth → next/server の ESM 解決エラーを回避するため auth をモック
-vi.mock("../auth", () => ({
-  auth: vi.fn().mockResolvedValue({ accessToken: "test-token" }),
+// auth-helpers → auth → next-auth → next/server の ESM 解決エラーを回避するためモック
+vi.mock("../lib/auth-helpers", () => ({
+  getAccessToken: vi.fn().mockResolvedValue("test-token"),
 }));
 
 import { POST } from "../app/api/credentials/route";

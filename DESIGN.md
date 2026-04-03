@@ -1,8 +1,8 @@
-# DESIGN — キャッシュ戦略導入（Phase 3.9）
+# DESIGN — Source Registry 導入・型安全化（Phase 3.16A）
 
-**Sprint**: Phase 3.9
+**Sprint**: Phase 3.16A
 **Date**: 2026-04-03
-**Status**: 完了（Ship 済み — PR #21）
+**Status**: Build 完了
 
 ---
 

@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { auth } from "../../auth";
+import { getAccessToken } from "../../lib/auth-helpers";
 import SearchBar from "../../components/SearchBar";
 import SourceFilterTabs from "../../components/SourceFilterTabs";
 import SearchResults from "../../components/SearchResults";
@@ -24,8 +24,7 @@ function SkeletonResults() {
 export default async function SearchResultsPage({ searchParams }: SearchPageProps) {
   const { q = "", source = "", page: pageStr = "1" } = await searchParams;
   const page = Math.max(1, parseInt(pageStr, 10) || 1);
-  const session = await auth();
-  const accessToken = (session as { accessToken?: string } | null)?.accessToken;
+  const accessToken = await getAccessToken();
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">

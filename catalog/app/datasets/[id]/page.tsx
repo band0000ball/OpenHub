@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { auth } from "../../../auth";
+import { getAccessToken } from "../../../lib/auth-helpers";
 import { fetchDataset } from "../../../lib/api";
 import { SOURCE_LABELS } from "../../../types";
 
@@ -9,8 +9,7 @@ interface DatasetDetailPageProps {
 
 export default async function DatasetDetailPage({ params }: DatasetDetailPageProps) {
   const { id } = await params;
-  const session = await auth();
-  const accessToken = (session as { accessToken?: string } | null)?.accessToken;
+  const accessToken = await getAccessToken();
 
   try {
     const payload = await fetchDataset(id, accessToken);

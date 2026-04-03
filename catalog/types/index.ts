@@ -25,9 +25,6 @@ export interface PayloadResponse {
   data: string;
 }
 
-export type SourceId = "estat" | "datagojp";
-
-export const SOURCE_LABELS: Record<string, string> = {
-  estat: "e-Stat",
-  datagojp: "data.go.jp",
-};
+// Source Registry から re-export（後方互換性のため維持）
+export { SOURCE_LABELS } from "../lib/sources";
+export type { SourceId } from "../lib/sources";

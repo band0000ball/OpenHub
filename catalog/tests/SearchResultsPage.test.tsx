@@ -9,8 +9,8 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams("q=人口"),
 }));
 
-vi.mock("../auth", () => ({
-  auth: vi.fn().mockResolvedValue({ accessToken: "test-token" }),
+vi.mock("../lib/auth-helpers", () => ({
+  getAccessToken: vi.fn().mockResolvedValue("test-token"),
 }));
 
 // Mock the lib/api module
