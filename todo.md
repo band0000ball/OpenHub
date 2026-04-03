@@ -3,10 +3,11 @@
 ## 優先度: 高
 
 - [x] **D3: proxy.ts の Amplify 動作確認** — 正常動作を確認。auth-flow テスト失敗は Cognito セッション自動ログインが原因（proxy.ts の問題ではない）
-- [ ] **E4: auth-flow テストの AWS スキップ** — setup で Cognito ログイン済みのため auth-flow は自動ログインされ Cognito UI を経由しない。AWS ではスキップし、setup + chromium-authenticated で認証を検証
-- [ ] **E5: タブクリックテストの flaky 対策** — AWS 環境でナビゲーション遅延によりタブ切替テストが不安定。waitForURL のタイムアウト延長または waitForNavigation 追加
-- [ ] **E2: E2E ウォームアップリクエスト** — テスト実行前にトップページを叩いて Amplify/Lambda の Cold Start を解消
-- [ ] **E6: auth setup 前に .auth/state.json を削除** — 古いローカルセッションが残ると AWS テストが不正に pass する
+- [x] **E4: auth-flow テストの AWS スキップ** — PR #27 で対応
+- [x] **E5: タブクリックテストの flaky 対策** — PR #27 でタイムアウト 15s に延長
+- [x] **E2: E2E ウォームアップ** — PR #27 で auth.setup.ts に Promise.race パターン導入
+- [x] **E6: auth setup 前に state.json 削除** — PR #27 で対応
+- [x] **E7: /login サーバーサイドリダイレクト化** — PR #27 でクライアント JS 不要に
 
 ## 優先度: 中
 
