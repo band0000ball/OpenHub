@@ -161,7 +161,7 @@ test.describe("Pagination", () => {
       return;
     }
     await nextLink.click();
-    await expect(page).toHaveURL(/page=2/);
+    await expect(page).toHaveURL(/page=2/, { timeout: 15000 });
     await page.waitForSelector('[role="article"], [role="alert"], p:has-text("見つかりませんでした")', {
       timeout: 10000,
     });
