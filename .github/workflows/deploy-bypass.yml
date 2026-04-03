@@ -6,6 +6,7 @@ on:
     paths:
       - 'bypass/**'
       - '.github/workflows/deploy-bypass.yml'
+  workflow_dispatch:
 
 jobs:
   test:
