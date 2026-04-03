@@ -56,7 +56,8 @@ jobs:
         run: |
           sam deploy \
             --stack-name sam-app \
-            --resolve-s3 \
+            --s3-bucket aws-sam-cli-managed-default-samclisourcebucket-vvisc8d96kkx \
+            --s3-prefix sam-app \
             --no-confirm-changeset \
             --no-fail-on-empty-changeset \
             --capabilities CAPABILITY_IAM \
