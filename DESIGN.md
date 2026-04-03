@@ -2,7 +2,7 @@
 
 **Sprint**: Phase 3.9
 **Date**: 2026-04-03
-**Status**: Think 完了 / Build 中
+**Status**: 完了（Ship 済み — PR #21）
 
 ---
 
@@ -41,9 +41,9 @@ e-Stat API キーは認証・レート制限のみで検索結果に影響しな
 
 ## 成功指標
 
-- [ ] searchDatasets / browseByCategory / fetchDataset に revalidate が設定される
-- [ ] getCredentialStatus は no-store を維持する
-- [ ] 既存テスト全 pass
+- [x] searchDatasets / browseByCategory / fetchDataset に revalidate が設定される
+- [x] getCredentialStatus は no-store を維持する
+- [x] 既存テスト全 pass（24 ファイル・165 テスト）
 
 ---
 

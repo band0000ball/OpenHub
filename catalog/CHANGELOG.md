@@ -2,6 +2,12 @@
 
 ## 2026-04-03
 
+### Added
+
+- **キャッシュ戦略導入（Phase 3.9）**: Next.js ISR `revalidate` を導入し Bypass API への不要なリクエストを削減。
+  検索結果は 60 秒、データセット詳細は 300 秒のキャッシュ。e-Stat API キーは認証・レート制限のみで
+  検索結果に影響しないため、認証状態に関わらず同一キャッシュを共有。
+
 ### Fixed
 
 - **ログイン後の APIキー取得不能バグ（Phase 3.15）**: `searchDatasets()` / `fetchDataset()` が Bypass API に

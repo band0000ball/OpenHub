@@ -60,7 +60,7 @@
 | 3.6 | e-Stat アプリケーションID 取得案内 | 低 | ✅ | 外部リンク + 取得手順の UI |
 | 3.7 | E2E テスト拡充（Playwright） | 中 | ✅ | ページネーション・認証・設定フローを追加カバー |
 | 3.8 | DatasetBrowser エラー時リトライ | 中 | 📋 | 再試行ボタン追加・ネットワーク障害とデータ不足を区別 |
-| 3.9 | キャッシュ戦略導入 | 中 | 📋 | 変更頻度の低いデータに `revalidate` を設定し Bypass 負荷を削減 |
+| 3.9 | キャッシュ戦略導入 | 中 | ✅ | ISR revalidate 導入（search: 60s, dataset: 300s, credentialStatus: no-store 維持） |
 | 3.10 | credentials route 型安全化 | 低 | 📋 | `as` キャストを除去し NextAuth Session 型を正しく参照 |
 | 3.11 | DatasetBrowser ロジック分離 | 低 | 📋 | データ取得・ページ計算をカスタムフックに切り出し |
 | 3.12 | 実行時バリデーション（Zod） | 低 | 📋 | `response.json() as T` を Zod パースに置き換え |
