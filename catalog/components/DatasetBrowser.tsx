@@ -1,4 +1,5 @@
 import DatasetListView from "./DatasetListView";
+import ErrorRetry from "./ErrorRetry";
 import { browseByCategory, searchDatasets } from "../lib/api";
 import { findCategory, BROWSE_LIMIT_SINGLE } from "../lib/categories";
 
@@ -47,10 +48,6 @@ export default async function DatasetBrowser({ category, page, accessToken }: Da
       />
     );
   } catch {
-    return (
-      <p role="alert" className="py-8 text-center text-red-600">
-        データの取得に失敗しました。再試行してください
-      </p>
-    );
+    return <ErrorRetry message="データの取得に失敗しました" />;
   }
 }

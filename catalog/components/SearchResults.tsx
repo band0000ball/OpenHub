@@ -1,4 +1,5 @@
 import DatasetListView from "./DatasetListView";
+import ErrorRetry from "./ErrorRetry";
 import { searchDatasets } from "../lib/api";
 
 const LIMIT = 20;
@@ -44,10 +45,6 @@ export default async function SearchResults({ q, source, page, accessToken }: Se
       </div>
     );
   } catch {
-    return (
-      <p role="alert" className="py-8 text-center text-red-600">
-        検索に失敗しました。再試行してください
-      </p>
-    );
+    return <ErrorRetry message="検索に失敗しました" />;
   }
 }
