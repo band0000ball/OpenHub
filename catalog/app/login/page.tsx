@@ -1,19 +1,29 @@
 /**
- * ログインページ（サーバーサイドリダイレクト）
+ * ログインページ
  *
- * クライアント JS を読み込まずに即座に Cognito へリダイレクトする。
+ * Cognito Hosted UI へリダイレクトする。
  * proxy.ts が /login?callbackUrl=/settings にリダイレクトし、
- * このページがサーバーサイドで signIn() を実行して Cognito OAuth フローを開始する。
+ * このページが signIn("cognito") を呼び出して OAuth フローを開始する。
+ *
+ * Note: サーバーサイド signIn() は Amplify SSR 環境で NEXT_REDIRECT の
+ * ハンドリングに問題があるため、クライアントコンポーネントで実装する。
  */
 
-import { signIn } from "../../auth"
+"use client"
 
-interface LoginPageProps {
-  searchParams: Promise<{ callbackUrl?: string }>;
-}
+import { signIn } from "next-auth/react"
+import { useEffect } from "react"
 
-export default async function LoginPage({ searchParams }: LoginPageProps) {
-  const { callbackUrl = "/" } = await searchParams;
-  // サーバーサイド signIn: 内部で NEXT_REDIRECT を throw して Cognito へリダイレクト
-  await signIn("cognito", { redirectTo: callbackUrl });
+export default function LoginPage() {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const callbackUrl = params.get("callbackUrl") ?? "/"
+    signIn("cognito", { callbackUrl })
+  }, [])
+
+  return (
+    <main className="flex min-h-screen items-center justify-center">
+      <p className="text-gray-500">ログイン画面へ移動中...</p>
+    </main>
+  )
 }
