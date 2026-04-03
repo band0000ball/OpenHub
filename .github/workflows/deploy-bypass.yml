@@ -56,6 +56,7 @@ jobs:
         run: |
           sam deploy \
             --stack-name sam-app \
+            --resolve-s3 \
             --no-confirm-changeset \
             --no-fail-on-empty-changeset \
             --capabilities CAPABILITY_IAM \
