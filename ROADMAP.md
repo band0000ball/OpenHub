@@ -46,7 +46,7 @@
 
 ---
 
-## Phase 3 — 認証・安定化・UX 改善
+## ✅ Phase 3 — 認証・安定化・UX 改善
 
 **目標**: Amazon Cognito 認証基盤を確立し、日常利用に耐える品質と UX を整える
 
@@ -59,7 +59,7 @@
 | 3.5 | data.go.jp 文字化け調査・修正 | 中 | ✅ | e-gov.go.jp レスポンスの文字コード（再現不可・実装正常を確認） |
 | 3.6 | e-Stat アプリケーションID 取得案内 | 低 | ✅ | 外部リンク + 取得手順の UI |
 | 3.7 | E2E テスト拡充（Playwright） | 中 | ✅ | ページネーション・認証・設定フローを追加カバー |
-| 3.8 | DatasetBrowser エラー時リトライ | 中 | 📋 | 再試行ボタン追加・ネットワーク障害とデータ不足を区別 |
+| 3.8 | DatasetBrowser エラー時リトライ | 中 | ✅ | ErrorRetry コンポーネントで router.refresh() 再試行、サーチバー・タブ維持 |
 | 3.9 | キャッシュ戦略導入 | 中 | ✅ | ISR revalidate 導入（search: 60s, dataset: 300s, credentialStatus: no-store 維持） |
 | 3.16A | Source Registry 導入・型安全化 | 中 | ✅ | `lib/sources.ts` + `lib/auth-helpers.ts` 新規作成、SourceFilterTabs 動的生成、as キャスト除去 |
 | 3.16B | コンポーネント汎用化・Zod 導入 | 中 | ✅ | DatasetListView 抽出、CredentialsBanner 汎用化、CredentialsForm ソース汎用化、Zod バリデーション |

@@ -4,6 +4,9 @@
 
 ### Added
 
+- **エラー時リトライボタン（Phase 3.8）**: データ取得失敗時に「再試行」ボタンを表示。
+  `router.refresh()` でサーバーコンポーネントのみ再レンダリングし、サーチバー・タブの状態は維持。
+
 - **コンポーネント汎用化・Zod 導入（Phase 3.16B）**: `DatasetListView` 共通コンポーネント抽出で
   DatasetBrowser/SearchResults の重複を解消。`CredentialsBanner` で API キー必須ソースを自動検出。
   `CredentialsForm` をソース汎用化。Zod スキーマで API レスポンスの実行時バリデーションを導入。
