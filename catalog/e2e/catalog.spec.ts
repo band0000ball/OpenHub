@@ -62,6 +62,10 @@ test.describe("Search results page - DoD scenarios", () => {
   });
 
   test("error message shown when bypass not available", async ({ page }) => {
+    // リモート環境（AWS）では Bypass が接続されているためスキップ
+    if (process.env.BASE_URL) {
+      test.skip(true, "リモート環境では Bypass が接続されているためスキップ");
+    }
     // NEXT_PUBLIC_BYPASS_BASE_URL は存在しないポート (19999) に設定されているため
     // サーバーサイドの RSC フェッチが常に失敗し、エラー UI が表示される
     await page.goto("/search?q=人口");
@@ -74,6 +78,9 @@ test.describe("Search results page - DoD scenarios", () => {
 
 test.describe("Dataset detail page", () => {
   test("shows error when dataset not found", async ({ page }) => {
+    if (process.env.BASE_URL) {
+      test.skip(true, "リモート環境では Bypass が接続されているためスキップ");
+    }
     // fetchDataset はサーバーサイドで Bypass (19999) を直接呼ぶため page.route は不要
     // Bypass が応答しないと try/catch でエラー UI が描画される
     // RSC ストリーミングが途中で切れる場合があるため waitUntil: 'domcontentloaded' を使用
