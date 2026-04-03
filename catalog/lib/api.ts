@@ -8,6 +8,11 @@ import {
 
 const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
 
+/** 検索結果のキャッシュ有効期間（秒）。行政データは日次〜月次更新のため 1 分で十分。 */
+const SEARCH_REVALIDATE = 60;
+/** カテゴリ一覧・データセット詳細のキャッシュ有効期間（秒）。更新頻度が低いため 5 分。 */
+const BROWSE_REVALIDATE = 300;
+
 function getSearchUrl(params: URLSearchParams): string {
   if (typeof window !== "undefined") {
     // クライアントサイド: Next.js プロキシ経由
@@ -39,7 +44,10 @@ export async function searchDatasets(
   }
 
   const url = getSearchUrl(params);
-  const response = await fetch(url, { cache: "no-store", headers: buildHeaders(accessToken) });
+  const response = await fetch(url, {
+    next: { revalidate: SEARCH_REVALIDATE },
+    headers: buildHeaders(accessToken),
+  });
 
   if (!response.ok) {
     throw new Error(`Search failed: ${response.status}`);
@@ -101,7 +109,10 @@ export async function fetchDataset(id: string, accessToken?: string): Promise<Pa
   const url = typeof window !== "undefined"
     ? `/api/datasets/${encodeURIComponent(id)}`
     : `${process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL}/datasets/${encodeURIComponent(id)}/fetch`;
-  const response = await fetch(url, { cache: "no-store", headers: buildHeaders(accessToken) });
+  const response = await fetch(url, {
+    next: { revalidate: BROWSE_REVALIDATE },
+    headers: buildHeaders(accessToken),
+  });
 
   if (!response.ok) {
     throw new Error(`Dataset fetch failed: ${response.status}`);
