@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SOURCES } from "../lib/sources";
 
 interface Tab {
   label: string;
@@ -7,8 +8,7 @@ interface Tab {
 
 const TABS: Tab[] = [
   { label: "全て", value: "" },
-  { label: "e-Stat", value: "estat" },
-  { label: "data.go.jp", value: "datagojp" },
+  ...SOURCES.map((s) => ({ label: s.label, value: s.id })),
 ];
 
 interface SourceFilterTabsProps {
