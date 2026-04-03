@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getAccessToken } from "../../../lib/auth-helpers";
 import { fetchDataset } from "../../../lib/api";
 import { SOURCE_LABELS } from "../../../types";
+import DataPreview from "../../../components/DataPreview";
 
 interface DatasetDetailPageProps {
   params: Promise<{ id: string }>;
@@ -52,7 +53,7 @@ export default async function DatasetDetailPage({ params }: DatasetDetailPagePro
 
           <p className="mt-4 leading-relaxed text-gray-700">{metadata.description}</p>
 
-          <div className="mt-6">
+          <div className="mt-6 flex gap-3">
             <a
               href={metadata.url}
               target="_blank"
@@ -63,6 +64,22 @@ export default async function DatasetDetailPage({ params }: DatasetDetailPagePro
               元データを見る
             </a>
           </div>
+
+          {payload.data && (
+            <section className="mt-8">
+              <h2 className="mb-3 text-lg font-semibold text-gray-900">データプレビュー</h2>
+              <DataPreview
+                data={payload.data}
+                format={payload.format}
+                dataEncoding={payload.data_encoding}
+              />
+              {payload.record_count !== null && (
+                <p className="mt-2 text-xs text-gray-400">
+                  {payload.record_count} レコード
+                </p>
+              )}
+            </section>
+          )}
         </article>
       </main>
     );
