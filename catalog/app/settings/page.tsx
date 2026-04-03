@@ -1,9 +1,9 @@
 import CredentialsForm from "../../components/CredentialsForm";
 import EStatGuideSteps from "../../components/EStatGuideSteps";
-import { fetchSourcesRequiringApiKey } from "../../lib/sources";
+import { getSourcesRequiringApiKey } from "../../lib/sources";
 
-export default async function SettingsPage() {
-  const sources = await fetchSourcesRequiringApiKey();
+export default function SettingsPage() {
+  const sources = getSourcesRequiringApiKey();
 
   return (
     <main className="mx-auto max-w-2xl px-4 py-12">
