@@ -24,6 +24,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from pydantic import BaseModel
 
 from connectors.datagojp import DataGoJpConnector
+from connectors.egov_law import EGovLawConnector
 from connectors.estat import EStatConnector
 from core.cache import InMemoryCache
 from core.connector import DataSourceConnector
@@ -80,6 +81,7 @@ class SourceDefinition(BaseModel):
 _SOURCE_REGISTRY: list[tuple[SourceDefinition, type]] = [
     (SourceDefinition(id="estat", label="e-Stat", requires_api_key=True), EStatConnector),
     (SourceDefinition(id="datagojp", label="data.go.jp", requires_api_key=False), DataGoJpConnector),
+    (SourceDefinition(id="egov_law", label="e-Gov 法令", requires_api_key=False), EGovLawConnector),
 ]
 
 # source_id → コネクタークラス（検索・取得用）

@@ -1,0 +1,59 @@
+{
+  "total_count": 42,
+  "sentence_count": 2,
+  "next_offset": 2,
+  "items": [
+    {
+      "law_info": {
+        "law_type": "Act",
+        "law_id": "415AC0000000057",
+        "law_num": "平成十五年法律第五十七号",
+        "law_num_era": "Heisei",
+        "law_num_year": 15,
+        "law_num_type": "Act",
+        "law_num_num": "057",
+        "promulgation_date": "2003-05-30"
+      },
+      "revision_info": {
+        "law_revision_id": "415AC0000000057_20250401",
+        "law_type": "Act",
+        "law_title": "個人情報の保護に関する法律",
+        "law_title_kana": "こじんじょうほうのほごにかんするほうりつ",
+        "abbrev": "個人情報保護法",
+        "category": "行政"
+      },
+      "sentences": [
+        {
+          "position": "article",
+          "text": "この法律は、<span>個人情報</span>の適正かつ効果的な活用が新たな産業の創出に資するものであることを鑑み"
+        }
+      ]
+    },
+    {
+      "law_info": {
+        "law_type": "Act",
+        "law_id": "325AC0000000131",
+        "law_num": "昭和二十五年法律第百三十一号",
+        "law_num_era": "Showa",
+        "law_num_year": 25,
+        "law_num_type": "Act",
+        "law_num_num": "131",
+        "promulgation_date": "1950-05-04"
+      },
+      "revision_info": {
+        "law_revision_id": "325AC0000000131_20260401",
+        "law_type": "Act",
+        "law_title": "地方税法",
+        "law_title_kana": "ちほうぜいほう",
+        "abbrev": "",
+        "category": "財務"
+      },
+      "sentences": [
+        {
+          "position": "caption",
+          "text": "行政機関の保有する<span>個人情報</span>の保護に関する法律"
+        }
+      ]
+    }
+  ]
+}
