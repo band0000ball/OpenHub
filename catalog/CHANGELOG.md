@@ -4,6 +4,10 @@
 
 ### Added
 
+- **コンポーネント汎用化・Zod 導入（Phase 3.16B）**: `DatasetListView` 共通コンポーネント抽出で
+  DatasetBrowser/SearchResults の重複を解消。`CredentialsBanner` で API キー必須ソースを自動検出。
+  `CredentialsForm` をソース汎用化。Zod スキーマで API レスポンスの実行時バリデーションを導入。
+
 - **Source Registry 導入（Phase 3.16A）**: `lib/sources.ts` にデータソース定義を集約。
   新ソース追加時に 1 エントリ追加するだけで SourceFilterTabs・SOURCE_LABELS が自動対応。
   `lib/auth-helpers.ts` で accessToken 取得を共通化し、4 箇所の `as` キャストを除去。

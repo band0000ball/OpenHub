@@ -62,7 +62,7 @@
 | 3.8 | DatasetBrowser エラー時リトライ | 中 | 📋 | 再試行ボタン追加・ネットワーク障害とデータ不足を区別 |
 | 3.9 | キャッシュ戦略導入 | 中 | ✅ | ISR revalidate 導入（search: 60s, dataset: 300s, credentialStatus: no-store 維持） |
 | 3.16A | Source Registry 導入・型安全化 | 中 | ✅ | `lib/sources.ts` + `lib/auth-helpers.ts` 新規作成、SourceFilterTabs 動的生成、as キャスト除去 |
-| 3.16B | コンポーネント汎用化・Zod 導入 | 中 | 📋 | `DatasetListView` 抽出、`CredentialsForm` ソース汎用化、`EStatBanner` → 汎用 `CredentialsBanner`、Zod バリデーション（旧 3.12 を統合） |
+| 3.16B | コンポーネント汎用化・Zod 導入 | 中 | ✅ | DatasetListView 抽出、CredentialsBanner 汎用化、CredentialsForm ソース汎用化、Zod バリデーション |
 | 3.13 | Bypass テストカバレッジ回復（80%+） | 中 | ✅ | credentials.py 76%→100%、全体 92%→94% |
 | 3.14 | Catalog テスト環境修正（next-auth × Vitest） | 中 | ✅ | `next/server` エイリアス追加 + モック修正で全テスト pass |
 | 3.15 | ログイン後の APIキー取得不能バグ修正 | **高** | ✅ | Catalog 側で accessToken を Bypass に送信するよう修正（根因: Authorization ヘッダー欠落） |
