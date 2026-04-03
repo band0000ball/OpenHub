@@ -4,6 +4,10 @@
 
 ### Added
 
+- **Source Registry 導入（Phase 3.16A）**: `lib/sources.ts` にデータソース定義を集約。
+  新ソース追加時に 1 エントリ追加するだけで SourceFilterTabs・SOURCE_LABELS が自動対応。
+  `lib/auth-helpers.ts` で accessToken 取得を共通化し、4 箇所の `as` キャストを除去。
+
 - **キャッシュ戦略導入（Phase 3.9）**: Next.js ISR `revalidate` を導入し Bypass API への不要なリクエストを削減。
   検索結果は 60 秒、データセット詳細は 300 秒のキャッシュ。e-Stat API キーは認証・レート制限のみで
   検索結果に影響しないため、認証状態に関わらず同一キャッシュを共有。

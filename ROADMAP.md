@@ -61,7 +61,7 @@
 | 3.7 | E2E テスト拡充（Playwright） | 中 | ✅ | ページネーション・認証・設定フローを追加カバー |
 | 3.8 | DatasetBrowser エラー時リトライ | 中 | 📋 | 再試行ボタン追加・ネットワーク障害とデータ不足を区別 |
 | 3.9 | キャッシュ戦略導入 | 中 | ✅ | ISR revalidate 導入（search: 60s, dataset: 300s, credentialStatus: no-store 維持） |
-| 3.16A | Source Registry 導入・型安全化 | 中 | 📋 | `lib/sources.ts` に全ソース定義を集約、`as` キャスト除去、auth token ユーティリティ抽出（旧 3.10/3.11 を統合） |
+| 3.16A | Source Registry 導入・型安全化 | 中 | ✅ | `lib/sources.ts` + `lib/auth-helpers.ts` 新規作成、SourceFilterTabs 動的生成、as キャスト除去 |
 | 3.16B | コンポーネント汎用化・Zod 導入 | 中 | 📋 | `DatasetListView` 抽出、`CredentialsForm` ソース汎用化、`EStatBanner` → 汎用 `CredentialsBanner`、Zod バリデーション（旧 3.12 を統合） |
 | 3.13 | Bypass テストカバレッジ回復（80%+） | 中 | ✅ | credentials.py 76%→100%、全体 92%→94% |
 | 3.14 | Catalog テスト環境修正（next-auth × Vitest） | 中 | ✅ | `next/server` エイリアス追加 + モック修正で全テスト pass |

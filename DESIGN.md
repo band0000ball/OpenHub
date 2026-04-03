@@ -2,7 +2,7 @@
 
 **Sprint**: Phase 3.16A
 **Date**: 2026-04-03
-**Status**: Build 完了
+**Status**: 完了（Ship 済み — PR #22）
 
 ---
 
