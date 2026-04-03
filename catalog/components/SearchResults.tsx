@@ -1,5 +1,4 @@
-import DatasetCard from "./DatasetCard";
-import Pagination from "./Pagination";
+import DatasetListView from "./DatasetListView";
 import { searchDatasets } from "../lib/api";
 
 const LIMIT = 20;
@@ -17,14 +16,6 @@ export default async function SearchResults({ q, source, page, accessToken }: Se
   try {
     const results = await searchDatasets(q, source || undefined, LIMIT, offset, accessToken);
 
-    if (results.items.length === 0) {
-      return (
-        <p className="py-12 text-center text-gray-500">
-          該当するデータセットが見つかりませんでした
-        </p>
-      );
-    }
-
     const totalPages = results.total !== null
       ? Math.ceil(results.total / LIMIT)
       : null;
@@ -34,22 +25,21 @@ export default async function SearchResults({ q, source, page, accessToken }: Se
 
     return (
       <div>
-        <p className="mb-4 text-sm text-gray-500">
-          {results.total !== null
-            ? `${results.total} 件のデータセットが見つかりました`
-            : "データセットが見つかりました"}
-        </p>
-        <div className="grid gap-4">
-          {results.items.map((dataset) => (
-            <DatasetCard key={dataset.id} dataset={dataset} />
-          ))}
-        </div>
-        <Pagination
-          currentPage={page}
+        {results.items.length > 0 && (
+          <p className="mb-4 text-sm text-gray-500">
+            {results.total !== null
+              ? `${results.total} 件のデータセットが見つかりました`
+              : "データセットが見つかりました"}
+          </p>
+        )}
+        <DatasetListView
+          items={results.items}
           totalPages={totalPages}
           hasNext={results.has_next}
+          currentPage={page}
           basePath="/search"
           queryParams={queryParams}
+          emptyMessage="該当するデータセットが見つかりませんでした"
         />
       </div>
     );

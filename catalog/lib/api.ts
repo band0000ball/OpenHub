@@ -5,6 +5,7 @@ import {
   BROWSE_LIMIT_SINGLE,
   findCategory,
 } from "./categories";
+import { SearchResponseSchema, PayloadResponseSchema } from "./schemas";
 
 const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
 
@@ -53,7 +54,8 @@ export async function searchDatasets(
     throw new Error(`Search failed: ${response.status}`);
   }
 
-  return response.json() as Promise<SearchResponse>;
+  const json: unknown = await response.json();
+  return SearchResponseSchema.parse(json);
 }
 
 export async function browseByCategory(
@@ -118,5 +120,6 @@ export async function fetchDataset(id: string, accessToken?: string): Promise<Pa
     throw new Error(`Dataset fetch failed: ${response.status}`);
   }
 
-  return response.json() as Promise<PayloadResponse>;
+  const json: unknown = await response.json();
+  return PayloadResponseSchema.parse(json);
 }

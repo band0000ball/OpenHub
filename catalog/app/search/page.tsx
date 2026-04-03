@@ -3,7 +3,7 @@ import { getAccessToken } from "../../lib/auth-helpers";
 import SearchBar from "../../components/SearchBar";
 import SourceFilterTabs from "../../components/SourceFilterTabs";
 import SearchResults from "../../components/SearchResults";
-import EStatBanner from "../../components/EStatBanner";
+import CredentialsBanner from "../../components/CredentialsBanner";
 import SkeletonCard from "../../components/SkeletonCard";
 
 
@@ -34,7 +34,7 @@ export default async function SearchResultsPage({ searchParams }: SearchPageProp
         </Suspense>
       </div>
       <Suspense fallback={null}>
-        <EStatBanner />
+        <CredentialsBanner />
       </Suspense>
       <div className="mb-4">
         <SourceFilterTabs currentSource={source} currentQuery={q} />

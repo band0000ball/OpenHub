@@ -17,6 +17,7 @@ const mockSearchResponse = {
     },
   ],
   total: 1,
+  has_next: false,
   limit: 20,
   offset: 0,
 };
@@ -136,7 +137,7 @@ describe("browseByCategory", () => {
   it("fetches single category keyword for non-all category", async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ items: [mockItem("pop:1")], total: 1, limit: 4, offset: 0 }),
+      json: async () => ({ items: [mockItem("pop:1")], total: 1, has_next: false, limit: 4, offset: 0 }),
     });
 
     const result = await browseByCategory("population");
@@ -155,6 +156,7 @@ describe("browseByCategory", () => {
         json: async () => ({
           items: [mockItem(`cat${i}:1`)],
           total: 1,
+          has_next: false,
           limit: 4,
           offset: 0,
         }),
@@ -175,6 +177,7 @@ describe("browseByCategory", () => {
         json: async () => ({
           items: [sharedItem],
           total: 1,
+          has_next: false,
           limit: 4,
           offset: 0,
         }),
@@ -193,11 +196,11 @@ describe("browseByCategory", () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ items: [mockItem("ok:1")], total: 1, limit: 4, offset: 0 }),
+        json: async () => ({ items: [mockItem("ok:1")], total: 1, has_next: false, limit: 4, offset: 0 }),
       })
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ items: [mockItem("ok:2")], total: 1, limit: 4, offset: 0 }),
+        json: async () => ({ items: [mockItem("ok:2")], total: 1, has_next: false, limit: 4, offset: 0 }),
       })
       .mockResolvedValue({ ok: false, status: 502 });
 
