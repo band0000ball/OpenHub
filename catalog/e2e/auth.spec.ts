@@ -69,6 +69,11 @@ test.describe("Authentication flow", () => {
     if (!process.env.E2E_TEST_EMAIL || !process.env.E2E_TEST_PASSWORD) {
       test.skip(true, "E2E_TEST_EMAIL / E2E_TEST_PASSWORD が未設定のためスキップ");
     }
+    // AWS 環境では setup で Cognito セッションが確立済みのため自動ログインされ、
+    // Cognito UI を経由しない。認証検証は setup + chromium-authenticated で実施する
+    if (process.env.BASE_URL) {
+      test.skip(true, "リモート環境では Cognito 自動ログインにより auth-flow テスト不可（setup で検証済み）");
+    }
     // Cognito との複数回のネットワーク往復があるため timeout を延長する
     testInfo.setTimeout(120000);
   });

@@ -1,4 +1,5 @@
 import { test as setup, expect } from "@playwright/test";
+import fs from "fs";
 import path from "path";
 
 const authStatePath = path.join(process.cwd(), ".auth/state.json");
@@ -27,6 +28,13 @@ setup("Cognito 認証セットアップ", async ({ page }) => {
     setup.skip(true, "E2E_TEST_EMAIL / E2E_TEST_PASSWORD が未設定のためスキップ");
     return;
   }
+
+  // 古いセッション state を削除（ローカル → AWS 切替時に不正なセッションが残るのを防ぐ）
+  try { fs.unlinkSync(authStatePath); } catch { /* not found — OK */ }
+
+  // ウォームアップ: トップページを叩いて Amplify/Lambda の Cold Start を解消
+  await page.goto("/");
+  await page.waitForLoadState("domcontentloaded");
 
   // /settings にアクセス → middleware が /login へ、/login が Cognito へリダイレクト
   // これにより callbackUrl が /settings に設定される

@@ -52,13 +52,13 @@ test.describe("Search results page - DoD scenarios", () => {
   test("clicking e-Stat tab updates URL source param", async ({ page }) => {
     await page.goto("/search?q=人口");
     await page.getByRole("tab", { name: "e-Stat" }).click();
-    await expect(page).toHaveURL(/source=estat/);
+    await expect(page).toHaveURL(/source=estat/, { timeout: 15000 });
   });
 
   test("clicking data.go.jp tab updates URL source param", async ({ page }) => {
     await page.goto("/search?q=人口");
     await page.getByRole("tab", { name: "data.go.jp" }).click();
-    await expect(page).toHaveURL(/source=datagojp/);
+    await expect(page).toHaveURL(/source=datagojp/, { timeout: 15000 });
   });
 
   test("error message shown when bypass not available", async ({ page }) => {
