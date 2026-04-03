@@ -1,0 +1,1405 @@
+[
+  {
+    "id": "jma:forecast:011000",
+    "title": "宗谷地方 天気予報",
+    "description": "宗谷地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "宗谷地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=011000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/011000.json"
+  },
+  {
+    "id": "jma:warning:011000",
+    "title": "宗谷地方 気象警報・注意報",
+    "description": "宗谷地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "宗谷地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=011000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/011000.json"
+  },
+  {
+    "id": "jma:forecast:012000",
+    "title": "上川・留萌地方 天気予報",
+    "description": "上川・留萌地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "上川・留萌地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=012000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/012000.json"
+  },
+  {
+    "id": "jma:warning:012000",
+    "title": "上川・留萌地方 気象警報・注意報",
+    "description": "上川・留萌地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "上川・留萌地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=012000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/012000.json"
+  },
+  {
+    "id": "jma:forecast:013000",
+    "title": "網走・北見・紋別地方 天気予報",
+    "description": "網走・北見・紋別地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "網走・北見・紋別地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=013000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/013000.json"
+  },
+  {
+    "id": "jma:warning:013000",
+    "title": "網走・北見・紋別地方 気象警報・注意報",
+    "description": "網走・北見・紋別地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "網走・北見・紋別地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=013000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/013000.json"
+  },
+  {
+    "id": "jma:forecast:014030",
+    "title": "十勝地方 天気予報",
+    "description": "十勝地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "十勝地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=014030",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/014030.json"
+  },
+  {
+    "id": "jma:warning:014030",
+    "title": "十勝地方 気象警報・注意報",
+    "description": "十勝地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "十勝地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=014030",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/014030.json"
+  },
+  {
+    "id": "jma:forecast:014100",
+    "title": "釧路・根室地方 天気予報",
+    "description": "釧路・根室地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "釧路・根室地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=014100",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/014100.json"
+  },
+  {
+    "id": "jma:warning:014100",
+    "title": "釧路・根室地方 気象警報・注意報",
+    "description": "釧路・根室地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "釧路・根室地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=014100",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/014100.json"
+  },
+  {
+    "id": "jma:forecast:015000",
+    "title": "胆振・日高地方 天気予報",
+    "description": "胆振・日高地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "胆振・日高地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=015000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/015000.json"
+  },
+  {
+    "id": "jma:warning:015000",
+    "title": "胆振・日高地方 気象警報・注意報",
+    "description": "胆振・日高地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "胆振・日高地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=015000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/015000.json"
+  },
+  {
+    "id": "jma:forecast:016000",
+    "title": "石狩・空知・後志地方 天気予報",
+    "description": "石狩・空知・後志地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "石狩・空知・後志地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=016000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/016000.json"
+  },
+  {
+    "id": "jma:warning:016000",
+    "title": "石狩・空知・後志地方 気象警報・注意報",
+    "description": "石狩・空知・後志地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "石狩・空知・後志地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=016000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/016000.json"
+  },
+  {
+    "id": "jma:forecast:017000",
+    "title": "渡島・檜山地方 天気予報",
+    "description": "渡島・檜山地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "渡島・檜山地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=017000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/017000.json"
+  },
+  {
+    "id": "jma:warning:017000",
+    "title": "渡島・檜山地方 気象警報・注意報",
+    "description": "渡島・檜山地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "渡島・檜山地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=017000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/017000.json"
+  },
+  {
+    "id": "jma:forecast:020000",
+    "title": "青森県 天気予報",
+    "description": "青森県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "青森県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=020000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/020000.json"
+  },
+  {
+    "id": "jma:warning:020000",
+    "title": "青森県 気象警報・注意報",
+    "description": "青森県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "青森県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=020000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/020000.json"
+  },
+  {
+    "id": "jma:forecast:030000",
+    "title": "岩手県 天気予報",
+    "description": "岩手県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "岩手県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=030000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/030000.json"
+  },
+  {
+    "id": "jma:warning:030000",
+    "title": "岩手県 気象警報・注意報",
+    "description": "岩手県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "岩手県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=030000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/030000.json"
+  },
+  {
+    "id": "jma:forecast:040000",
+    "title": "宮城県 天気予報",
+    "description": "宮城県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "宮城県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=040000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/040000.json"
+  },
+  {
+    "id": "jma:warning:040000",
+    "title": "宮城県 気象警報・注意報",
+    "description": "宮城県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "宮城県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=040000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/040000.json"
+  },
+  {
+    "id": "jma:forecast:050000",
+    "title": "秋田県 天気予報",
+    "description": "秋田県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "秋田県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=050000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/050000.json"
+  },
+  {
+    "id": "jma:warning:050000",
+    "title": "秋田県 気象警報・注意報",
+    "description": "秋田県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "秋田県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=050000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/050000.json"
+  },
+  {
+    "id": "jma:forecast:060000",
+    "title": "山形県 天気予報",
+    "description": "山形県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "山形県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=060000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/060000.json"
+  },
+  {
+    "id": "jma:warning:060000",
+    "title": "山形県 気象警報・注意報",
+    "description": "山形県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "山形県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=060000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/060000.json"
+  },
+  {
+    "id": "jma:forecast:070000",
+    "title": "福島県 天気予報",
+    "description": "福島県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "福島県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=070000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/070000.json"
+  },
+  {
+    "id": "jma:warning:070000",
+    "title": "福島県 気象警報・注意報",
+    "description": "福島県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "福島県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=070000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/070000.json"
+  },
+  {
+    "id": "jma:forecast:080000",
+    "title": "茨城県 天気予報",
+    "description": "茨城県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "茨城県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=080000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/080000.json"
+  },
+  {
+    "id": "jma:warning:080000",
+    "title": "茨城県 気象警報・注意報",
+    "description": "茨城県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "茨城県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=080000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/080000.json"
+  },
+  {
+    "id": "jma:forecast:090000",
+    "title": "栃木県 天気予報",
+    "description": "栃木県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "栃木県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=090000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/090000.json"
+  },
+  {
+    "id": "jma:warning:090000",
+    "title": "栃木県 気象警報・注意報",
+    "description": "栃木県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "栃木県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=090000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/090000.json"
+  },
+  {
+    "id": "jma:forecast:100000",
+    "title": "群馬県 天気予報",
+    "description": "群馬県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "群馬県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=100000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/100000.json"
+  },
+  {
+    "id": "jma:warning:100000",
+    "title": "群馬県 気象警報・注意報",
+    "description": "群馬県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "群馬県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=100000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/100000.json"
+  },
+  {
+    "id": "jma:forecast:110000",
+    "title": "埼玉県 天気予報",
+    "description": "埼玉県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "埼玉県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=110000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/110000.json"
+  },
+  {
+    "id": "jma:warning:110000",
+    "title": "埼玉県 気象警報・注意報",
+    "description": "埼玉県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "埼玉県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=110000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/110000.json"
+  },
+  {
+    "id": "jma:forecast:120000",
+    "title": "千葉県 天気予報",
+    "description": "千葉県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "千葉県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=120000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/120000.json"
+  },
+  {
+    "id": "jma:warning:120000",
+    "title": "千葉県 気象警報・注意報",
+    "description": "千葉県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "千葉県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=120000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/120000.json"
+  },
+  {
+    "id": "jma:forecast:130000",
+    "title": "東京都 天気予報",
+    "description": "東京都の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "東京都"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=130000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/130000.json"
+  },
+  {
+    "id": "jma:warning:130000",
+    "title": "東京都 気象警報・注意報",
+    "description": "東京都の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "東京都"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=130000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/130000.json"
+  },
+  {
+    "id": "jma:forecast:140000",
+    "title": "神奈川県 天気予報",
+    "description": "神奈川県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "神奈川県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=140000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/140000.json"
+  },
+  {
+    "id": "jma:warning:140000",
+    "title": "神奈川県 気象警報・注意報",
+    "description": "神奈川県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "神奈川県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=140000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/140000.json"
+  },
+  {
+    "id": "jma:forecast:150000",
+    "title": "新潟県 天気予報",
+    "description": "新潟県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "新潟県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=150000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/150000.json"
+  },
+  {
+    "id": "jma:warning:150000",
+    "title": "新潟県 気象警報・注意報",
+    "description": "新潟県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "新潟県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=150000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/150000.json"
+  },
+  {
+    "id": "jma:forecast:160000",
+    "title": "富山県 天気予報",
+    "description": "富山県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "富山県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=160000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/160000.json"
+  },
+  {
+    "id": "jma:warning:160000",
+    "title": "富山県 気象警報・注意報",
+    "description": "富山県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "富山県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=160000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/160000.json"
+  },
+  {
+    "id": "jma:forecast:170000",
+    "title": "石川県 天気予報",
+    "description": "石川県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "石川県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=170000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/170000.json"
+  },
+  {
+    "id": "jma:warning:170000",
+    "title": "石川県 気象警報・注意報",
+    "description": "石川県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "石川県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=170000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/170000.json"
+  },
+  {
+    "id": "jma:forecast:180000",
+    "title": "福井県 天気予報",
+    "description": "福井県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "福井県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=180000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/180000.json"
+  },
+  {
+    "id": "jma:warning:180000",
+    "title": "福井県 気象警報・注意報",
+    "description": "福井県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "福井県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=180000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/180000.json"
+  },
+  {
+    "id": "jma:forecast:190000",
+    "title": "山梨県 天気予報",
+    "description": "山梨県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "山梨県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=190000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/190000.json"
+  },
+  {
+    "id": "jma:warning:190000",
+    "title": "山梨県 気象警報・注意報",
+    "description": "山梨県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "山梨県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=190000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/190000.json"
+  },
+  {
+    "id": "jma:forecast:200000",
+    "title": "長野県 天気予報",
+    "description": "長野県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "長野県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=200000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/200000.json"
+  },
+  {
+    "id": "jma:warning:200000",
+    "title": "長野県 気象警報・注意報",
+    "description": "長野県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "長野県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=200000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/200000.json"
+  },
+  {
+    "id": "jma:forecast:210000",
+    "title": "岐阜県 天気予報",
+    "description": "岐阜県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "岐阜県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=210000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/210000.json"
+  },
+  {
+    "id": "jma:warning:210000",
+    "title": "岐阜県 気象警報・注意報",
+    "description": "岐阜県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "岐阜県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=210000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/210000.json"
+  },
+  {
+    "id": "jma:forecast:220000",
+    "title": "静岡県 天気予報",
+    "description": "静岡県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "静岡県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=220000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/220000.json"
+  },
+  {
+    "id": "jma:warning:220000",
+    "title": "静岡県 気象警報・注意報",
+    "description": "静岡県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "静岡県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=220000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/220000.json"
+  },
+  {
+    "id": "jma:forecast:230000",
+    "title": "愛知県 天気予報",
+    "description": "愛知県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "愛知県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=230000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/230000.json"
+  },
+  {
+    "id": "jma:warning:230000",
+    "title": "愛知県 気象警報・注意報",
+    "description": "愛知県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "愛知県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=230000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/230000.json"
+  },
+  {
+    "id": "jma:forecast:240000",
+    "title": "三重県 天気予報",
+    "description": "三重県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "三重県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=240000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/240000.json"
+  },
+  {
+    "id": "jma:warning:240000",
+    "title": "三重県 気象警報・注意報",
+    "description": "三重県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "三重県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=240000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/240000.json"
+  },
+  {
+    "id": "jma:forecast:250000",
+    "title": "滋賀県 天気予報",
+    "description": "滋賀県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "滋賀県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=250000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/250000.json"
+  },
+  {
+    "id": "jma:warning:250000",
+    "title": "滋賀県 気象警報・注意報",
+    "description": "滋賀県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "滋賀県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=250000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/250000.json"
+  },
+  {
+    "id": "jma:forecast:260000",
+    "title": "京都府 天気予報",
+    "description": "京都府の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "京都府"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=260000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/260000.json"
+  },
+  {
+    "id": "jma:warning:260000",
+    "title": "京都府 気象警報・注意報",
+    "description": "京都府の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "京都府"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=260000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/260000.json"
+  },
+  {
+    "id": "jma:forecast:270000",
+    "title": "大阪府 天気予報",
+    "description": "大阪府の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "大阪府"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=270000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/270000.json"
+  },
+  {
+    "id": "jma:warning:270000",
+    "title": "大阪府 気象警報・注意報",
+    "description": "大阪府の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "大阪府"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=270000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/270000.json"
+  },
+  {
+    "id": "jma:forecast:280000",
+    "title": "兵庫県 天気予報",
+    "description": "兵庫県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "兵庫県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=280000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/280000.json"
+  },
+  {
+    "id": "jma:warning:280000",
+    "title": "兵庫県 気象警報・注意報",
+    "description": "兵庫県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "兵庫県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=280000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/280000.json"
+  },
+  {
+    "id": "jma:forecast:290000",
+    "title": "奈良県 天気予報",
+    "description": "奈良県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "奈良県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=290000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/290000.json"
+  },
+  {
+    "id": "jma:warning:290000",
+    "title": "奈良県 気象警報・注意報",
+    "description": "奈良県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "奈良県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=290000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/290000.json"
+  },
+  {
+    "id": "jma:forecast:300000",
+    "title": "和歌山県 天気予報",
+    "description": "和歌山県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "和歌山県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=300000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/300000.json"
+  },
+  {
+    "id": "jma:warning:300000",
+    "title": "和歌山県 気象警報・注意報",
+    "description": "和歌山県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "和歌山県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=300000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/300000.json"
+  },
+  {
+    "id": "jma:forecast:310000",
+    "title": "鳥取県 天気予報",
+    "description": "鳥取県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "鳥取県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=310000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/310000.json"
+  },
+  {
+    "id": "jma:warning:310000",
+    "title": "鳥取県 気象警報・注意報",
+    "description": "鳥取県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "鳥取県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=310000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/310000.json"
+  },
+  {
+    "id": "jma:forecast:320000",
+    "title": "島根県 天気予報",
+    "description": "島根県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "島根県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=320000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/320000.json"
+  },
+  {
+    "id": "jma:warning:320000",
+    "title": "島根県 気象警報・注意報",
+    "description": "島根県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "島根県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=320000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/320000.json"
+  },
+  {
+    "id": "jma:forecast:330000",
+    "title": "岡山県 天気予報",
+    "description": "岡山県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "岡山県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=330000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/330000.json"
+  },
+  {
+    "id": "jma:warning:330000",
+    "title": "岡山県 気象警報・注意報",
+    "description": "岡山県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "岡山県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=330000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/330000.json"
+  },
+  {
+    "id": "jma:forecast:340000",
+    "title": "広島県 天気予報",
+    "description": "広島県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "広島県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=340000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/340000.json"
+  },
+  {
+    "id": "jma:warning:340000",
+    "title": "広島県 気象警報・注意報",
+    "description": "広島県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "広島県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=340000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/340000.json"
+  },
+  {
+    "id": "jma:forecast:350000",
+    "title": "山口県 天気予報",
+    "description": "山口県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "山口県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=350000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/350000.json"
+  },
+  {
+    "id": "jma:warning:350000",
+    "title": "山口県 気象警報・注意報",
+    "description": "山口県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "山口県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=350000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/350000.json"
+  },
+  {
+    "id": "jma:forecast:360000",
+    "title": "徳島県 天気予報",
+    "description": "徳島県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "徳島県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=360000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/360000.json"
+  },
+  {
+    "id": "jma:warning:360000",
+    "title": "徳島県 気象警報・注意報",
+    "description": "徳島県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "徳島県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=360000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/360000.json"
+  },
+  {
+    "id": "jma:forecast:370000",
+    "title": "香川県 天気予報",
+    "description": "香川県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "香川県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=370000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/370000.json"
+  },
+  {
+    "id": "jma:warning:370000",
+    "title": "香川県 気象警報・注意報",
+    "description": "香川県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "香川県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=370000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/370000.json"
+  },
+  {
+    "id": "jma:forecast:380000",
+    "title": "愛媛県 天気予報",
+    "description": "愛媛県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "愛媛県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=380000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/380000.json"
+  },
+  {
+    "id": "jma:warning:380000",
+    "title": "愛媛県 気象警報・注意報",
+    "description": "愛媛県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "愛媛県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=380000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/380000.json"
+  },
+  {
+    "id": "jma:forecast:390000",
+    "title": "高知県 天気予報",
+    "description": "高知県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "高知県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=390000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/390000.json"
+  },
+  {
+    "id": "jma:warning:390000",
+    "title": "高知県 気象警報・注意報",
+    "description": "高知県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "高知県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=390000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/390000.json"
+  },
+  {
+    "id": "jma:forecast:400000",
+    "title": "福岡県 天気予報",
+    "description": "福岡県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "福岡県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=400000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/400000.json"
+  },
+  {
+    "id": "jma:warning:400000",
+    "title": "福岡県 気象警報・注意報",
+    "description": "福岡県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "福岡県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=400000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/400000.json"
+  },
+  {
+    "id": "jma:forecast:410000",
+    "title": "佐賀県 天気予報",
+    "description": "佐賀県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "佐賀県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=410000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/410000.json"
+  },
+  {
+    "id": "jma:warning:410000",
+    "title": "佐賀県 気象警報・注意報",
+    "description": "佐賀県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "佐賀県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=410000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/410000.json"
+  },
+  {
+    "id": "jma:forecast:420000",
+    "title": "長崎県 天気予報",
+    "description": "長崎県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "長崎県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=420000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/420000.json"
+  },
+  {
+    "id": "jma:warning:420000",
+    "title": "長崎県 気象警報・注意報",
+    "description": "長崎県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "長崎県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=420000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/420000.json"
+  },
+  {
+    "id": "jma:forecast:430000",
+    "title": "熊本県 天気予報",
+    "description": "熊本県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "熊本県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=430000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/430000.json"
+  },
+  {
+    "id": "jma:warning:430000",
+    "title": "熊本県 気象警報・注意報",
+    "description": "熊本県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "熊本県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=430000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/430000.json"
+  },
+  {
+    "id": "jma:forecast:440000",
+    "title": "大分県 天気予報",
+    "description": "大分県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "大分県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=440000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/440000.json"
+  },
+  {
+    "id": "jma:warning:440000",
+    "title": "大分県 気象警報・注意報",
+    "description": "大分県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "大分県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=440000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/440000.json"
+  },
+  {
+    "id": "jma:forecast:450000",
+    "title": "宮崎県 天気予報",
+    "description": "宮崎県の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "宮崎県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=450000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/450000.json"
+  },
+  {
+    "id": "jma:warning:450000",
+    "title": "宮崎県 気象警報・注意報",
+    "description": "宮崎県の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "宮崎県"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=450000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/450000.json"
+  },
+  {
+    "id": "jma:forecast:460040",
+    "title": "奄美地方 天気予報",
+    "description": "奄美地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "奄美地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=460040",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/460040.json"
+  },
+  {
+    "id": "jma:warning:460040",
+    "title": "奄美地方 気象警報・注意報",
+    "description": "奄美地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "奄美地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=460040",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/460040.json"
+  },
+  {
+    "id": "jma:forecast:460100",
+    "title": "鹿児島県（奄美地方除く） 天気予報",
+    "description": "鹿児島県（奄美地方除く）の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "鹿児島県（奄美地方除く）"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=460100",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/460100.json"
+  },
+  {
+    "id": "jma:warning:460100",
+    "title": "鹿児島県（奄美地方除く） 気象警報・注意報",
+    "description": "鹿児島県（奄美地方除く）の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "鹿児島県（奄美地方除く）"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=460100",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/460100.json"
+  },
+  {
+    "id": "jma:forecast:471000",
+    "title": "沖縄本島地方 天気予報",
+    "description": "沖縄本島地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "沖縄本島地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=471000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/471000.json"
+  },
+  {
+    "id": "jma:warning:471000",
+    "title": "沖縄本島地方 気象警報・注意報",
+    "description": "沖縄本島地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "沖縄本島地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=471000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/471000.json"
+  },
+  {
+    "id": "jma:forecast:472000",
+    "title": "大東島地方 天気予報",
+    "description": "大東島地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "大東島地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=472000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/472000.json"
+  },
+  {
+    "id": "jma:warning:472000",
+    "title": "大東島地方 気象警報・注意報",
+    "description": "大東島地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "大東島地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=472000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/472000.json"
+  },
+  {
+    "id": "jma:forecast:473000",
+    "title": "宮古島地方 天気予報",
+    "description": "宮古島地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "宮古島地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=473000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/473000.json"
+  },
+  {
+    "id": "jma:warning:473000",
+    "title": "宮古島地方 気象警報・注意報",
+    "description": "宮古島地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "宮古島地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=473000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/473000.json"
+  },
+  {
+    "id": "jma:forecast:474000",
+    "title": "八重山地方 天気予報",
+    "description": "八重山地方の天気予報（気象庁発表）",
+    "tags": [
+      "天気",
+      "予報",
+      "八重山地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/forecast/#area_type=offices&area_code=474000",
+    "endpoint": "https://www.jma.go.jp/bosai/forecast/data/overview_forecast/474000.json"
+  },
+  {
+    "id": "jma:warning:474000",
+    "title": "八重山地方 気象警報・注意報",
+    "description": "八重山地方の気象警報・注意報（気象庁発表）",
+    "tags": [
+      "警報",
+      "注意報",
+      "八重山地方"
+    ],
+    "url": "https://www.jma.go.jp/bosai/warning/#area_type=offices&area_code=474000",
+    "endpoint": "https://www.jma.go.jp/bosai/warning/data/warning/474000.json"
+  },
+  {
+    "id": "jma:quake:latest",
+    "title": "最新の地震情報",
+    "description": "気象庁発表の最新地震情報一覧",
+    "tags": [
+      "地震",
+      "震度"
+    ],
+    "url": "https://www.jma.go.jp/bosai/quake/",
+    "endpoint": "https://www.jma.go.jp/bosai/quake/data/list.json"
+  }
+]

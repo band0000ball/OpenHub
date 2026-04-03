@@ -26,6 +26,7 @@ from pydantic import BaseModel
 from connectors.datagojp import DataGoJpConnector
 from connectors.egov_law import EGovLawConnector
 from connectors.estat import EStatConnector
+from connectors.jma import JmaConnector
 from core.cache import InMemoryCache
 from core.connector import DataSourceConnector
 from core.auth import get_current_user_optional
@@ -56,7 +57,7 @@ def get_search_cache() -> InMemoryCache[SearchResult]:
     return _search_cache
 
 # dataset_id フォーマット: "{source_id}:{original_id}"
-_DATASET_ID_PATTERN = re.compile(r"^[a-z][a-z0-9_]+:[a-zA-Z0-9_\-\.]+$")
+_DATASET_ID_PATTERN = re.compile(r"^[a-z][a-z0-9_]+:[a-zA-Z0-9_\-\.:]+$")
 
 # バックオフ上限（秒）
 _MAX_BACKOFF_SECONDS = 60.0
@@ -82,6 +83,7 @@ _SOURCE_REGISTRY: list[tuple[SourceDefinition, type]] = [
     (SourceDefinition(id="estat", label="e-Stat", requires_api_key=True), EStatConnector),
     (SourceDefinition(id="datagojp", label="data.go.jp", requires_api_key=False), DataGoJpConnector),
     (SourceDefinition(id="egov_law", label="e-Gov 法令", requires_api_key=False), EGovLawConnector),
+    (SourceDefinition(id="jma", label="気象庁", requires_api_key=False), JmaConnector),
 ]
 
 # source_id → コネクタークラス（検索・取得用）
