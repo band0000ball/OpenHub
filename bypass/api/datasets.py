@@ -38,6 +38,7 @@ from core.errors import (
 from core.models import DatasetMetadata, DatasetPayload, SearchResult
 
 router = APIRouter(prefix="/datasets", tags=["データセット"])
+sources_router = APIRouter(tags=["ソース"])
 
 # 構造化ログ
 logger = logging.getLogger(__name__)
@@ -53,9 +54,6 @@ def get_search_cache() -> InMemoryCache[SearchResult]:
     """検索キャッシュを返す（auth エンドポイントからのクリア用）。"""
     return _search_cache
 
-# 有効な source_id のセット
-VALID_SOURCES = frozenset(["estat", "datagojp"])
-
 # dataset_id フォーマット: "{source_id}:{original_id}"
 _DATASET_ID_PATTERN = re.compile(r"^[a-z][a-z0-9_]+:[a-zA-Z0-9_\-\.]+$")
 
@@ -65,11 +63,47 @@ _MAX_BACKOFF_SECONDS = 60.0
 # バイナリとして扱うフォーマット（base64 エンコードして返す）
 _BINARY_FORMATS = frozenset(["shapefile", "binary"])
 
-# コネクタークラスの登録（source_id → クラス）
+
+# ---------------------------------------------------------------------------
+# ソース登録（単一ソースオブトゥルース）
+# ---------------------------------------------------------------------------
+
+
+class SourceDefinition(BaseModel):
+    """データソース定義。GET /sources で返す情報と一致する。"""
+    id: str
+    label: str
+    requires_api_key: bool
+
+
+# コネクタークラスとメタデータの登録
+_SOURCE_REGISTRY: list[tuple[SourceDefinition, type]] = [
+    (SourceDefinition(id="estat", label="e-Stat", requires_api_key=True), EStatConnector),
+    (SourceDefinition(id="datagojp", label="data.go.jp", requires_api_key=False), DataGoJpConnector),
+]
+
+# source_id → コネクタークラス（検索・取得用）
 _CONNECTOR_FACTORIES: dict[str, type] = {
-    "estat": EStatConnector,
-    "datagojp": DataGoJpConnector,
+    entry[0].id: entry[1] for entry in _SOURCE_REGISTRY
 }
+
+# 有効な source_id のセット
+VALID_SOURCES = frozenset(_CONNECTOR_FACTORIES.keys())
+
+
+def get_source_definitions() -> list[SourceDefinition]:
+    """登録済みソース定義を返す。GET /sources エンドポイントで使用。"""
+    return [entry[0] for entry in _SOURCE_REGISTRY]
+
+
+@sources_router.get(
+    "/sources",
+    response_model=list[SourceDefinition],
+    summary="登録済みデータソース一覧を返す",
+)
+def get_sources() -> list[SourceDefinition]:
+    """Catalog がソース定義を同期するためのエンドポイント。"""
+    return get_source_definitions()
 
 
 # ---------------------------------------------------------------------------

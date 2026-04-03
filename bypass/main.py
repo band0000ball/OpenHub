@@ -17,6 +17,7 @@ from api.datasets import (
     handle_rate_limit_error,
     handle_timeout_error,
     router as datasets_router,
+    sources_router,
 )
 from core.errors import (
     AuthenticationError,
@@ -74,6 +75,7 @@ def create_app() -> FastAPI:
     # ルーター登録
     app.include_router(auth_router)
     app.include_router(datasets_router)
+    app.include_router(sources_router)
 
     return app
 
