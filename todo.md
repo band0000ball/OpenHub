@@ -12,7 +12,7 @@
 ## 優先度: 中
 
 - [ ] **A4: EventBridge Ping** — 5 分ごとに Lambda を呼んで warm 状態を維持
-- [ ] **A5: ARM64 (Graviton2) 移行** — template.yaml に `Architectures: [arm64]` 追加。起動速度向上 + コスト 20% 減
+- [x] **A5: ARM64 (Graviton2) 移行** — template.yaml に Architectures: [arm64] 追加。自動デプロイで反映済み
 - [x] **D1: Cognito リダイレクトチェーン最小化** — PR #27 で /login サーバーサイド化により実質解決（残り ~50ms の改善は PKCE 手動実装が必要でリスク過大）
 
 ## 優先度: 低
