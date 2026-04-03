@@ -1,28 +1,24 @@
 import Link from "next/link";
-import { SOURCES } from "../lib/sources";
-
-interface Tab {
-  label: string;
-  value: string;
-}
-
-const TABS: Tab[] = [
-  { label: "全て", value: "" },
-  ...SOURCES.map((s) => ({ label: s.label, value: s.id })),
-];
+import { fetchSources } from "../lib/sources";
 
 interface SourceFilterTabsProps {
   currentSource: string;
   currentQuery: string;
 }
 
-export default function SourceFilterTabs({
+export default async function SourceFilterTabs({
   currentSource,
   currentQuery,
 }: SourceFilterTabsProps) {
+  const sources = await fetchSources();
+  const tabs = [
+    { label: "全て", value: "" },
+    ...sources.map((s) => ({ label: s.label, value: s.id })),
+  ];
+
   return (
     <div role="tablist" className="flex gap-1 border-b border-gray-200">
-      {TABS.map((tab) => {
+      {tabs.map((tab) => {
         const isSelected = currentSource === tab.value;
         const params = new URLSearchParams({ q: currentQuery });
         if (tab.value) {

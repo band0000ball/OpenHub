@@ -8,11 +8,11 @@
 import Link from "next/link";
 import { getAccessToken } from "../lib/auth-helpers";
 import { getCredentialStatus } from "../lib/api";
-import { getSourcesRequiringApiKey } from "../lib/sources";
+import { fetchSourcesRequiringApiKey } from "../lib/sources";
 
 export default async function CredentialsBanner() {
   const accessToken = await getAccessToken().catch(() => undefined);
-  const sources = getSourcesRequiringApiKey();
+  const sources = await fetchSourcesRequiringApiKey();
 
   // 全ての requiresApiKey ソースの設定状態を並列チェック
   const statuses = await Promise.all(
