@@ -1,20 +1,21 @@
 import Link from "next/link";
-import { fetchSources } from "../lib/sources";
+import { FALLBACK_SOURCES } from "../lib/sources";
 
 interface SourceFilterTabsProps {
   currentSource: string;
   currentQuery: string;
 }
 
-export default async function SourceFilterTabs({
+const TABS = [
+  { label: "全て", value: "" },
+  ...FALLBACK_SOURCES.map((s) => ({ label: s.label, value: s.id })),
+];
+
+export default function SourceFilterTabs({
   currentSource,
   currentQuery,
 }: SourceFilterTabsProps) {
-  const sources = await fetchSources();
-  const tabs = [
-    { label: "全て", value: "" },
-    ...sources.map((s) => ({ label: s.label, value: s.id })),
-  ];
+  const tabs = TABS;
 
   return (
     <div role="tablist" className="flex gap-1 border-b border-gray-200">

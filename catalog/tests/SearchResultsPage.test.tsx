@@ -13,22 +13,6 @@ vi.mock("../lib/auth-helpers", () => ({
   getAccessToken: vi.fn().mockResolvedValue("test-token"),
 }));
 
-vi.mock("../lib/sources", async (importOriginal) => {
-  const original = await importOriginal<typeof import("../lib/sources")>();
-  return {
-    ...original,
-    fetchSources: vi.fn().mockResolvedValue(original.FALLBACK_SOURCES),
-    fetchSourcesRequiringApiKey: vi.fn().mockResolvedValue([]),
-  };
-});
-
-// async RSC の SourceFilterTabs を同期コンポーネントとしてモック
-vi.mock("../components/SourceFilterTabs", () => ({
-  default: ({ currentSource, currentQuery }: { currentSource: string; currentQuery: string }) => (
-    <div role="tablist" data-source={currentSource} data-query={currentQuery}>tabs</div>
-  ),
-}));
-
 // Mock the lib/api module
 vi.mock("../lib/api", () => ({
   searchDatasets: vi.fn(),
