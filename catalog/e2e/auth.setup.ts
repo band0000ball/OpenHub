@@ -11,11 +11,10 @@ const authStatePath = path.join(process.cwd(), ".auth/state.json");
  * 設定済みの場合は Cognito Hosted UI でサインインし、
  * storageState を .auth/state.json に保存する。
  *
- * Cognito Hosted UI のセレクター（外部サービス依存）:
- *   - ユーザー名: input[name="username"]
- *   - パスワード: input[name="password"]
- *   - サインインボタン: input[name="signInSubmitButton"]
- * Cognito UI が変更された場合はこのファイルのセレクターを更新する。
+ * 2 つのケースを処理する:
+ * A) 新規ログイン: /settings → Cognito UI → 認証情報入力 → /settings
+ * B) 自動ログイン: /settings → (Cognito セッション既存で自動完了) → /settings
+ *    リトライ時や AWS 環境で Cognito セッションが残っている場合に発生する
  */
 setup("Cognito 認証セットアップ", async ({ page }) => {
   // Cognito との複数回のネットワーク往復があるため timeout を延長する
@@ -29,28 +28,32 @@ setup("Cognito 認証セットアップ", async ({ page }) => {
     return;
   }
 
-  // 古いセッション state を削除（ローカル → AWS 切替時に不正なセッションが残るのを防ぐ）
+  // 古いセッション state を削除
   try { fs.unlinkSync(authStatePath); } catch { /* not found — OK */ }
 
-  // ウォームアップ: トップページを叩いて Amplify/Lambda の Cold Start を解消
-  await page.goto("/");
-  await page.waitForLoadState("domcontentloaded");
-
-  // /settings にアクセス → middleware が /login へ、/login が Cognito へリダイレクト
-  // これにより callbackUrl が /settings に設定される
+  // /settings にアクセス → proxy.ts が /login へリダイレクト → Cognito へ
   await page.goto("/settings");
 
-  // Cognito ドメインへのリダイレクトを待機（最大 30 秒）
-  // 実際のドメインは "ap-northeast-1hk1xd4doz.auth.ap-northeast-1.amazoncognito.com" 形式
-  await page.waitForURL(/amazoncognito\.com/, { timeout: 30000 });
+  // Cognito UI に到達するか、自動ログインで /settings に直接到達するかを待機
+  // どちらかが先に発生した方で分岐する
+  const destination = await Promise.race([
+    page.waitForURL(/amazoncognito\.com/, { timeout: 60000 }).then(() => "cognito" as const),
+    page.waitForURL(/\/settings/, { timeout: 60000 }).then(() => "settings" as const),
+  ]);
 
-  // Cognito Hosted UI でサインイン（ステップ式: username → Next → password）
+  if (destination === "settings") {
+    // ケース B: 自動ログイン完了 — Cognito セッションが既に存在していた
+    // /settings に到達済みなのでセッションを保存するだけ
+    await expect(page).toHaveURL(/\/settings/);
+    await page.context().storageState({ path: authStatePath });
+    return;
+  }
+
+  // ケース A: Cognito UI に到達 — 認証情報を入力する
   await page.locator('input[name="username"]').fill(email);
-  // "Next" ボタンをクリック（username ステップ）
   await page.locator('button[type="submit"]').click();
 
-  // パスワード入力ページを待機（verifyPassword または availableChallenges）
-  // "available challenges" が出る場合は Password を選択する
+  // パスワード入力ページを待機
   const challengePage = page.locator('button:has-text("Password"), input[name="password"]');
   await challengePage.first().waitFor({ timeout: 15000 });
   if (await page.locator('button:has-text("Password")').isVisible()) {
@@ -60,22 +63,19 @@ setup("Cognito 認証セットアップ", async ({ page }) => {
   await page.locator('input[name="password"]').fill(password);
   await page.locator('button[type="submit"]').click();
 
-  // 初回ログイン時の「Change password」チャレンジ（FORCE_CHANGE_PASSWORD 状態）をハンドル
-  // 30 秒待機してチャレンジが出るかを確認する
+  // 初回ログイン時の「Change password」チャレンジ
   const changePasswordHeading = page.getByRole("heading", { name: "Change password" });
   try {
     await changePasswordHeading.waitFor({ timeout: 30000 });
-    // チャレンジが出たら新パスワードを入力して送信
     await page.locator('input[placeholder="Enter new password"]').fill(password);
     await page.locator('input[placeholder="Re-enter new password"]').fill(password);
     await page.locator('button[type="submit"]').click();
-    // 送信後のナビゲーションを待機（Change password 以外のページへ移動するまで）
     await page.waitForURL(/(?!.*amazoncognito\.com.*changepassword).*/, { timeout: 30000 });
   } catch {
     // Change password チャレンジが出なければそのまま続行
   }
 
-  // パスキー登録プロンプト（/login/complete）が出る場合は "Not now" でスキップ
+  // パスキー登録プロンプトのスキップ
   try {
     await page.waitForURL(/login\/complete/, { timeout: 5000 });
     const notNow = page.locator('button:has-text("Not now"), button:has-text("Skip")');
@@ -86,7 +86,7 @@ setup("Cognito 認証セットアップ", async ({ page }) => {
     // /login/complete が出なければそのまま続行
   }
 
-  // /settings への到達を確認（最大 30 秒）
+  // /settings への到達を確認
   await page.waitForURL(/\/settings/, { timeout: 30000 });
   await expect(page).toHaveURL(/\/settings/);
 
