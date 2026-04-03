@@ -4,6 +4,10 @@
 
 ### Added
 
+- **e-Gov 法令 API コネクター（Phase 4.1）**: 日本の法令をキーワード検索・全文取得できる
+  `EGovLawConnector` を追加。認証不要。OpenHub 初のデータソース拡張で、
+  e-Stat / data.go.jp に加えて法令データが横断検索可能に。
+
 - **GET /sources API でソース定義同期**: Bypass `GET /sources` エンドポイントを追加し、
   Catalog が実行時にソース定義を動的取得。新ソース追加時に Bypass 側のみ変更すれば
   UI（フィルタータブ・バナー・設定フォーム）が自動対応。フォールバック定数で Bypass 未接続時も動作。
