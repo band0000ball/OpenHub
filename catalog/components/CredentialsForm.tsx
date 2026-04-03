@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import EStatGuideSteps from "./EStatGuideSteps";
-import { ESTAT_URLS } from "../lib/estat-guide";
+import type { DataSource } from "../lib/sources";
 
 type Status = "idle" | "loading" | "success" | "error";
 
-export default function CredentialsForm() {
+interface CredentialsFormProps {
+  source: DataSource;
+}
+
+export default function CredentialsForm({ source }: CredentialsFormProps) {
   const [apiKey, setApiKey] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
@@ -20,7 +23,7 @@ export default function CredentialsForm() {
       const response = await fetch("/api/credentials", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ source_id: "estat", api_key: apiKey }),
+        body: JSON.stringify({ source_id: source.id, api_key: apiKey }),
       });
 
       if (!response.ok) {
@@ -30,7 +33,7 @@ export default function CredentialsForm() {
       }
 
       setStatus("success");
-      setMessage("e-Stat APIキーを保存しました。");
+      setMessage(`${source.label} APIキーを保存しました。`);
       setApiKey("");
     } catch {
       setStatus("error");
@@ -42,41 +45,29 @@ export default function CredentialsForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <p className="mb-1 text-sm font-medium text-gray-500">データソース</p>
-        <p className="font-medium text-gray-900">e-Stat（政府統計の総合窓口）</p>
+        <p className="font-medium text-gray-900">{source.label}</p>
       </div>
 
       <div>
         <label
-          htmlFor="api-key"
+          htmlFor={`api-key-${source.id}`}
           className="mb-1 block text-sm font-medium text-gray-700"
         >
           アプリケーションID
         </label>
         <input
-          id="api-key"
+          id={`api-key-${source.id}`}
           type="password"
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
-          placeholder="e-Stat アプリケーションIDを入力"
+          placeholder={`${source.label} アプリケーションIDを入力`}
           aria-required="true"
-          aria-describedby="api-key-hint api-key-status"
+          aria-describedby={`api-key-hint-${source.id} api-key-status-${source.id}`}
           className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
         />
-        <p id="api-key-hint" className="mt-1 text-xs text-gray-400">
-          アプリケーションIDは{" "}
-          <a
-            href={ESTAT_URLS.apiTop}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline"
-          >
-            api.e-stat.go.jp
-          </a>{" "}
-          でユーザー登録後に取得できます
-        </p>
       </div>
 
-      <div id="api-key-status" aria-live="polite" aria-atomic="true">
+      <div id={`api-key-status-${source.id}`} aria-live="polite" aria-atomic="true">
         {status === "success" && (
           <p role="status" className="rounded-lg bg-green-50 px-4 py-2 text-sm text-green-700">
             {message}
@@ -97,8 +88,6 @@ export default function CredentialsForm() {
       >
         {status === "loading" ? "保存中…" : "保存"}
       </button>
-
-      <EStatGuideSteps />
     </form>
   );
 }

@@ -3,7 +3,7 @@ import { getAccessToken } from "../lib/auth-helpers";
 import SearchBar from "../components/SearchBar";
 import CategoryTabs from "../components/CategoryTabs";
 import DatasetBrowser from "../components/DatasetBrowser";
-import EStatBanner from "../components/EStatBanner";
+import CredentialsBanner from "../components/CredentialsBanner";
 import SkeletonCard from "../components/SkeletonCard";
 
 interface HomePageProps {
@@ -47,7 +47,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
       <div className="mx-auto max-w-5xl w-full px-4 py-8">
         <Suspense fallback={null}>
-          <EStatBanner />
+          <CredentialsBanner />
         </Suspense>
         <CategoryTabs currentCategory={category} />
         <Suspense fallback={<SkeletonGrid />}>

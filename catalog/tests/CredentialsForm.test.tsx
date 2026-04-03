@@ -1,9 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import CredentialsForm from "../components/CredentialsForm";
+import type { DataSource } from "../lib/sources";
 
 const mockFetch = vi.fn();
 vi.stubGlobal("fetch", mockFetch);
+
+const estatSource: DataSource = { id: "estat", label: "e-Stat", requiresApiKey: true };
 
 describe("CredentialsForm", () => {
   beforeEach(() => {
@@ -11,29 +14,29 @@ describe("CredentialsForm", () => {
   });
 
   it("renders API key input and submit button", () => {
-    render(<CredentialsForm />);
+    render(<CredentialsForm source={estatSource} />);
     expect(screen.getByLabelText(/アプリケーションID/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /保存/i })).toBeInTheDocument();
   });
 
-  it("renders e-Stat as the source label", () => {
-    render(<CredentialsForm />);
+  it("renders source label", () => {
+    render(<CredentialsForm source={estatSource} />);
     expect(screen.getAllByText(/e-Stat/i).length).toBeGreaterThan(0);
   });
 
   it("input type is password", () => {
-    render(<CredentialsForm />);
+    render(<CredentialsForm source={estatSource} />);
     const input = screen.getByLabelText(/アプリケーションID/i);
     expect(input).toHaveAttribute("type", "password");
   });
 
   it("submit button is disabled when input is empty", () => {
-    render(<CredentialsForm />);
+    render(<CredentialsForm source={estatSource} />);
     expect(screen.getByRole("button", { name: /保存/i })).toBeDisabled();
   });
 
   it("submit button is enabled when input has value", async () => {
-    render(<CredentialsForm />);
+    render(<CredentialsForm source={estatSource} />);
     fireEvent.change(screen.getByLabelText(/アプリケーションID/i), {
       target: { value: "my-api-key" },
     });
@@ -46,7 +49,7 @@ describe("CredentialsForm", () => {
       json: async () => ({ source_id: "estat", message: "設定しました" }),
     });
 
-    render(<CredentialsForm />);
+    render(<CredentialsForm source={estatSource} />);
     fireEvent.change(screen.getByLabelText(/アプリケーションID/i), {
       target: { value: "valid-key" },
     });
@@ -64,7 +67,7 @@ describe("CredentialsForm", () => {
       json: async () => ({ error: "upstream error" }),
     });
 
-    render(<CredentialsForm />);
+    render(<CredentialsForm source={estatSource} />);
     fireEvent.change(screen.getByLabelText(/アプリケーションID/i), {
       target: { value: "bad-key" },
     });
@@ -75,23 +78,13 @@ describe("CredentialsForm", () => {
     });
   });
 
-  it("取得手順セクションが表示される", () => {
-    render(<CredentialsForm />);
-    expect(screen.getByText(/アプリケーションIDの取得手順/)).toBeInTheDocument();
-  });
-
-  it("取得手順が番号付きリストで表示される", () => {
-    const { container } = render(<CredentialsForm />);
-    expect(container.querySelector("ol")).toBeInTheDocument();
-  });
-
   it("calls POST /api/credentials with correct body", async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ source_id: "estat", message: "ok" }),
     });
 
-    render(<CredentialsForm />);
+    render(<CredentialsForm source={estatSource} />);
     fireEvent.change(screen.getByLabelText(/アプリケーションID/i), {
       target: { value: "my-key" },
     });

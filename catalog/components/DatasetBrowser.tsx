@@ -1,5 +1,4 @@
-import DatasetCard from "./DatasetCard";
-import Pagination from "./Pagination";
+import DatasetListView from "./DatasetListView";
 import { browseByCategory, searchDatasets } from "../lib/api";
 import { findCategory, BROWSE_LIMIT_SINGLE } from "../lib/categories";
 
@@ -14,21 +13,16 @@ export default async function DatasetBrowser({ category, page, accessToken }: Da
     // "all" カテゴリは複数ソースの並列フェッチのためページネーション非対応
     if (category === "all") {
       const datasets = await browseByCategory("all", accessToken);
-
-      if (datasets.length === 0) {
-        return (
-          <p className="py-12 text-center text-gray-500">
-            データセットが見つかりませんでした
-          </p>
-        );
-      }
-
       return (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {datasets.map((dataset) => (
-            <DatasetCard key={dataset.id} dataset={dataset} />
-          ))}
-        </div>
+        <DatasetListView
+          items={datasets}
+          totalPages={null}
+          hasNext={false}
+          currentPage={1}
+          basePath="/"
+          queryParams={{ category }}
+          gridCols={2}
+        />
       );
     }
 
@@ -37,33 +31,20 @@ export default async function DatasetBrowser({ category, page, accessToken }: Da
     const offset = (page - 1) * BROWSE_LIMIT_SINGLE;
     const result = await searchDatasets(categoryInfo.keyword, undefined, BROWSE_LIMIT_SINGLE, offset, accessToken);
 
-    if (result.items.length === 0) {
-      return (
-        <p className="py-12 text-center text-gray-500">
-          データセットが見つかりませんでした
-        </p>
-      );
-    }
-
     const totalPages = result.total !== null
       ? Math.ceil(result.total / BROWSE_LIMIT_SINGLE)
       : null;
 
     return (
-      <div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {result.items.map((dataset) => (
-            <DatasetCard key={dataset.id} dataset={dataset} />
-          ))}
-        </div>
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          hasNext={result.has_next}
-          basePath="/"
-          queryParams={{ category }}
-        />
-      </div>
+      <DatasetListView
+        items={result.items}
+        totalPages={totalPages}
+        hasNext={result.has_next}
+        currentPage={page}
+        basePath="/"
+        queryParams={{ category }}
+        gridCols={2}
+      />
     );
   } catch {
     return (
