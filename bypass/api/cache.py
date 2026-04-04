@@ -114,28 +114,24 @@ def get_cached_metadata(
         ) from exc
 
 
-@router.get("/browse", summary="カテゴリ別ブラウズ（1回のリクエストで複数カテゴリ取得）")
+@router.get("/browse", summary="ソース別ブラウズ（各ソースから N 件ずつ取得）")
 def get_cached_browse(
-    categories: str = Query("人口,経済,環境,教育,医療", description="カンマ区切りのカテゴリキーワード"),
-    limit_per: int = Query(4, ge=1, le=20, description="カテゴリ毎の件数"),
+    limit_per: int = Query(5, ge=1, le=50, description="ソース毎の件数"),
 ):
-    """複数カテゴリを一括検索して返す。HTTP 往復を 1 回にまとめる。"""
+    """全ソースから limit_per 件ずつ取得してソース別に返す。"""
     try:
-        all_items = _get_all_items()
-        keywords = [k.strip() for k in categories.split(",") if k.strip()]
+        source_ids = ("estat", "datagojp", "egov_law", "jma")
+        sections: list[dict] = []
 
-        seen: set[str] = set()
-        browse_items: list[dict] = []
+        for source_id in source_ids:
+            items = _get_source_items(source_id)
+            sections.append({
+                "source_id": source_id,
+                "items": items[:limit_per],
+                "total": len(items),
+            })
 
-        for keyword in keywords:
-            result = _search_items(all_items, keyword, None, limit_per, 0)
-            for item in result["items"]:
-                item_id = item.get("id", "")
-                if item_id not in seen:
-                    seen.add(item_id)
-                    browse_items.append(item)
-
-        return {"items": browse_items, "total": len(browse_items)}
+        return {"sections": sections}
     except Exception as exc:
         logger.error("Failed to browse cache: %s", exc)
         raise HTTPException(

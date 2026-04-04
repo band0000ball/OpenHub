@@ -1,7 +1,6 @@
 /**
  * キャッシュクライアント。
- * Bypass の /cache/metadata エンドポイント経由でメタデータを検索する。
- * Bypass 側でフィルタリング・ページネーション済みの結果を返す。
+ * Bypass の /cache エンドポイント経由でメタデータを検索・ブラウズする。
  */
 
 import type { DatasetMetadata, SearchResponse } from "../types";
@@ -10,6 +9,16 @@ const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
 
 function getBypassUrl(): string {
   return process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
+}
+
+export interface BrowseSection {
+  source_id: string;
+  items: DatasetMetadata[];
+  total: number;
+}
+
+export interface BrowseResponse {
+  sections: BrowseSection[];
 }
 
 export async function searchCachedMetadata(
@@ -39,19 +48,18 @@ export async function searchCachedMetadata(
 }
 
 export async function browseCachedMetadata(
-  keywords: string[],
-  limitPer = 4,
-): Promise<{ items: DatasetMetadata[]; total: number }> {
+  limitPer = 5,
+): Promise<BrowseResponse> {
   try {
     const response = await fetch(
-      `${getBypassUrl()}/cache/browse?categories=${encodeURIComponent(keywords.join(","))}&limit_per=${limitPer}`,
+      `${getBypassUrl()}/cache/browse?limit_per=${limitPer}`,
     );
     if (!response.ok) {
       throw new Error(`Browse API returned ${response.status}`);
     }
-    return (await response.json()) as { items: DatasetMetadata[]; total: number };
+    return (await response.json()) as BrowseResponse;
   } catch {
-    return { items: [], total: 0 };
+    return { sections: [] };
   }
 }
 
