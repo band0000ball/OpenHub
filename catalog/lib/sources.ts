@@ -33,6 +33,7 @@ export const FALLBACK_SOURCES: readonly DataSource[] = [
   { id: "datagojp", label: "data.go.jp", requiresApiKey: false },
   { id: "egov_law", label: "e-Gov 法令", requiresApiKey: false },
   { id: "jma", label: "気象庁", requiresApiKey: false },
+  { id: "cinii", label: "CiNii Research", requiresApiKey: false },
 ] as const;
 
 /** @deprecated FALLBACK_SOURCES を使用してください。後方互換のため維持。 */
