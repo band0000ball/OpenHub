@@ -38,6 +38,23 @@ export async function searchCachedMetadata(
   }
 }
 
+export async function browseCachedMetadata(
+  keywords: string[],
+  limitPer = 4,
+): Promise<{ items: DatasetMetadata[]; total: number }> {
+  try {
+    const response = await fetch(
+      `${getBypassUrl()}/cache/browse?categories=${encodeURIComponent(keywords.join(","))}&limit_per=${limitPer}`,
+    );
+    if (!response.ok) {
+      throw new Error(`Browse API returned ${response.status}`);
+    }
+    return (await response.json()) as { items: DatasetMetadata[]; total: number };
+  } catch {
+    return { items: [], total: 0 };
+  }
+}
+
 export async function getLastUpdated(): Promise<string | null> {
   try {
     const response = await fetch(`${getBypassUrl()}/cache/last_updated`);

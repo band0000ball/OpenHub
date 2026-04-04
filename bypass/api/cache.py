@@ -108,6 +108,36 @@ def get_cached_metadata(
         ) from exc
 
 
+@router.get("/browse", summary="カテゴリ別ブラウズ（1回のリクエストで複数カテゴリ取得）")
+def get_cached_browse(
+    categories: str = Query("人口,経済,環境,教育,医療", description="カンマ区切りのカテゴリキーワード"),
+    limit_per: int = Query(4, ge=1, le=20, description="カテゴリ毎の件数"),
+):
+    """複数カテゴリを一括検索して返す。HTTP 往復を 1 回にまとめる。"""
+    try:
+        all_items = _get_all_items()
+        keywords = [k.strip() for k in categories.split(",") if k.strip()]
+
+        seen: set[str] = set()
+        browse_items: list[dict] = []
+
+        for keyword in keywords:
+            result = _search_items(all_items, keyword, None, limit_per, 0)
+            for item in result["items"]:
+                item_id = item.get("id", "")
+                if item_id not in seen:
+                    seen.add(item_id)
+                    browse_items.append(item)
+
+        return {"items": browse_items, "total": len(browse_items)}
+    except Exception as exc:
+        logger.error("Failed to browse cache: %s", exc)
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail=f"Browse failed: {exc}",
+        ) from exc
+
+
 @router.get("/last_updated", summary="キャッシュの最終更新日時を返す")
 def get_cache_last_updated():
     """S3 の catalog/last_updated.json を返す。"""
