@@ -22,7 +22,9 @@ const nextConfig: NextConfig = {
     AUTH_COGNITO_SECRET: process.env.AUTH_COGNITO_SECRET ?? "",
     AUTH_SECRET: process.env.AUTH_SECRET ?? "",
     AUTH_URL: process.env.AUTH_URL ?? "",
+    CACHE_BUCKET_NAME: process.env.CACHE_BUCKET_NAME ?? "",
   },
+  serverExternalPackages: ["@aws-sdk/client-s3"],
 };
 
 export default nextConfig;
