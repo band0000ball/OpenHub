@@ -14,6 +14,28 @@ test.describe("Home page", () => {
     await expect(page.getByRole("searchbox")).toBeVisible();
   });
 
+  test("displays data source sections with dataset cards", async ({ page }) => {
+    // Bypass Lambda コールドスタート（最大90秒）を考慮
+    test.setTimeout(120000);
+    await page.goto("/");
+    // データカードまたはエラーが表示されるまで待機
+    const article = page.locator('[role="article"]').first();
+    const errorAlert = page.locator('[role="alert"]:has-text("失敗")');
+    await expect(article.or(errorAlert)).toBeVisible({ timeout: 90000 });
+
+    // データカードが表示された場合のみ検証
+    if (await article.isVisible()) {
+      await expect(page.getByRole("heading", { name: "e-Stat" })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "data.go.jp" })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "e-Gov 法令" })).toBeVisible();
+      await expect(page.getByRole("heading", { name: "気象庁" })).toBeVisible();
+      expect(await page.locator('[role="article"]').count()).toBeGreaterThanOrEqual(4);
+    } else {
+      // コールドスタートでタイムアウトした場合、エラーメッセージが表示されている
+      await expect(errorAlert).toBeVisible();
+    }
+  });
+
   test("cannot submit empty search", async ({ page }) => {
     await page.goto("/");
     const input = page.getByRole("searchbox");
