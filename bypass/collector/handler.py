@@ -56,14 +56,15 @@ def _get_connector_factories() -> dict[str, type]:
 
 
 _PAGE_SIZE = 1000
+_DEFAULT_MAX_ITEMS = 50000
 
 
 def _collect_default(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
-    """汎用収集: 空クエリでページネーションしながら全件取得する。上限なし。"""
+    """汎用収集: 空クエリでページネーションしながら最大 _DEFAULT_MAX_ITEMS 件取得する。"""
     all_items: list[DatasetMetadata] = []
     offset = 0
 
-    while True:
+    while offset < _DEFAULT_MAX_ITEMS:
         result = connector.search("", {"limit": _PAGE_SIZE, "offset": offset})
         all_items.extend(result.items)
 
@@ -111,12 +112,12 @@ def _collect_by_keywords(
 
 
 def _collect_egov_law(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
-    """e-Gov 法令収集: 代表キーワードでページネーションしながら全件取得。"""
+    """e-Gov 法令収集: 代表キーワードでページネーションしながら取得。"""
     return _collect_by_keywords(
         connector,
         keywords=_EGOV_LAW_KEYWORDS,
         page_size=200,
-        max_per_keyword=10000,
+        max_per_keyword=1000,
         source_label="e-Gov law",
     )
 
@@ -124,13 +125,14 @@ def _collect_egov_law(connector: DataSourceConnector) -> tuple[DatasetMetadata, 
 def _collect_cinii(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
     """CiNii Research 収集: 学術分野キーワードでページネーション + 重複除去。
 
-    CiNii API は start=10000 が上限のため、キーワード毎に最大 10,000 件取得。
+    CiNii API は start=10000 が上限のため、キーワード毎に最大 2,000 件取得。
+    20 キーワード × 2,000 件 = 最大 40,000 件（重複除去後はこれ以下）。
     """
     return _collect_by_keywords(
         connector,
         keywords=_CINII_KEYWORDS,
         page_size=200,
-        max_per_keyword=10000,
+        max_per_keyword=2000,
         source_label="CiNii",
     )
 
