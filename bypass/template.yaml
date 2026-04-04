@@ -79,7 +79,7 @@ Resources:
         Variables:
           CACHE_BUCKET_NAME: !Ref CacheBucketName
           ESTAT_API_KEY: !Ref EStatApiKey
-          COLLECTOR_SOURCES: estat,datagojp,egov_law,jma
+          COLLECTOR_SOURCES: estat,datagojp,egov_law,jma,cinii
       Policies:
         - S3CrudPolicy:
             BucketName: !Ref CacheBucketName

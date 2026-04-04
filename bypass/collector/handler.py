@@ -25,6 +25,14 @@ _EGOV_LAW_KEYWORDS: tuple[str, ...] = (
     "個人情報", "著作権", "会社", "保険", "年金",
 )
 
+# CiNii Research は空クエリ非対応のため、学術分野キーワードで検索する
+_CINII_KEYWORDS: tuple[str, ...] = (
+    "情報", "医学", "工学", "経済", "教育",
+    "環境", "物理", "化学", "生物", "法学",
+    "社会", "心理", "数学", "農学", "建築",
+    "機械学習", "エネルギー", "ロボット", "材料", "宇宙",
+)
+
 
 @dataclass(frozen=True)
 class CollectResult:
@@ -87,9 +95,29 @@ def _collect_egov_law(connector: DataSourceConnector) -> tuple[DatasetMetadata, 
     return tuple(items)
 
 
+def _collect_cinii(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
+    """CiNii Research 収集: 学術分野キーワードで検索し、重複を除去して統合する。"""
+    seen: set[str] = set()
+    items: list[DatasetMetadata] = []
+
+    for keyword in _CINII_KEYWORDS:
+        try:
+            result = connector.search(keyword, {"limit": 200, "offset": 0})
+            for item in result.items:
+                if item.id not in seen:
+                    seen.add(item.id)
+                    items.append(item)
+        except Exception as exc:
+            logger.warning("CiNii keyword '%s' failed: %s", keyword, exc)
+            continue
+
+    return tuple(items)
+
+
 # ソース ID → 収集関数のマッピング
 _COLLECT_STRATEGIES: dict[str, callable] = {
     "egov_law": _collect_egov_law,
+    "cinii": _collect_cinii,
 }
 
 

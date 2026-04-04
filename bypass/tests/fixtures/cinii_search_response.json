@@ -1,0 +1,43 @@
+{
+  "@context": {
+    "@vocab": "http://purl.org/rss/1.0/",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "prism": "http://prismstandard.org/namespaces/basic/2.0/",
+    "opensearch": "http://a9.com/-/spec/opensearch/1.1/",
+    "@language": "ja"
+  },
+  "@id": "https://cir.nii.ac.jp/opensearch/all?q=AI&count=2&format=json",
+  "@type": "channel",
+  "title": "CiNii Research all - AI",
+  "opensearch:totalResults": 134192,
+  "opensearch:startIndex": 1,
+  "opensearch:itemsPerPage": 2,
+  "items": [
+    {
+      "@id": "https://cir.nii.ac.jp/crid/1362825893369700096",
+      "@type": "item",
+      "title": "Artificial Intelligence (AI) Ethics",
+      "link": {"@id": "https://cir.nii.ac.jp/crid/1362825893369700096"},
+      "dc:creator": ["Keng Siau", "Weiyu Wang"],
+      "dc:publisher": "IGI Global",
+      "dc:type": "Article",
+      "dc:subject": ["artificial intelligence", "ethics", "AI"],
+      "prism:publicationName": "Journal of Database Management",
+      "prism:publicationDate": "2020-04-01",
+      "description": "<p>Artificial intelligence (AI)-based technology has achieved many great things.</p>"
+    },
+    {
+      "@id": "https://cir.nii.ac.jp/crid/1390001205687203456",
+      "@type": "item",
+      "title": "深層学習を用いた画像認識の研究",
+      "link": {"@id": "https://cir.nii.ac.jp/crid/1390001205687203456"},
+      "dc:creator": ["山田太郎", "鈴木花子", "田中一郎", "佐藤次郎"],
+      "dc:publisher": "情報処理学会",
+      "dc:type": "Article",
+      "dc:subject": ["深層学習", "画像認識"],
+      "prism:publicationName": "情報処理学会論文誌",
+      "prism:publicationDate": "2023-06-15",
+      "description": "本研究では深層学習を用いた画像認識手法を提案する。"
+    }
+  ]
+}

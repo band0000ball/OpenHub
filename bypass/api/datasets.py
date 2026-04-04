@@ -23,6 +23,7 @@ from typing import Any, Literal
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from pydantic import BaseModel
 
+from connectors.cinii import CiNiiConnector
 from connectors.datagojp import DataGoJpConnector
 from connectors.egov_law import EGovLawConnector
 from connectors.estat import EStatConnector
@@ -84,6 +85,7 @@ _SOURCE_REGISTRY: list[tuple[SourceDefinition, type]] = [
     (SourceDefinition(id="datagojp", label="data.go.jp", requires_api_key=False), DataGoJpConnector),
     (SourceDefinition(id="egov_law", label="e-Gov 法令", requires_api_key=False), EGovLawConnector),
     (SourceDefinition(id="jma", label="気象庁", requires_api_key=False), JmaConnector),
+    (SourceDefinition(id="cinii", label="CiNii Research", requires_api_key=False), CiNiiConnector),
 ]
 
 # source_id → コネクタークラス（検索・取得用）
