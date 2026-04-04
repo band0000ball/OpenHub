@@ -27,7 +27,7 @@ Resources:
       Runtime: python3.12
       Architectures:
         - arm64
-      MemorySize: 256
+      MemorySize: 512
       Timeout: 60
       FunctionUrlConfig:
         AuthType: NONE
@@ -47,6 +47,13 @@ Resources:
           COGNITO_CLIENT_ID: !Ref CognitoClientId
           CREDENTIAL_STORE_BACKEND: dynamodb
           DYNAMODB_TABLE_NAME: openhub-credentials
+      Events:
+        WarmPing:
+          Type: Schedule
+          Properties:
+            Schedule: rate(5 minutes)
+            Input: '{"warm": true}'
+            Enabled: true
       Policies:
         - DynamoDBCrudPolicy:
             TableName: openhub-credentials
