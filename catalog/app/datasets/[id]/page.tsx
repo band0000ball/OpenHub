@@ -53,17 +53,19 @@ export default async function DatasetDetailPage({ params }: DatasetDetailPagePro
 
           <p className="mt-4 leading-relaxed text-gray-700">{metadata.description}</p>
 
-          <div className="mt-6 flex gap-3">
-            <a
-              href={metadata.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${metadata.title}（新しいタブで開く）`}
-              className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
-            >
-              元データを見る
-            </a>
-          </div>
+          {metadata.url && (
+            <div className="mt-6 flex gap-3">
+              <a
+                href={metadata.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${metadata.title}（新しいタブで開く）`}
+                className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+              >
+                元データを見る
+              </a>
+            </div>
+          )}
 
           {payload.data && (
             <section className="mt-8">
