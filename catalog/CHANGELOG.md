@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-04-04
+
+### Changed
+
+- **ホームページ表示速度の大幅改善**: SSR でのデータ取得をクライアントサ���ド fetch に移行。
+  Amplify SSR Lambda + Bypass Lambda のコールドスタート連鎖（最大 80 秒）を解消し、
+  ページシェルを即時表示。データはスケルトン UI 経由で非同期ロード。
+
+### Added
+
+- **`/api/browse` エンドポイント**: カテゴリ別データセット一覧をクライアントから取得する API Route。
+  `browseByCategory` / `searchDatasets` ロジックをサーバーサイドで実行し JSON 返却。
+
+- **`/api/credentials/status` エンドポイント**: API キー設定状態をクライアントから確認する API Route。
+  CredentialsBanner のページブロックを解消。
+
 ## 2026-04-03
 
 ### Added

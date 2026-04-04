@@ -1,21 +1,20 @@
 import { type NextRequest } from "next/server";
-import { browseByCategory, searchDatasets } from "../../../lib/api";
+import { getMetadata } from "../../../lib/s3-cache";
+import { searchMetadata } from "../../../lib/search";
 import { findCategory, BROWSE_LIMIT_SINGLE } from "../../../lib/categories";
-import { getAccessToken } from "../../../lib/auth-helpers";
 
 export async function GET(request: NextRequest): Promise<Response> {
   const params = request.nextUrl.searchParams;
   const category = params.get("category") ?? "all";
   const page = Math.max(1, parseInt(params.get("page") ?? "1", 10) || 1);
 
-  const accessToken = await getAccessToken().catch(() => undefined);
-
   try {
+    const allItems = await getMetadata();
+
     if (category === "all") {
-      const items = await browseByCategory("all", accessToken);
       return Response.json({
-        items,
-        total: null,
+        items: allItems,
+        total: allItems.length,
         has_next: false,
         page: 1,
       });
@@ -23,12 +22,12 @@ export async function GET(request: NextRequest): Promise<Response> {
 
     const categoryInfo = findCategory(category);
     const offset = (page - 1) * BROWSE_LIMIT_SINGLE;
-    const result = await searchDatasets(
+    const result = searchMetadata(
+      allItems,
       categoryInfo.keyword,
       undefined,
       BROWSE_LIMIT_SINGLE,
       offset,
-      accessToken,
     );
 
     return Response.json({

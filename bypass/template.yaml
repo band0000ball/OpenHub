@@ -10,6 +10,13 @@ Parameters:
     Type: String
   CognitoClientId:
     Type: String
+  CacheBucketName:
+    Type: String
+    Default: openhub-cache
+  EStatApiKey:
+    Type: String
+    NoEcho: true
+    Default: ""
 
 Resources:
   BypassFunction:
@@ -44,7 +51,43 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: openhub-credentials
 
+  CacheBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref CacheBucketName
+
+  CollectorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: collector.handler.handler
+      Runtime: python3.12
+      Architectures:
+        - arm64
+      MemorySize: 512
+      Timeout: 900
+      Environment:
+        Variables:
+          CACHE_BUCKET_NAME: !Ref CacheBucketName
+          ESTAT_API_KEY: !Ref EStatApiKey
+          COLLECTOR_SOURCES: estat,datagojp,egov_law,jma
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref CacheBucketName
+      Events:
+        ScheduleEvent:
+          Type: Schedule
+          Properties:
+            Schedule: rate(6 hours)
+            Enabled: true
+
 Outputs:
   FunctionUrl:
     Description: Lambda Function URL
     Value: !GetAtt BypassFunctionUrl.FunctionUrl
+  CacheBucketName:
+    Description: S3 Cache Bucket Name
+    Value: !Ref CacheBucket
+  CacheBucketArn:
+    Description: S3 Cache Bucket ARN
+    Value: !GetAtt CacheBucket.Arn
