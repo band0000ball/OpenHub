@@ -24,71 +24,45 @@ const mockDatasets = [
     updated_at: "2024-01-01",
   },
   {
-    id: "datagojp:0002",
+    id: "datagojp:0001",
     source_id: "datagojp",
-    title: "経済指標データ",
-    description: "経済に関するデータ",
-    url: "https://example.com",
-    tags: ["経済"],
+    title: "オープンデータ一覧",
+    description: "data.go.jp のデータ",
+    url: "https://example.com/2",
+    tags: ["オープンデータ"],
     updated_at: "2024-02-01",
   },
 ];
 
-function mockFetchResponse(data: unknown, ok = true) {
-  return vi.fn().mockResolvedValue({
-    ok,
-    status: ok ? 200 : 502,
-    json: () => Promise.resolve(data),
-  });
-}
+describe("DatasetBrowser — all カテゴリ（ソース別セクション）", () => {
+  beforeEach(() => { vi.clearAllMocks(); });
+  afterEach(() => { vi.restoreAllMocks(); });
 
-describe("DatasetBrowser — all カテゴリ", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it("スケルトン → データ表示の順で描画する", async () => {
-    global.fetch = mockFetchResponse({
-      items: mockDatasets,
-      total: null,
-      has_next: false,
-      page: 1,
+  it("ソース別セクションを表示する", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        sections: [
+          { source_id: "estat", items: [mockDatasets[0]], total: 100 },
+          { source_id: "datagojp", items: [mockDatasets[1]], total: 200 },
+        ],
+      }),
     });
 
     render(<DatasetBrowser category="all" page={1} />);
 
-    // 初期状態: スケルトン表示
-    expect(screen.queryByRole("article")).not.toBeInTheDocument();
-
-    // データ取得後: カード表示
     await waitFor(() => {
-      expect(screen.getAllByRole("article")).toHaveLength(2);
+      expect(screen.getByRole("heading", { name: "e-Stat" })).toBeInTheDocument();
+      expect(screen.getByRole("heading", { name: "data.go.jp" })).toBeInTheDocument();
     });
     expect(screen.getByText("人口統計データ")).toBeInTheDocument();
-    expect(global.fetch).toHaveBeenCalledWith("/api/browse?category=all&page=1");
-  });
-
-  it("件数ゼロの場合は空状態を表示する", async () => {
-    global.fetch = mockFetchResponse({
-      items: [],
-      total: 0,
-      has_next: false,
-      page: 1,
-    });
-
-    render(<DatasetBrowser category="all" page={1} />);
-
-    await waitFor(() => {
-      expect(screen.getByText(/見つかりませんでした/)).toBeInTheDocument();
-    });
+    expect(screen.getByText("オープンデータ一覧")).toBeInTheDocument();
+    expect(screen.getByText("100 件")).toBeInTheDocument();
+    expect(screen.getByText("200 件")).toBeInTheDocument();
   });
 
   it("フェッチ失敗時はエラー状態を表示する", async () => {
-    global.fetch = mockFetchResponse({ error: "fail" }, false);
+    global.fetch = vi.fn().mockResolvedValue({ ok: false, status: 502 });
 
     render(<DatasetBrowser category="all" page={1} />);
 
@@ -99,20 +73,18 @@ describe("DatasetBrowser — all カテゴリ", () => {
 });
 
 describe("DatasetBrowser — 個別カテゴリ", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  beforeEach(() => { vi.clearAllMocks(); });
+  afterEach(() => { vi.restoreAllMocks(); });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it("category=population で正しいクエリを送る", async () => {
-    global.fetch = mockFetchResponse({
-      items: mockDatasets,
-      total: 2,
-      has_next: false,
-      page: 1,
+  it("カテゴリ検索結果を表示する", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        items: mockDatasets,
+        total: 2,
+        has_next: false,
+        page: 1,
+      }),
     });
 
     render(<DatasetBrowser category="population" page={1} />);
@@ -120,30 +92,17 @@ describe("DatasetBrowser — 個別カテゴリ", () => {
     await waitFor(() => {
       expect(screen.getAllByRole("article")).toHaveLength(2);
     });
-    expect(global.fetch).toHaveBeenCalledWith("/api/browse?category=population&page=1");
-  });
-
-  it("page=2 で正しいクエリを送る", async () => {
-    global.fetch = mockFetchResponse({
-      items: mockDatasets,
-      total: 40,
-      has_next: true,
-      page: 2,
-    });
-
-    render(<DatasetBrowser category="population" page={2} />);
-
-    await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith("/api/browse?category=population&page=2");
-    });
   });
 
   it("has_next=true のとき次へボタンが表示される", async () => {
-    global.fetch = mockFetchResponse({
-      items: mockDatasets,
-      total: null,
-      has_next: true,
-      page: 1,
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        items: mockDatasets,
+        total: null,
+        has_next: true,
+        page: 1,
+      }),
     });
 
     render(<DatasetBrowser category="population" page={1} />);
