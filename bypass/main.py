@@ -11,6 +11,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.auth import router as auth_router
+from api.cache import router as cache_router
 from api.datasets import (
     handle_authentication_error,
     handle_not_found_error,
@@ -74,6 +75,7 @@ def create_app() -> FastAPI:
 
     # ルーター登録
     app.include_router(auth_router)
+    app.include_router(cache_router)
     app.include_router(datasets_router)
     app.include_router(sources_router)
 
