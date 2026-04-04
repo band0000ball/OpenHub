@@ -89,10 +89,10 @@ test.describe("Dataset detail page", () => {
     await expect(alert).toBeVisible({ timeout: 10000 });
   });
 
-  test("検索結果に戻る link is present", async ({ page }) => {
+  test("一覧に戻る link is present", async ({ page }) => {
     await page.goto("/datasets/test-id", { waitUntil: "domcontentloaded" }).catch(() => {});
     // Even error page has back link
-    await expect(page.getByRole("link", { name: /検索結果に戻る/i })).toBeVisible({
+    await expect(page.getByRole("link", { name: /一覧に戻る/i })).toBeVisible({
       timeout: 10000,
     });
   });
