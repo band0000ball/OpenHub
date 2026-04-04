@@ -1,5 +1,6 @@
 """S3 Writer のテスト。moto で S3 をモック。"""
 
+import gzip
 import json
 import os
 
@@ -53,12 +54,17 @@ def s3_client():
         yield client
 
 
+def _read_gzip_json(s3_client, bucket: str, key: str) -> dict:
+    """S3 から gzip JSON を読み取る。"""
+    obj = s3_client.get_object(Bucket=bucket, Key=key)
+    return json.loads(gzip.decompress(obj["Body"].read()))
+
+
 class TestWriteSourceJson:
     def test_writes_correct_key_and_content(self, s3_client, sample_items):
         write_source_json(BUCKET, "estat", sample_items, s3_client=s3_client)
 
-        obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/sources/estat.json")
-        data = json.loads(obj["Body"].read())
+        data = _read_gzip_json(s3_client, BUCKET, "catalog/sources/estat.json.gz")
 
         assert data["source_id"] == "estat"
         assert data["count"] == 2
@@ -69,10 +75,7 @@ class TestWriteSourceJson:
     def test_writes_empty_items(self, s3_client):
         write_source_json(BUCKET, "datagojp", (), s3_client=s3_client)
 
-        obj = s3_client.get_object(
-            Bucket=BUCKET, Key="catalog/sources/datagojp.json"
-        )
-        data = json.loads(obj["Body"].read())
+        data = _read_gzip_json(s3_client, BUCKET, "catalog/sources/datagojp.json.gz")
 
         assert data["count"] == 0
         assert data["items"] == []
@@ -82,8 +85,7 @@ class TestWriteMetadataJson:
     def test_writes_unified_metadata(self, s3_client, sample_items):
         write_metadata_json(BUCKET, sample_items, s3_client=s3_client)
 
-        obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/metadata.json")
-        data = json.loads(obj["Body"].read())
+        data = _read_gzip_json(s3_client, BUCKET, "catalog/metadata.json.gz")
 
         assert data["count"] == 2
         assert len(data["items"]) == 2
@@ -91,8 +93,7 @@ class TestWriteMetadataJson:
     def test_writes_empty_metadata(self, s3_client):
         write_metadata_json(BUCKET, (), s3_client=s3_client)
 
-        obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/metadata.json")
-        data = json.loads(obj["Body"].read())
+        data = _read_gzip_json(s3_client, BUCKET, "catalog/metadata.json.gz")
 
         assert data["count"] == 0
 

@@ -1,5 +1,6 @@
-"""S3 書き込みモジュール。DatasetMetadata を JSON として S3 に保存する。"""
+"""S3 書き込みモジュール。DatasetMetadata を gzip 圧縮 JSON として S3 に保存する。"""
 
+import gzip
 import json
 from dataclasses import asdict
 from datetime import datetime, timezone
@@ -35,11 +36,13 @@ def write_source_json(
         {"source_id": source_id, "count": len(items), "items": _serialize_items(items)},
         ensure_ascii=False,
     )
+    compressed = gzip.compress(body.encode("utf-8"))
     client.put_object(
         Bucket=bucket,
-        Key=f"catalog/sources/{source_id}.json",
-        Body=body.encode("utf-8"),
+        Key=f"catalog/sources/{source_id}.json.gz",
+        Body=compressed,
         ContentType="application/json",
+        ContentEncoding="gzip",
     )
 
 
@@ -57,11 +60,13 @@ def write_metadata_json(
         {"count": len(all_items), "items": _serialize_items(all_items)},
         ensure_ascii=False,
     )
+    compressed = gzip.compress(body.encode("utf-8"))
     client.put_object(
         Bucket=bucket,
-        Key="catalog/metadata.json",
-        Body=body.encode("utf-8"),
+        Key="catalog/metadata.json.gz",
+        Body=compressed,
         ContentType="application/json",
+        ContentEncoding="gzip",
     )
 
 

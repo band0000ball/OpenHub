@@ -1,5 +1,6 @@
 """Collector Handler のテスト。コネクター・S3 をモック。"""
 
+import gzip
 import json
 from unittest.mock import MagicMock, patch
 
@@ -87,12 +88,12 @@ class TestCollectAll:
         assert result.total_count == 2
 
         # S3 にデータが書き込まれていることを確認
-        metadata_obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/metadata.json")
-        metadata = json.loads(metadata_obj["Body"].read())
+        metadata_obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/metadata.json.gz")
+        metadata = json.loads(gzip.decompress(metadata_obj["Body"].read()))
         assert metadata["count"] == 2
 
-        estat_obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/sources/estat.json")
-        estat_data = json.loads(estat_obj["Body"].read())
+        estat_obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/sources/estat.json.gz")
+        estat_data = json.loads(gzip.decompress(estat_obj["Body"].read()))
         assert estat_data["count"] == 1
 
         last_obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/last_updated.json")
@@ -120,8 +121,8 @@ class TestCollectAll:
         assert result.total_count == 1
 
         # 成功したソースのデータは書き込まれている
-        metadata_obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/metadata.json")
-        metadata = json.loads(metadata_obj["Body"].read())
+        metadata_obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/metadata.json.gz")
+        metadata = json.loads(gzip.decompress(metadata_obj["Body"].read()))
         assert metadata["count"] == 1
 
     def test_all_sources_fail(self, s3_client):
@@ -141,8 +142,8 @@ class TestCollectAll:
         assert result.total_count == 0
 
         # 空のメタデータが書き込まれている
-        metadata_obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/metadata.json")
-        metadata = json.loads(metadata_obj["Body"].read())
+        metadata_obj = s3_client.get_object(Bucket=BUCKET, Key="catalog/metadata.json.gz")
+        metadata = json.loads(gzip.decompress(metadata_obj["Body"].read()))
         assert metadata["count"] == 0
 
     def test_unknown_source_id_skipped(self, s3_client):
