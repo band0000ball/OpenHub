@@ -1,6 +1,5 @@
 import { type NextRequest } from "next/server";
-import { getMetadata } from "../../../lib/s3-cache";
-import { searchMetadata } from "../../../lib/search";
+import { searchCachedMetadata } from "../../../lib/s3-cache";
 
 export async function GET(request: NextRequest): Promise<Response> {
   const params = request.nextUrl.searchParams;
@@ -17,8 +16,7 @@ export async function GET(request: NextRequest): Promise<Response> {
   }
 
   try {
-    const allItems = await getMetadata();
-    const result = searchMetadata(allItems, q, source, limit, offset);
+    const result = await searchCachedMetadata(q, source, limit, offset);
 
     return Response.json({
       items: result.items,

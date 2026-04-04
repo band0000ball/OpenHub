@@ -13,59 +13,64 @@ const sampleItems: DatasetMetadata[] = [
   },
 ];
 
-import { getMetadata, getLastUpdated, clearCache } from "../lib/s3-cache";
+import { searchCachedMetadata, getLastUpdated } from "../lib/s3-cache";
 
 describe("s3-cache", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    clearCache();
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  describe("getMetadata", () => {
-    it("4ソースを並列取得して統合する", async () => {
-      global.fetch = vi.fn().mockImplementation((url: string) => {
-        if (url.includes("source=estat")) {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve({ items: sampleItems }),
-          });
-        }
-        return Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve({ items: [] }),
-        });
-      });
-
-      const result = await getMetadata();
-
-      expect(result).toHaveLength(1);
-      expect(result[0].title).toBe("人口統計データ");
-      expect(global.fetch).toHaveBeenCalledTimes(4);
-    });
-
-    it("2 回目の呼び出しはキャッシュを返す", async () => {
+  describe("searchCachedMetadata", () => {
+    it("Bypass /cache/metadata にクエリを渡して結果を返す", async () => {
       global.fetch = vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({ items: sampleItems }),
+        json: () => Promise.resolve({
+          items: sampleItems,
+          total: 1,
+          has_next: false,
+          limit: 20,
+          offset: 0,
+        }),
       });
 
-      await getMetadata();
-      const callCount = (global.fetch as ReturnType<typeof vi.fn>).mock.calls.length;
-      await getMetadata();
+      const result = await searchCachedMetadata("人口");
 
-      expect(global.fetch).toHaveBeenCalledTimes(callCount);
+      expect(result.items).toHaveLength(1);
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining("/cache/metadata?q=%E4%BA%BA%E5%8F%A3"),
+      );
     });
 
-    it("全ソース失敗時は空配列を返す", async () => {
+    it("source パラメータを渡せる", async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({
+          items: sampleItems,
+          total: 1,
+          has_next: false,
+          limit: 20,
+          offset: 0,
+        }),
+      });
+
+      await searchCachedMetadata("人口", "estat", 10, 0);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining("source=estat"),
+      );
+    });
+
+    it("API エラー時は空の SearchResponse を返す", async () => {
       global.fetch = vi.fn().mockResolvedValue({ ok: false, status: 502 });
 
-      const result = await getMetadata();
+      const result = await searchCachedMetadata("人口");
 
-      expect(result).toEqual([]);
+      expect(result.items).toEqual([]);
+      expect(result.total).toBe(0);
     });
   });
 
