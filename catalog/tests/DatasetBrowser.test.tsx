@@ -1,15 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
 import DatasetBrowser from "../components/DatasetBrowser";
 
 vi.mock("next/navigation", () => ({
-  useRouter: () => ({ push: vi.fn() }),
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn() }),
   useSearchParams: () => new URLSearchParams(""),
-}));
-
-vi.mock("../lib/api", () => ({
-  searchDatasets: vi.fn(),
-  browseByCategory: vi.fn(),
 }));
 
 vi.mock("next/link", () => ({
@@ -17,10 +12,6 @@ vi.mock("next/link", () => ({
     <a href={href} className={className}>{children}</a>
   ),
 }));
-
-import { browseByCategory, searchDatasets } from "../lib/api";
-const mockBrowse = vi.mocked(browseByCategory);
-const mockSearch = vi.mocked(searchDatasets);
 
 const mockDatasets = [
   {
@@ -43,47 +34,67 @@ const mockDatasets = [
   },
 ];
 
-const mockSearchResult = {
-  items: mockDatasets,
-  total: 2,
-  has_next: false,
-  limit: 20,
-  offset: 0,
-};
+function mockFetchResponse(data: unknown, ok = true) {
+  return vi.fn().mockResolvedValue({
+    ok,
+    status: ok ? 200 : 502,
+    json: () => Promise.resolve(data),
+  });
+}
 
 describe("DatasetBrowser — all カテゴリ", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("browseByCategory を呼んでカードを表示する", async () => {
-    mockBrowse.mockResolvedValueOnce(mockDatasets);
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
-    const component = await DatasetBrowser({ category: "all", page: 1 });
-    render(component);
+  it("スケルトン → データ表示の順で描画する", async () => {
+    global.fetch = mockFetchResponse({
+      items: mockDatasets,
+      total: null,
+      has_next: false,
+      page: 1,
+    });
 
-    expect(screen.getAllByRole("article")).toHaveLength(2);
+    render(<DatasetBrowser category="all" page={1} />);
+
+    // 初期状態: スケルトン表示
+    expect(screen.queryByRole("article")).not.toBeInTheDocument();
+
+    // データ取得後: カード表示
+    await waitFor(() => {
+      expect(screen.getAllByRole("article")).toHaveLength(2);
+    });
     expect(screen.getByText("人口統計データ")).toBeInTheDocument();
-    expect(mockBrowse).toHaveBeenCalledWith("all", undefined);
+    expect(global.fetch).toHaveBeenCalledWith("/api/browse?category=all&page=1");
   });
 
   it("件数ゼロの場合は空状態を表示する", async () => {
-    mockBrowse.mockResolvedValueOnce([]);
+    global.fetch = mockFetchResponse({
+      items: [],
+      total: 0,
+      has_next: false,
+      page: 1,
+    });
 
-    const component = await DatasetBrowser({ category: "all", page: 1 });
-    render(component);
+    render(<DatasetBrowser category="all" page={1} />);
 
-    expect(screen.queryByRole("article")).not.toBeInTheDocument();
-    expect(screen.getByText(/見つかりませんでした/)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/見つかりませんでした/)).toBeInTheDocument();
+    });
   });
 
   it("フェッチ失敗時はエラー状態を表示する", async () => {
-    mockBrowse.mockRejectedValueOnce(new Error("Network error"));
+    global.fetch = mockFetchResponse({ error: "fail" }, false);
 
-    const component = await DatasetBrowser({ category: "all", page: 1 });
-    render(component);
+    render(<DatasetBrowser category="all" page={1} />);
 
-    expect(screen.getByRole("alert")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole("alert")).toBeInTheDocument();
+    });
   });
 });
 
@@ -92,42 +103,54 @@ describe("DatasetBrowser — 個別カテゴリ", () => {
     vi.clearAllMocks();
   });
 
-  it("searchDatasets を呼んでカードとページネーションを表示する", async () => {
-    mockSearch.mockResolvedValueOnce(mockSearchResult);
-
-    const component = await DatasetBrowser({ category: "population", page: 1 });
-    render(component);
-
-    expect(screen.getAllByRole("article")).toHaveLength(2);
-    expect(mockSearch).toHaveBeenCalledWith("人口", undefined, 20, 0, undefined);
-    expect(mockBrowse).not.toHaveBeenCalled();
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
-  it("page=2 のとき offset=20 で searchDatasets を呼ぶ", async () => {
-    mockSearch.mockResolvedValueOnce({ ...mockSearchResult, offset: 20 });
+  it("category=population で正しいクエリを送る", async () => {
+    global.fetch = mockFetchResponse({
+      items: mockDatasets,
+      total: 2,
+      has_next: false,
+      page: 1,
+    });
 
-    await DatasetBrowser({ category: "population", page: 2 });
+    render(<DatasetBrowser category="population" page={1} />);
 
-    expect(mockSearch).toHaveBeenCalledWith("人口", undefined, 20, 20, undefined);
+    await waitFor(() => {
+      expect(screen.getAllByRole("article")).toHaveLength(2);
+    });
+    expect(global.fetch).toHaveBeenCalledWith("/api/browse?category=population&page=1");
   });
 
-  it("has_next=true のとき次へボタンがリンクとして表示される", async () => {
-    mockSearch.mockResolvedValueOnce({ ...mockSearchResult, has_next: true, total: null });
+  it("page=2 で正しいクエリを送る", async () => {
+    global.fetch = mockFetchResponse({
+      items: mockDatasets,
+      total: 40,
+      has_next: true,
+      page: 2,
+    });
 
-    const component = await DatasetBrowser({ category: "population", page: 1 });
-    render(component);
+    render(<DatasetBrowser category="population" page={2} />);
 
-    const nextLink = screen.getByRole("link", { name: "次へ" });
-    expect(nextLink).toHaveAttribute("href", "/?category=population&page=2");
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith("/api/browse?category=population&page=2");
+    });
   });
 
-  it("件数ゼロの場合は空状態を表示する", async () => {
-    mockSearch.mockResolvedValueOnce({ ...mockSearchResult, items: [] });
+  it("has_next=true のとき次へボタンが表示される", async () => {
+    global.fetch = mockFetchResponse({
+      items: mockDatasets,
+      total: null,
+      has_next: true,
+      page: 1,
+    });
 
-    const component = await DatasetBrowser({ category: "population", page: 1 });
-    render(component);
+    render(<DatasetBrowser category="population" page={1} />);
 
-    expect(screen.queryByRole("article")).not.toBeInTheDocument();
-    expect(screen.getByText(/見つかりませんでした/)).toBeInTheDocument();
+    await waitFor(() => {
+      const nextLink = screen.getByRole("link", { name: "次へ" });
+      expect(nextLink).toHaveAttribute("href", "/?category=population&page=2");
+    });
   });
 });

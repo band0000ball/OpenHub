@@ -1,32 +1,46 @@
+"use client";
+
 /**
  * CredentialsBanner — API キー未設定のデータソースに対する警告バナー
  *
- * Source Registry の requiresApiKey ソースを検出し、
+ * クライアントサイドで /api/credentials/status を呼び出し、
  * 未設定のソースがあれば設定ページへ誘導するバナーを表示する。
- * ソース一覧はローカル定数を使用（Bypass への不要な HTTP リクエストを回避）。
+ * ページ描画をブロックしない。
  */
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { getAccessToken } from "../lib/auth-helpers";
-import { getCredentialStatus } from "../lib/api";
-import { getSourcesRequiringApiKey } from "../lib/sources";
 
-export default async function CredentialsBanner() {
-  const accessToken = await getAccessToken().catch(() => undefined);
-  const sources = getSourcesRequiringApiKey();
+interface UnconfiguredSource {
+  id: string;
+  label: string;
+  configured: boolean;
+}
 
-  // 全ての requiresApiKey ソースの設定状態を並列チェック
-  const statuses = await Promise.all(
-    sources.map(async (source) => ({
-      source,
-      configured: await getCredentialStatus(source.id, accessToken),
-    })),
-  );
+interface StatusResponse {
+  unconfigured: UnconfiguredSource[];
+}
 
-  const unconfigured = statuses.filter((s) => !s.configured);
-  if (unconfigured.length === 0) return null;
+export default function CredentialsBanner() {
+  const [names, setNames] = useState<string | null>(null);
 
-  const names = unconfigured.map((s) => s.source.label).join("・");
+  useEffect(() => {
+    fetch("/api/credentials/status")
+      .then((res) => {
+        if (!res.ok) return null;
+        return res.json() as Promise<StatusResponse>;
+      })
+      .then((data) => {
+        if (data && data.unconfigured.length > 0) {
+          setNames(data.unconfigured.map((s) => s.label).join("・"));
+        }
+      })
+      .catch(() => {
+        // サイレントに失敗 — バナー非表示
+      });
+  }, []);
+
+  if (!names) return null;
 
   return (
     <div
