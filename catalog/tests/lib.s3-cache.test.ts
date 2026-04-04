@@ -13,14 +13,6 @@ const sampleItems: DatasetMetadata[] = [
   },
 ];
 
-function mockFetchResponse(data: unknown, ok = true) {
-  return vi.fn().mockResolvedValue({
-    ok,
-    status: ok ? 200 : 502,
-    json: () => Promise.resolve(data),
-  });
-}
-
 import { getMetadata, getLastUpdated, clearCache } from "../lib/s3-cache";
 
 describe("s3-cache", () => {
@@ -34,29 +26,42 @@ describe("s3-cache", () => {
   });
 
   describe("getMetadata", () => {
-    it("Bypass /cache/metadata からデータを取得する", async () => {
-      global.fetch = mockFetchResponse({ count: 1, items: sampleItems });
+    it("4ソースを並列取得して統合する", async () => {
+      global.fetch = vi.fn().mockImplementation((url: string) => {
+        if (url.includes("source=estat")) {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve({ items: sampleItems }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({ items: [] }),
+        });
+      });
 
       const result = await getMetadata();
 
       expect(result).toHaveLength(1);
       expect(result[0].title).toBe("人口統計データ");
-      expect(global.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/cache/metadata"),
-      );
+      expect(global.fetch).toHaveBeenCalledTimes(4);
     });
 
     it("2 回目の呼び出しはキャッシュを返す", async () => {
-      global.fetch = mockFetchResponse({ count: 1, items: sampleItems });
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ items: sampleItems }),
+      });
 
       await getMetadata();
+      const callCount = (global.fetch as ReturnType<typeof vi.fn>).mock.calls.length;
       await getMetadata();
 
-      expect(global.fetch).toHaveBeenCalledTimes(1);
+      expect(global.fetch).toHaveBeenCalledTimes(callCount);
     });
 
-    it("API エラー時は空配列を返す", async () => {
-      global.fetch = mockFetchResponse({ error: "fail" }, false);
+    it("全ソース失敗時は空配列を返す", async () => {
+      global.fetch = vi.fn().mockResolvedValue({ ok: false, status: 502 });
 
       const result = await getMetadata();
 
@@ -65,16 +70,19 @@ describe("s3-cache", () => {
   });
 
   describe("getLastUpdated", () => {
-    it("Bypass /cache/last_updated からタイムスタンプを取得する", async () => {
-      global.fetch = mockFetchResponse({ last_updated: "2024-01-01T00:00:00Z" });
+    it("タイムスタンプを取得する", async () => {
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ last_updated: "2024-01-01T00:00:00Z" }),
+      });
 
       const result = await getLastUpdated();
 
       expect(result).toBe("2024-01-01T00:00:00Z");
     });
 
-    it("API エラー時は null を返す", async () => {
-      global.fetch = mockFetchResponse({ error: "fail" }, false);
+    it("エラー時は null を返す", async () => {
+      global.fetch = vi.fn().mockResolvedValue({ ok: false, status: 502 });
 
       const result = await getLastUpdated();
 

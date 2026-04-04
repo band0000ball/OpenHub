@@ -28,10 +28,27 @@ def _get_s3_json(key: str) -> dict:
 
 
 @router.get("/metadata", summary="キャッシュ済みメタデータを返す")
-def get_cached_metadata():
-    """S3 の catalog/metadata.json を返す。"""
+def get_cached_metadata(source: str | None = None):
+    """S3 のメタデータ JSON を返す。
+
+    source パラメータでソース別 JSON を取得可能（レスポンスサイズ制限対策）。
+    source 省略時は全ソースを順次読み取って統合する。
+    """
     try:
-        return _get_s3_json("catalog/metadata.json")
+        if source:
+            return _get_s3_json(f"catalog/sources/{source}.json")
+
+        # 全ソースを個別に読み取って統合（metadata.json は 6MB 超の場合があるため）
+        all_items: list[dict] = []
+        for source_id in ("estat", "datagojp", "egov_law", "jma"):
+            try:
+                data = _get_s3_json(f"catalog/sources/{source_id}.json")
+                all_items.extend(data.get("items", []))
+            except Exception as exc:
+                logger.warning("Failed to read source %s: %s", source_id, exc)
+                continue
+
+        return {"count": len(all_items), "items": all_items}
     except Exception as exc:
         logger.error("Failed to read S3 cache: %s", exc)
         raise HTTPException(
