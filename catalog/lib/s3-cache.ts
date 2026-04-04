@@ -1,11 +1,13 @@
 /**
- * S3 キャッシュクライアント。
- * metadata.json を S3 から取得し、in-memory キャッシュ（TTL 5分）で保持する。
+ * キャッシュクライアント。
+ * Bypass の /cache/metadata エンドポイント経由で S3 のメタデータを取得する。
+ * in-memory キャッシュ（TTL 5分）で保持。
  */
 
 import type { DatasetMetadata } from "../types";
 
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 分
+const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
 
 interface CacheEntry<T> {
   data: T;
@@ -14,18 +16,8 @@ interface CacheEntry<T> {
 
 let metadataCache: CacheEntry<DatasetMetadata[]> | null = null;
 
-async function getS3Json<T>(key: string): Promise<T> {
-  const bucketName = process.env.CACHE_BUCKET_NAME ?? "";
-  if (!bucketName) {
-    throw new Error("CACHE_BUCKET_NAME is not configured");
-  }
-
-  const { S3Client, GetObjectCommand } = await import("@aws-sdk/client-s3");
-  const s3 = new S3Client({});
-  const command = new GetObjectCommand({ Bucket: bucketName, Key: key });
-  const response = await s3.send(command);
-  const body = await response.Body!.transformToString();
-  return JSON.parse(body) as T;
+function getBypassUrl(): string {
+  return process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
 }
 
 export async function getMetadata(): Promise<DatasetMetadata[]> {
@@ -36,9 +28,11 @@ export async function getMetadata(): Promise<DatasetMetadata[]> {
   }
 
   try {
-    const json = await getS3Json<{ count: number; items: DatasetMetadata[] }>(
-      "catalog/metadata.json",
-    );
+    const response = await fetch(`${getBypassUrl()}/cache/metadata`);
+    if (!response.ok) {
+      throw new Error(`Cache API returned ${response.status}`);
+    }
+    const json = (await response.json()) as { count: number; items: DatasetMetadata[] };
     metadataCache = { data: json.items, expiry: now + CACHE_TTL_MS };
     return json.items;
   } catch {
@@ -48,9 +42,9 @@ export async function getMetadata(): Promise<DatasetMetadata[]> {
 
 export async function getLastUpdated(): Promise<string | null> {
   try {
-    const json = await getS3Json<{ last_updated: string }>(
-      "catalog/last_updated.json",
-    );
+    const response = await fetch(`${getBypassUrl()}/cache/last_updated`);
+    if (!response.ok) return null;
+    const json = (await response.json()) as { last_updated: string };
     return json.last_updated;
   } catch {
     return null;
