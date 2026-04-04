@@ -3,7 +3,6 @@
  * metadata.json を S3 から取得し、in-memory キャッシュ（TTL 5分）で保持する。
  */
 
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import type { DatasetMetadata } from "../types";
 
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 分
@@ -15,10 +14,14 @@ interface CacheEntry<T> {
 
 let metadataCache: CacheEntry<DatasetMetadata[]> | null = null;
 
-const s3 = new S3Client({});
-const bucketName = process.env.CACHE_BUCKET_NAME ?? "";
-
 async function getS3Json<T>(key: string): Promise<T> {
+  const bucketName = process.env.CACHE_BUCKET_NAME ?? "";
+  if (!bucketName) {
+    throw new Error("CACHE_BUCKET_NAME is not configured");
+  }
+
+  const { S3Client, GetObjectCommand } = await import("@aws-sdk/client-s3");
+  const s3 = new S3Client({});
   const command = new GetObjectCommand({ Bucket: bucketName, Key: key });
   const response = await s3.send(command);
   const body = await response.Body!.transformToString();
