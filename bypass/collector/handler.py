@@ -1,6 +1,9 @@
 """Collector Lambda ハンドラー。
 
 既存コネクターの search() を呼び出してメタデータを収集し、S3 に書き込む。
+ソースごとに収集戦略が異なる:
+- 汎用ソース: 空クエリで全件取得
+- e-Gov 法令: キーワード検索のみ対応のため、代表キーワードで複数回検索して統合
 """
 
 import logging
@@ -9,9 +12,18 @@ from dataclasses import dataclass, field
 
 from collector.config import CollectorConfig
 from collector.s3_writer import write_last_updated, write_metadata_json, write_source_json
+from core.connector import DataSourceConnector
 from core.models import DatasetMetadata
 
 logger = logging.getLogger(__name__)
+
+# e-Gov 法令 API は全件取得ができないため、代表的な法令カテゴリで検索する
+_EGOV_LAW_KEYWORDS: tuple[str, ...] = (
+    "憲法", "民法", "刑法", "商法", "行政",
+    "労働", "税", "教育", "環境", "医療",
+    "建築", "道路", "食品", "金融", "通信",
+    "個人情報", "著作権", "会社", "保険", "年金",
+)
 
 
 @dataclass(frozen=True)
@@ -35,6 +47,52 @@ def _get_connector_factories() -> dict[str, type]:
     return dict(_CONNECTOR_FACTORIES)
 
 
+_PAGE_SIZE = 1000
+_MAX_ITEMS = 10000
+
+
+def _collect_default(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
+    """汎用収集: 空クエリでページネーションしながら全件取得する。"""
+    all_items: list[DatasetMetadata] = []
+    offset = 0
+
+    while offset < _MAX_ITEMS:
+        result = connector.search("", {"limit": _PAGE_SIZE, "offset": offset})
+        all_items.extend(result.items)
+
+        if not result.has_next or len(result.items) == 0:
+            break
+        offset += len(result.items)
+        logger.info("  ... %d items so far (offset=%d)", len(all_items), offset)
+
+    return tuple(all_items)
+
+
+def _collect_egov_law(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
+    """e-Gov 法令収集: 代表キーワードで複数回検索し、重複を除去して統合する。"""
+    seen: set[str] = set()
+    items: list[DatasetMetadata] = []
+
+    for keyword in _EGOV_LAW_KEYWORDS:
+        try:
+            result = connector.search(keyword, {"limit": 100, "offset": 0})
+            for item in result.items:
+                if item.id not in seen:
+                    seen.add(item.id)
+                    items.append(item)
+        except Exception as exc:
+            logger.warning("e-Gov law keyword '%s' failed: %s", keyword, exc)
+            continue
+
+    return tuple(items)
+
+
+# ソース ID → 収集関数のマッピング
+_COLLECT_STRATEGIES: dict[str, callable] = {
+    "egov_law": _collect_egov_law,
+}
+
+
 def collect_all(config: CollectorConfig, s3_client=None) -> CollectResult:
     """全ソースからメタデータを収集し S3 に書き込む。
 
@@ -54,12 +112,11 @@ def collect_all(config: CollectorConfig, s3_client=None) -> CollectResult:
 
         try:
             connector = factory()
-            # API キーが必要なソースは環境変数から取得
             api_key = os.environ.get(f"{source_id.upper()}_API_KEY")
             connector.initialize(api_key)
 
-            result = connector.search("", {"limit": 1000, "offset": 0})
-            items = result.items
+            strategy = _COLLECT_STRATEGIES.get(source_id, _collect_default)
+            items = strategy(connector)
 
             write_source_json(config.bucket_name, source_id, items, s3_client=s3_client)
             all_items.extend(items)

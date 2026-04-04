@@ -153,3 +153,147 @@ class TestCollectAll:
 
         assert result.source_counts == {}
         assert "unknown_source" in result.errors
+
+
+class TestDefaultPagination:
+    def test_paginates_until_has_next_false(self, s3_client):
+        config = CollectorConfig(bucket_name=BUCKET, source_ids=("datagojp",))
+
+        page1 = tuple(
+            DatasetMetadata(
+                id=f"datagojp:{i}", source_id="datagojp", title=f"Data {i}",
+                description="", url="https://example.com", tags=(), updated_at="2024-01-01",
+            )
+            for i in range(3)
+        )
+        page2 = tuple(
+            DatasetMetadata(
+                id=f"datagojp:{i}", source_id="datagojp", title=f"Data {i}",
+                description="", url="https://example.com", tags=(), updated_at="2024-01-01",
+            )
+            for i in range(3, 5)
+        )
+
+        mock_conn = MagicMock()
+        mock_conn.source_id = "datagojp"
+        mock_conn.search.side_effect = [
+            SearchResult(items=page1, total_count=5, has_next=True),
+            SearchResult(items=page2, total_count=5, has_next=False),
+        ]
+
+        connector_map = {"datagojp": lambda: mock_conn}
+
+        with patch("collector.handler._get_connector_factories", return_value=connector_map):
+            result = collect_all(config, s3_client=s3_client)
+
+        assert result.source_counts == {"datagojp": 5}
+        assert mock_conn.search.call_count == 2
+        # offset が正しく渡されているか
+        assert mock_conn.search.call_args_list[1][0][1]["offset"] == 3
+
+    def test_stops_on_empty_page(self, s3_client):
+        config = CollectorConfig(bucket_name=BUCKET, source_ids=("datagojp",))
+
+        mock_conn = MagicMock()
+        mock_conn.source_id = "datagojp"
+        mock_conn.search.return_value = SearchResult(
+            items=(), total_count=0, has_next=False,
+        )
+
+        connector_map = {"datagojp": lambda: mock_conn}
+
+        with patch("collector.handler._get_connector_factories", return_value=connector_map):
+            result = collect_all(config, s3_client=s3_client)
+
+        assert result.source_counts == {"datagojp": 0}
+        assert mock_conn.search.call_count == 1
+
+
+class TestEgovLawStrategy:
+    def test_collects_via_multiple_keywords(self, s3_client):
+        config = CollectorConfig(bucket_name=BUCKET, source_ids=("egov_law",))
+
+        items_a = (
+            DatasetMetadata(
+                id="egov_law:law1", source_id="egov_law", title="民法",
+                description="民法第一条", url="https://example.com/1",
+                tags=("法律",), updated_at="2024-01-01T00:00:00Z",
+            ),
+        )
+        items_b = (
+            DatasetMetadata(
+                id="egov_law:law2", source_id="egov_law", title="刑法",
+                description="刑法第一条", url="https://example.com/2",
+                tags=("法律",), updated_at="2024-01-01T00:00:00Z",
+            ),
+        )
+
+        mock_egov = MagicMock()
+        mock_egov.source_id = "egov_law"
+        # 各キーワードで異なる結果を返す（最初の2回だけ、残りは空）
+        mock_egov.search.side_effect = [
+            SearchResult(items=items_a, total_count=1, has_next=False),
+            SearchResult(items=items_b, total_count=1, has_next=False),
+        ] + [SearchResult(items=(), total_count=0, has_next=False)] * 18
+
+        connector_map = {"egov_law": lambda: mock_egov}
+
+        with patch("collector.handler._get_connector_factories", return_value=connector_map):
+            result = collect_all(config, s3_client=s3_client)
+
+        assert result.source_counts == {"egov_law": 2}
+        # 20 キーワード分呼ばれる
+        assert mock_egov.search.call_count == 20
+
+    def test_deduplicates_across_keywords(self, s3_client):
+        config = CollectorConfig(bucket_name=BUCKET, source_ids=("egov_law",))
+
+        same_item = (
+            DatasetMetadata(
+                id="egov_law:law1", source_id="egov_law", title="民法",
+                description="民法", url="https://example.com/1",
+                tags=(), updated_at="2024-01-01T00:00:00Z",
+            ),
+        )
+
+        mock_egov = MagicMock()
+        mock_egov.source_id = "egov_law"
+        # 全キーワードで同じ法令が返る
+        mock_egov.search.return_value = SearchResult(
+            items=same_item, total_count=1, has_next=False,
+        )
+
+        connector_map = {"egov_law": lambda: mock_egov}
+
+        with patch("collector.handler._get_connector_factories", return_value=connector_map):
+            result = collect_all(config, s3_client=s3_client)
+
+        # 重複除去で 1 件のみ
+        assert result.source_counts == {"egov_law": 1}
+
+    def test_partial_keyword_failure_continues(self, s3_client):
+        config = CollectorConfig(bucket_name=BUCKET, source_ids=("egov_law",))
+
+        item = (
+            DatasetMetadata(
+                id="egov_law:law1", source_id="egov_law", title="憲法",
+                description="", url="https://example.com/1",
+                tags=(), updated_at="2024-01-01T00:00:00Z",
+            ),
+        )
+
+        mock_egov = MagicMock()
+        mock_egov.source_id = "egov_law"
+        # 最初のキーワードは成功、残りは全て失敗
+        mock_egov.search.side_effect = [
+            SearchResult(items=item, total_count=1, has_next=False),
+        ] + [Exception("API error")] * 19
+
+        connector_map = {"egov_law": lambda: mock_egov}
+
+        with patch("collector.handler._get_connector_factories", return_value=connector_map):
+            result = collect_all(config, s3_client=s3_client)
+
+        # 成功した 1 件は収集される
+        assert result.source_counts == {"egov_law": 1}
+        assert "egov_law" not in result.errors
