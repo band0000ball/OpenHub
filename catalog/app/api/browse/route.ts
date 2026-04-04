@@ -1,5 +1,5 @@
 import { type NextRequest } from "next/server";
-import { searchCachedMetadata } from "../../../lib/s3-cache";
+import { searchCachedMetadata, browseCachedMetadata } from "../../../lib/s3-cache";
 import {
   findCategory,
   CATEGORIES,
@@ -14,25 +14,14 @@ export async function GET(request: NextRequest): Promise<Response> {
 
   try {
     if (category === "all") {
-      // 各カテゴリから数件ずつ並列取得して統合
-      const subCategories = CATEGORIES.filter((c) => c.id !== "all");
-      const results = await Promise.all(
-        subCategories.map((c) =>
-          searchCachedMetadata(c.keyword, undefined, BROWSE_LIMIT_PER_CATEGORY, 0),
-        ),
-      );
-
-      const seen = new Set<string>();
-      const browseItems = results
-        .flatMap((r) => r.items)
-        .filter((item) => {
-          if (seen.has(item.id)) return false;
-          seen.add(item.id);
-          return true;
-        });
+      // 1回のリクエストで全カテゴリを取得
+      const keywords = CATEGORIES
+        .filter((c) => c.id !== "all")
+        .map((c) => c.keyword);
+      const result = await browseCachedMetadata(keywords, BROWSE_LIMIT_PER_CATEGORY);
 
       return Response.json({
-        items: browseItems,
+        items: result.items,
         total: null,
         has_next: false,
         page: 1,
