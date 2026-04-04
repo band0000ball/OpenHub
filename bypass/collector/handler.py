@@ -8,12 +8,16 @@
 
 import logging
 import os
+import time
 from dataclasses import dataclass, field
 
 from collector.config import CollectorConfig
 from collector.s3_writer import write_last_updated, write_metadata_json, write_source_json
 from core.connector import DataSourceConnector
 from core.models import DatasetMetadata
+
+# ソース毎の収集タイムアウト（秒）。超過したら途中結果を保存して次のソースへ。
+_SOURCE_TIMEOUT_SECONDS = 120
 
 logger = logging.getLogger(__name__)
 
@@ -59,12 +63,16 @@ _PAGE_SIZE = 1000
 _DEFAULT_MAX_ITEMS = 50000
 
 
-def _collect_default(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
-    """汎用収集: 空クエリでページネーションしながら最大 _DEFAULT_MAX_ITEMS 件取得する。"""
+def _collect_default(connector: DataSourceConnector, deadline: float = 0) -> tuple[DatasetMetadata, ...]:
+    """汎用収集: 空クエリでページネーションしながら取得。deadline 超過で途中終了。"""
     all_items: list[DatasetMetadata] = []
     offset = 0
 
     while offset < _DEFAULT_MAX_ITEMS:
+        if deadline and time.monotonic() > deadline:
+            logger.warning("  Deadline reached at %d items, stopping", len(all_items))
+            break
+
         result = connector.search("", {"limit": _PAGE_SIZE, "offset": offset})
         all_items.extend(result.items)
 
@@ -82,14 +90,21 @@ def _collect_by_keywords(
     page_size: int,
     max_per_keyword: int,
     source_label: str,
+    deadline: float = 0,
 ) -> tuple[DatasetMetadata, ...]:
     """キーワード検索型収集: 各キーワードでページネーションし、重複を除去して統合する。"""
     seen: set[str] = set()
     items: list[DatasetMetadata] = []
 
     for keyword in keywords:
+        if deadline and time.monotonic() > deadline:
+            logger.warning("  %s deadline reached at %d items, stopping", source_label, len(items))
+            break
+
         offset = 0
         while offset < max_per_keyword:
+            if deadline and time.monotonic() > deadline:
+                break
             try:
                 result = connector.search(keyword, {"limit": page_size, "offset": offset})
                 new_count = 0
@@ -111,7 +126,7 @@ def _collect_by_keywords(
     return tuple(items)
 
 
-def _collect_egov_law(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
+def _collect_egov_law(connector: DataSourceConnector, deadline: float = 0) -> tuple[DatasetMetadata, ...]:
     """e-Gov 法令収集: 代表キーワードでページネーションしながら取得。"""
     return _collect_by_keywords(
         connector,
@@ -119,10 +134,11 @@ def _collect_egov_law(connector: DataSourceConnector) -> tuple[DatasetMetadata, 
         page_size=200,
         max_per_keyword=1000,
         source_label="e-Gov law",
+        deadline=deadline,
     )
 
 
-def _collect_cinii(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
+def _collect_cinii(connector: DataSourceConnector, deadline: float = 0) -> tuple[DatasetMetadata, ...]:
     """CiNii Research 収集: 学術分野キーワードでページネーション + 重複除去。
 
     CiNii API は start=10000 が上限のため、キーワード毎に最大 2,000 件取得。
@@ -134,6 +150,7 @@ def _collect_cinii(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...
         page_size=200,
         max_per_keyword=2000,
         source_label="CiNii",
+        deadline=deadline,
     )
 
 
@@ -166,8 +183,9 @@ def collect_all(config: CollectorConfig, s3_client=None) -> CollectResult:
             api_key = os.environ.get(f"{source_id.upper()}_API_KEY")
             connector.initialize(api_key)
 
+            deadline = time.monotonic() + _SOURCE_TIMEOUT_SECONDS
             strategy = _COLLECT_STRATEGIES.get(source_id, _collect_default)
-            items = strategy(connector)
+            items = strategy(connector, deadline=deadline)
 
             write_source_json(config.bucket_name, source_id, items, s3_client=s3_client)
             all_items.extend(items)
