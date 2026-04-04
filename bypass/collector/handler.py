@@ -56,15 +56,14 @@ def _get_connector_factories() -> dict[str, type]:
 
 
 _PAGE_SIZE = 1000
-_MAX_ITEMS = 10000
 
 
 def _collect_default(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
-    """汎用収集: 空クエリでページネーションしながら全件取得する。"""
+    """汎用収集: 空クエリでページネーションしながら全件取得する。上限なし。"""
     all_items: list[DatasetMetadata] = []
     offset = 0
 
-    while offset < _MAX_ITEMS:
+    while True:
         result = connector.search("", {"limit": _PAGE_SIZE, "offset": offset})
         all_items.extend(result.items)
 
@@ -76,42 +75,64 @@ def _collect_default(connector: DataSourceConnector) -> tuple[DatasetMetadata, .
     return tuple(all_items)
 
 
-def _collect_egov_law(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
-    """e-Gov 法令収集: 代表キーワードで複数回検索し、重複を除去して統合する。"""
+def _collect_by_keywords(
+    connector: DataSourceConnector,
+    keywords: tuple[str, ...],
+    page_size: int,
+    max_per_keyword: int,
+    source_label: str,
+) -> tuple[DatasetMetadata, ...]:
+    """キーワード検索型収集: 各キーワードでページネーションし、重複を除去して統合する。"""
     seen: set[str] = set()
     items: list[DatasetMetadata] = []
 
-    for keyword in _EGOV_LAW_KEYWORDS:
-        try:
-            result = connector.search(keyword, {"limit": 100, "offset": 0})
-            for item in result.items:
-                if item.id not in seen:
-                    seen.add(item.id)
-                    items.append(item)
-        except Exception as exc:
-            logger.warning("e-Gov law keyword '%s' failed: %s", keyword, exc)
-            continue
+    for keyword in keywords:
+        offset = 0
+        while offset < max_per_keyword:
+            try:
+                result = connector.search(keyword, {"limit": page_size, "offset": offset})
+                new_count = 0
+                for item in result.items:
+                    if item.id not in seen:
+                        seen.add(item.id)
+                        items.append(item)
+                        new_count += 1
+
+                if not result.has_next or len(result.items) == 0:
+                    break
+                offset += len(result.items)
+            except Exception as exc:
+                logger.warning("%s keyword '%s' offset=%d failed: %s", source_label, keyword, offset, exc)
+                break
+
+        logger.info("  %s keyword '%s': %d unique items so far", source_label, keyword, len(items))
 
     return tuple(items)
+
+
+def _collect_egov_law(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
+    """e-Gov 法令収集: 代表キーワードでページネーションしながら全件取得。"""
+    return _collect_by_keywords(
+        connector,
+        keywords=_EGOV_LAW_KEYWORDS,
+        page_size=200,
+        max_per_keyword=10000,
+        source_label="e-Gov law",
+    )
 
 
 def _collect_cinii(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
-    """CiNii Research 収集: 学術分野キーワードで検索し、重複を除去して統合する。"""
-    seen: set[str] = set()
-    items: list[DatasetMetadata] = []
+    """CiNii Research 収集: 学術分野キーワードでページネーション + 重複除去。
 
-    for keyword in _CINII_KEYWORDS:
-        try:
-            result = connector.search(keyword, {"limit": 200, "offset": 0})
-            for item in result.items:
-                if item.id not in seen:
-                    seen.add(item.id)
-                    items.append(item)
-        except Exception as exc:
-            logger.warning("CiNii keyword '%s' failed: %s", keyword, exc)
-            continue
-
-    return tuple(items)
+    CiNii API は start=10000 が上限のため、キーワード毎に最大 10,000 件取得。
+    """
+    return _collect_by_keywords(
+        connector,
+        keywords=_CINII_KEYWORDS,
+        page_size=200,
+        max_per_keyword=10000,
+        source_label="CiNii",
+    )
 
 
 # ソース ID → 収集関数のマッピング
