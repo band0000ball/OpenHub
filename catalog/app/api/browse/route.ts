@@ -1,6 +1,5 @@
 import { type NextRequest } from "next/server";
-import { getMetadata } from "../../../lib/s3-cache";
-import { searchMetadata } from "../../../lib/search";
+import { searchCachedMetadata } from "../../../lib/s3-cache";
 import {
   findCategory,
   CATEGORIES,
@@ -14,29 +13,23 @@ export async function GET(request: NextRequest): Promise<Response> {
   const page = Math.max(1, parseInt(params.get("page") ?? "1", 10) || 1);
 
   try {
-    const allItems = await getMetadata();
-
     if (category === "all") {
-      // 各カテゴリから BROWSE_LIMIT_PER_CATEGORY 件ずつ取得して統合
-      const seen = new Set<string>();
-      const browseItems = [];
+      // 各カテゴリから数件ずつ並列取得して統合
+      const subCategories = CATEGORIES.filter((c) => c.id !== "all");
+      const results = await Promise.all(
+        subCategories.map((c) =>
+          searchCachedMetadata(c.keyword, undefined, BROWSE_LIMIT_PER_CATEGORY, 0),
+        ),
+      );
 
-      for (const cat of CATEGORIES) {
-        if (cat.id === "all") continue;
-        const result = searchMetadata(
-          allItems,
-          cat.keyword,
-          undefined,
-          BROWSE_LIMIT_PER_CATEGORY,
-          0,
-        );
-        for (const item of result.items) {
-          if (!seen.has(item.id)) {
-            seen.add(item.id);
-            browseItems.push(item);
-          }
-        }
-      }
+      const seen = new Set<string>();
+      const browseItems = results
+        .flatMap((r) => r.items)
+        .filter((item) => {
+          if (seen.has(item.id)) return false;
+          seen.add(item.id);
+          return true;
+        });
 
       return Response.json({
         items: browseItems,
@@ -48,8 +41,7 @@ export async function GET(request: NextRequest): Promise<Response> {
 
     const categoryInfo = findCategory(category);
     const offset = (page - 1) * BROWSE_LIMIT_SINGLE;
-    const result = searchMetadata(
-      allItems,
+    const result = await searchCachedMetadata(
       categoryInfo.keyword,
       undefined,
       BROWSE_LIMIT_SINGLE,

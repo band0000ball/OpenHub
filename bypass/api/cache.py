@@ -1,7 +1,7 @@
 """
 S3 キャッシュ読み取りエンドポイント
 
-GET /cache/metadata     — 統合メタデータ JSON を返す
+GET /cache/metadata     — メタデータ検索（S3 から読み取り → フィルタ → 返却）
 GET /cache/last_updated — 最終更新タイムスタンプを返す
 """
 
@@ -10,13 +10,16 @@ import logging
 import os
 
 import boto3
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, status
 
 router = APIRouter(prefix="/cache", tags=["キャッシュ"])
 
 logger = logging.getLogger(__name__)
 
 _BUCKET_NAME = os.environ.get("CACHE_BUCKET_NAME", "openhub-cache")
+
+# ソース別 S3 データの in-memory キャッシュ（Lambda インスタンス内で再利用）
+_source_cache: dict[str, list[dict]] = {}
 
 
 def _get_s3_json(key: str) -> dict:
@@ -27,28 +30,76 @@ def _get_s3_json(key: str) -> dict:
     return json.loads(body)
 
 
-@router.get("/metadata", summary="キャッシュ済みメタデータを返す")
-def get_cached_metadata(source: str | None = None):
-    """S3 のメタデータ JSON を返す。
+def _get_source_items(source_id: str) -> list[dict]:
+    """ソース別メタデータを取得する。Lambda 内キャッシュあり。"""
+    if source_id in _source_cache:
+        return _source_cache[source_id]
 
-    source パラメータでソース別 JSON を取得可能（レスポンスサイズ制限対策）。
-    source 省略時は全ソースを順次読み取って統合する。
-    """
+    try:
+        data = _get_s3_json(f"catalog/sources/{source_id}.json")
+        items = data.get("items", [])
+        _source_cache[source_id] = items
+        return items
+    except Exception as exc:
+        logger.warning("Failed to read source %s: %s", source_id, exc)
+        return []
+
+
+def _get_all_items() -> list[dict]:
+    """全ソースのメタデータを統合して返す。"""
+    all_items: list[dict] = []
+    for source_id in ("estat", "datagojp", "egov_law", "jma"):
+        all_items.extend(_get_source_items(source_id))
+    return all_items
+
+
+def _search_items(
+    items: list[dict],
+    q: str,
+    source: str | None,
+    limit: int,
+    offset: int,
+) -> dict:
+    """in-memory キーワード検索 + ページネーション。"""
+    filtered = items
+
+    if source:
+        filtered = [i for i in filtered if i.get("source_id") == source]
+
+    keywords = q.lower().split() if q.strip() else []
+    if keywords:
+        def matches(item: dict) -> bool:
+            text = f"{item.get('title', '')} {item.get('description', '')} {' '.join(item.get('tags', []))}".lower()
+            return all(kw in text for kw in keywords)
+        filtered = [i for i in filtered if matches(i)]
+
+    total = len(filtered)
+    paged = filtered[offset:offset + limit]
+
+    return {
+        "items": paged,
+        "total": total,
+        "has_next": offset + limit < total,
+        "limit": limit,
+        "offset": offset,
+    }
+
+
+@router.get("/metadata", summary="キャッシュ済みメタデータを検索する")
+def get_cached_metadata(
+    source: str | None = Query(None, description="ソース ID で絞り込み"),
+    q: str = Query("", description="キーワード検索"),
+    limit: int = Query(20, ge=1, le=1000, description="取得件数"),
+    offset: int = Query(0, ge=0, description="オフセット"),
+):
+    """S3 のメタデータを検索して返す。サーバーサイドでフィルタリング。"""
     try:
         if source:
-            return _get_s3_json(f"catalog/sources/{source}.json")
+            items = _get_source_items(source)
+        else:
+            items = _get_all_items()
 
-        # 全ソースを個別に読み取って統合（metadata.json は 6MB 超の場合があるため）
-        all_items: list[dict] = []
-        for source_id in ("estat", "datagojp", "egov_law", "jma"):
-            try:
-                data = _get_s3_json(f"catalog/sources/{source_id}.json")
-                all_items.extend(data.get("items", []))
-            except Exception as exc:
-                logger.warning("Failed to read source %s: %s", source_id, exc)
-                continue
-
-        return {"count": len(all_items), "items": all_items}
+        return _search_items(items, q, source, limit, offset)
     except Exception as exc:
         logger.error("Failed to read S3 cache: %s", exc)
         raise HTTPException(

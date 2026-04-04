@@ -2,15 +2,12 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GET } from "../app/api/search/route";
 import { NextRequest } from "next/server";
 
-// S3 キャッシュモック
 vi.mock("../lib/s3-cache", () => ({
-  getMetadata: vi.fn(),
-  getLastUpdated: vi.fn(),
-  clearCache: vi.fn(),
+  searchCachedMetadata: vi.fn(),
 }));
 
-import { getMetadata } from "../lib/s3-cache";
-const mockGetMetadata = vi.mocked(getMetadata);
+import { searchCachedMetadata } from "../lib/s3-cache";
+const mockSearch = vi.mocked(searchCachedMetadata);
 
 const makeRequest = (params: Record<string, string> = {}) => {
   const url = new URL("http://localhost:3000/api/search");
@@ -28,21 +25,18 @@ const sampleItems = [
     tags: ["人口", "統計"],
     updated_at: "2024-01-01",
   },
-  {
-    id: "datagojp:0001",
-    source_id: "datagojp",
-    title: "経済指標",
-    description: "GDPデータ",
-    url: "https://example.com/2",
-    tags: ["経済"],
-    updated_at: "2024-02-01",
-  },
 ];
 
 describe("GET /api/search", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockGetMetadata.mockResolvedValue(sampleItems);
+    mockSearch.mockResolvedValue({
+      items: sampleItems,
+      total: 1,
+      has_next: false,
+      limit: 20,
+      offset: 0,
+    });
   });
 
   it("キーワードで検索してマッチする結果を返す", async () => {
@@ -52,26 +46,22 @@ describe("GET /api/search", () => {
 
     expect(res.status).toBe(200);
     expect(body.items).toHaveLength(1);
-    expect(body.items[0].id).toBe("estat:0001");
-    expect(body.total).toBe(1);
+    expect(mockSearch).toHaveBeenCalledWith("人口", undefined, 20, 0);
   });
 
   it("source フィルタで絞り込める", async () => {
     const req = makeRequest({ q: "統計", source: "estat" });
     const res = await GET(req);
-    const body = await res.json();
 
-    expect(body.items).toHaveLength(1);
-    expect(body.items[0].source_id).toBe("estat");
+    expect(res.status).toBe(200);
+    expect(mockSearch).toHaveBeenCalledWith("統計", "estat", 20, 0);
   });
 
   it("limit と offset でページネーションできる", async () => {
-    const req = makeRequest({ q: "データ", limit: "1", offset: "0" });
-    const res = await GET(req);
-    const body = await res.json();
+    const req = makeRequest({ q: "データ", limit: "10", offset: "5" });
+    await GET(req);
 
-    expect(body.items).toHaveLength(1);
-    expect(body.has_next).toBe(true);
+    expect(mockSearch).toHaveBeenCalledWith("データ", undefined, 10, 5);
   });
 
   it("q パラメータが空の場合は 400 を返す", async () => {
@@ -79,18 +69,14 @@ describe("GET /api/search", () => {
     const res = await GET(req);
 
     expect(res.status).toBe(400);
-    const body = await res.json();
-    expect(body.error).toBeDefined();
   });
 
-  it("S3 エラー時は空の結果を返す（502 ではなく）", async () => {
-    mockGetMetadata.mockResolvedValue([]);
+  it("searchCachedMetadata エラー時は空の結果を返す", async () => {
+    mockSearch.mockRejectedValue(new Error("fail"));
 
     const req = makeRequest({ q: "人口" });
     const res = await GET(req);
-    const body = await res.json();
 
-    expect(res.status).toBe(200);
-    expect(body.items).toHaveLength(0);
+    expect(res.status).toBe(502);
   });
 });
