@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import type { DatasetMetadata } from "../types";
 
-// AWS SDK モック — vi.hoisted で巻き上げ
+// AWS SDK モック — dynamic import をモック
 const { mockSend } = vi.hoisted(() => ({
   mockSend: vi.fn(),
 }));
