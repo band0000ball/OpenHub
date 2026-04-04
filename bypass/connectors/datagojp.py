@@ -197,12 +197,16 @@ def _ckan_package_to_metadata(
     tags = tuple(tag["name"] for tag in pkg.get("tags", []) if "name" in tag)
     updated_at = pkg.get("metadata_modified", "")
 
+    # Web ページ URL: name フィールドがあれば詳細ページ、なければ空
+    name = pkg.get("name", "")
+    url = f"https://data.e-gov.go.jp/data/dataset/{name}" if name else ""
+
     return DatasetMetadata(
         id=dataset_id,
         source_id="datagojp",
         title=pkg.get("title") or "",
         description=pkg.get("notes") or "",
-        url=pkg.get("url") or "",
+        url=url,
         tags=tags,
         updated_at=updated_at or "",
     )

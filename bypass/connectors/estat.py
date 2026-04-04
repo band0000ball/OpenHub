@@ -177,10 +177,7 @@ def _parse_search_response(body: dict, limit: int = 20, offset: int = 0) -> Sear
             source_id="estat",
             title=title,
             description=f"{item.get('STATISTICS_NAME', '')} - {org_name}",
-            url=(
-                f"https://api.e-stat.go.jp/rest/3.0/app/json/getStatsData"
-                f"?statsDataId={stat_id}"
-            ),
+            url=f"https://www.e-stat.go.jp/dbview?sid={stat_id}",
             tags=_extract_tags(item),
             updated_at=_normalize_date(updated_date),
         )
