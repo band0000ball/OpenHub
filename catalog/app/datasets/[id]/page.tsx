@@ -21,10 +21,10 @@ export default async function DatasetDetailPage({ params }: DatasetDetailPagePro
       <main className="mx-auto max-w-3xl px-4 py-8">
         <nav className="mb-6">
           <Link
-            href="/search"
+            href="/"
             className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700"
           >
-            ← 検索結果に戻る
+            ← 一覧に戻る
           </Link>
         </nav>
 
@@ -88,10 +88,10 @@ export default async function DatasetDetailPage({ params }: DatasetDetailPagePro
       <main className="mx-auto max-w-3xl px-4 py-8">
         <nav className="mb-6">
           <Link
-            href="/search"
+            href="/"
             className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700"
           >
-            ← 検索結果に戻る
+            ← 一覧に戻る
           </Link>
         </nav>
         <p role="alert" className="py-8 text-center text-red-600">

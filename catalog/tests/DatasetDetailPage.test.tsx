@@ -114,7 +114,7 @@ describe("DatasetDetailPage", () => {
     expect(link).toHaveAttribute("target", "_blank");
   });
 
-  it("renders 検索結果に戻る link", async () => {
+  it("renders 一覧に戻る link", async () => {
     mockFetchDataset.mockResolvedValueOnce(mockPayload);
 
     const page = await DatasetDetailPage({
@@ -122,8 +122,8 @@ describe("DatasetDetailPage", () => {
     });
     render(page);
 
-    const backLink = screen.getByRole("link", { name: /検索結果に戻る/i });
-    expect(backLink).toBeInTheDocument();
+    const backLink = screen.getByRole("link", { name: /一覧に戻る/i });
+    expect(backLink).toHaveAttribute("href", "/");
   });
 
   it("renders error when fetch fails", async () => {
