@@ -1,37 +1,34 @@
 import { type NextRequest } from "next/server";
-
-const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
+import { getMetadata } from "../../../lib/s3-cache";
+import { searchMetadata } from "../../../lib/search";
 
 export async function GET(request: NextRequest): Promise<Response> {
-  const baseUrl = process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
-  const upstreamUrl = new URL(`${baseUrl}/datasets/search`);
+  const params = request.nextUrl.searchParams;
+  const q = params.get("q") ?? "";
+  const source = params.get("source") ?? undefined;
+  const limit = Math.min(100, Math.max(1, parseInt(params.get("limit") ?? "20", 10) || 20));
+  const offset = Math.max(0, parseInt(params.get("offset") ?? "0", 10) || 0);
 
-  const incomingParams = request.nextUrl.searchParams;
-  const allowedParams = ["q", "source", "limit", "offset"];
-
-  for (const key of allowedParams) {
-    const value = incomingParams.get(key);
-    if (value !== null && value !== "") {
-      upstreamUrl.searchParams.set(key, value);
-    }
+  if (!q.trim()) {
+    return Response.json(
+      { error: "Query parameter 'q' is required" },
+      { status: 400 },
+    );
   }
 
   try {
-    const upstreamResponse = await fetch(upstreamUrl.toString(), {
-      headers: { "Content-Type": "application/json" },
+    const allItems = await getMetadata();
+    const result = searchMetadata(allItems, q, source, limit, offset);
+
+    return Response.json({
+      items: result.items,
+      total: result.total,
+      has_next: result.has_next,
+      limit: result.limit,
+      offset: result.offset,
     });
-
-    if (!upstreamResponse.ok) {
-      return Response.json(
-        { error: `Upstream error: ${upstreamResponse.status}` },
-        { status: 502 }
-      );
-    }
-
-    const data = await upstreamResponse.json();
-    return Response.json(data, { status: 200 });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    return Response.json({ error: `Failed to reach upstream: ${message}` }, { status: 502 });
+    return Response.json({ error: `Search failed: ${message}` }, { status: 502 });
   }
 }
