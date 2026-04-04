@@ -1,7 +1,12 @@
 import { type NextRequest } from "next/server";
 import { getMetadata } from "../../../lib/s3-cache";
 import { searchMetadata } from "../../../lib/search";
-import { findCategory, BROWSE_LIMIT_SINGLE } from "../../../lib/categories";
+import {
+  findCategory,
+  CATEGORIES,
+  BROWSE_LIMIT_PER_CATEGORY,
+  BROWSE_LIMIT_SINGLE,
+} from "../../../lib/categories";
 
 export async function GET(request: NextRequest): Promise<Response> {
   const params = request.nextUrl.searchParams;
@@ -12,9 +17,30 @@ export async function GET(request: NextRequest): Promise<Response> {
     const allItems = await getMetadata();
 
     if (category === "all") {
+      // 各カテゴリから BROWSE_LIMIT_PER_CATEGORY 件ずつ取得して統合
+      const seen = new Set<string>();
+      const browseItems = [];
+
+      for (const cat of CATEGORIES) {
+        if (cat.id === "all") continue;
+        const result = searchMetadata(
+          allItems,
+          cat.keyword,
+          undefined,
+          BROWSE_LIMIT_PER_CATEGORY,
+          0,
+        );
+        for (const item of result.items) {
+          if (!seen.has(item.id)) {
+            seen.add(item.id);
+            browseItems.push(item);
+          }
+        }
+      }
+
       return Response.json({
-        items: allItems,
-        total: allItems.length,
+        items: browseItems,
+        total: null,
         has_next: false,
         page: 1,
       });
