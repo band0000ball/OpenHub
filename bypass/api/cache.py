@@ -54,7 +54,7 @@ def _get_source_items(source_id: str) -> list[dict]:
 def _get_all_items() -> list[dict]:
     """全ソースのメタデータを統合して返す。"""
     all_items: list[dict] = []
-    for source_id in ("estat", "datagojp", "egov_law", "jma", "cinii"):
+    for source_id in ("estat", "datagojp", "egov_law", "jma", "cinii", "boj"):
         all_items.extend(_get_source_items(source_id))
     return all_items
 
@@ -120,7 +120,7 @@ def get_cached_browse(
 ):
     """全ソースから limit_per 件ずつ取得してソース別に返す。"""
     try:
-        source_ids = ("estat", "datagojp", "egov_law", "jma", "cinii")
+        source_ids = ("estat", "datagojp", "egov_law", "jma", "cinii", "boj")
         sections: list[dict] = []
 
         for source_id in source_ids:

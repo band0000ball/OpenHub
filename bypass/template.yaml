@@ -27,7 +27,7 @@ Resources:
       Runtime: python3.12
       Architectures:
         - arm64
-      MemorySize: 512
+      MemorySize: 1024
       Timeout: 60
       FunctionUrlConfig:
         AuthType: NONE
@@ -73,13 +73,13 @@ Resources:
       Runtime: python3.12
       Architectures:
         - arm64
-      MemorySize: 512
+      MemorySize: 1024
       Timeout: 900
       Environment:
         Variables:
           CACHE_BUCKET_NAME: !Ref CacheBucketName
           ESTAT_API_KEY: !Ref EStatApiKey
-          COLLECTOR_SOURCES: estat,datagojp,egov_law,jma,cinii
+          COLLECTOR_SOURCES: boj,jma,egov_law,cinii,datagojp,estat
       Policies:
         - S3CrudPolicy:
             BucketName: !Ref CacheBucketName

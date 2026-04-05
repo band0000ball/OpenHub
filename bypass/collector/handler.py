@@ -8,12 +8,17 @@
 
 import logging
 import os
+import time
 from dataclasses import dataclass, field
 
 from collector.config import CollectorConfig
-from collector.s3_writer import write_last_updated, write_metadata_json, write_source_json
+from collector.s3_writer import write_last_updated, write_source_json
+
 from core.connector import DataSourceConnector
 from core.models import DatasetMetadata
+
+# ソース毎の収集タイムアウト（秒）。超過したら途中結果を保存して次のソースへ。
+_SOURCE_TIMEOUT_SECONDS = 120
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +36,18 @@ _CINII_KEYWORDS: tuple[str, ...] = (
     "環境", "物理", "化学", "生物", "法学",
     "社会", "心理", "数学", "農学", "建築",
     "機械学習", "エネルギー", "ロボット", "材料", "宇宙",
+)
+
+# BOJ 日銀統計は DB ID 別にメタデータを取得する
+_BOJ_DB_IDS: tuple[str, ...] = (
+    "FM08",  # 為替
+    "IR01",  # 金利
+    "MD10",  # マネーストック
+    "BP01",  # 国際収支
+    "CO",    # 企業物価
+    "ST",    # 短観
+    "FC01",  # 資金循環
+    "QE",    # 四半期別GDP
 )
 
 
@@ -56,15 +73,19 @@ def _get_connector_factories() -> dict[str, type]:
 
 
 _PAGE_SIZE = 1000
-_MAX_ITEMS = 10000
+_DEFAULT_MAX_ITEMS = 50000
 
 
-def _collect_default(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
-    """汎用収集: 空クエリでページネーションしながら全件取得する。"""
+def _collect_default(connector: DataSourceConnector, deadline: float = 0) -> tuple[DatasetMetadata, ...]:
+    """汎用収集: 空クエリでページネーション。deadline 超過で途中終了。"""
     all_items: list[DatasetMetadata] = []
     offset = 0
 
-    while offset < _MAX_ITEMS:
+    while offset < _DEFAULT_MAX_ITEMS:
+        if deadline and time.monotonic() > deadline:
+            logger.warning("  Deadline reached at %d items, stopping", len(all_items))
+            break
+
         result = connector.search("", {"limit": _PAGE_SIZE, "offset": offset})
         all_items.extend(result.items)
 
@@ -76,39 +97,81 @@ def _collect_default(connector: DataSourceConnector) -> tuple[DatasetMetadata, .
     return tuple(all_items)
 
 
-def _collect_egov_law(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
-    """e-Gov 法令収集: 代表キーワードで複数回検索し、重複を除去して統合する。"""
+def _collect_by_keywords(
+    connector: DataSourceConnector,
+    keywords: tuple[str, ...],
+    page_size: int,
+    max_per_keyword: int,
+    source_label: str,
+    deadline: float = 0,
+) -> tuple[DatasetMetadata, ...]:
+    """キーワード検索型収集: 各キーワードでページネーションし、重複を除去して統合する。"""
     seen: set[str] = set()
     items: list[DatasetMetadata] = []
 
-    for keyword in _EGOV_LAW_KEYWORDS:
-        try:
-            result = connector.search(keyword, {"limit": 100, "offset": 0})
-            for item in result.items:
-                if item.id not in seen:
-                    seen.add(item.id)
-                    items.append(item)
-        except Exception as exc:
-            logger.warning("e-Gov law keyword '%s' failed: %s", keyword, exc)
-            continue
+    for keyword in keywords:
+        if deadline and time.monotonic() > deadline:
+            logger.warning("  %s deadline reached at %d items, stopping", source_label, len(items))
+            break
+
+        offset = 0
+        while offset < max_per_keyword:
+            if deadline and time.monotonic() > deadline:
+                break
+            try:
+                result = connector.search(keyword, {"limit": page_size, "offset": offset})
+                for item in result.items:
+                    if item.id not in seen:
+                        seen.add(item.id)
+                        items.append(item)
+
+                if not result.has_next or len(result.items) == 0:
+                    break
+                offset += len(result.items)
+            except Exception as exc:
+                logger.warning("%s keyword '%s' offset=%d failed: %s", source_label, keyword, offset, exc)
+                break
+
+        logger.info("  %s keyword '%s': %d unique items so far", source_label, keyword, len(items))
 
     return tuple(items)
 
 
-def _collect_cinii(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...]:
-    """CiNii Research 収集: 学術分野キーワードで検索し、重複を除去して統合する。"""
+def _collect_egov_law(connector: DataSourceConnector, deadline: float = 0) -> tuple[DatasetMetadata, ...]:
+    """e-Gov 法令収集: 代表キーワードでページネーション。"""
+    return _collect_by_keywords(
+        connector, _EGOV_LAW_KEYWORDS, page_size=200, max_per_keyword=1000,
+        source_label="e-Gov law", deadline=deadline,
+    )
+
+
+def _collect_cinii(connector: DataSourceConnector, deadline: float = 0) -> tuple[DatasetMetadata, ...]:
+    """CiNii Research 収集: 学術分野キーワードでページネーション + 重複除去。"""
+    return _collect_by_keywords(
+        connector, _CINII_KEYWORDS, page_size=200, max_per_keyword=2000,
+        source_label="CiNii", deadline=deadline,
+    )
+
+
+def _collect_boj(connector: DataSourceConnector, deadline: float = 0) -> tuple[DatasetMetadata, ...]:
+    """BOJ 日銀統計収集: DB ID 別にメタデータを取得して統合する。"""
     seen: set[str] = set()
     items: list[DatasetMetadata] = []
 
-    for keyword in _CINII_KEYWORDS:
+    for db_id in _BOJ_DB_IDS:
+        if deadline and time.monotonic() > deadline:
+            logger.warning("  BOJ deadline reached at %d items, stopping", len(items))
+            break
+
         try:
-            result = connector.search(keyword, {"limit": 200, "offset": 0})
+            result = connector.search("", {"db": db_id})
             for item in result.items:
                 if item.id not in seen:
                     seen.add(item.id)
                     items.append(item)
+            logger.info("  BOJ db=%s: %d unique items so far", db_id, len(items))
         except Exception as exc:
-            logger.warning("CiNii keyword '%s' failed: %s", keyword, exc)
+            logger.warning("BOJ db '%s' failed: %s", db_id, exc)
             continue
 
     return tuple(items)
@@ -118,6 +181,7 @@ def _collect_cinii(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...
 _COLLECT_STRATEGIES: dict[str, callable] = {
     "egov_law": _collect_egov_law,
     "cinii": _collect_cinii,
+    "boj": _collect_boj,
 }
 
 
@@ -127,7 +191,6 @@ def collect_all(config: CollectorConfig, s3_client=None) -> CollectResult:
     各ソースは独立して処理され、1 つが失敗しても他のソースの収集は継続する。
     """
     factories = _get_connector_factories()
-    all_items: list[DatasetMetadata] = []
     source_counts: dict[str, int] = {}
     errors: dict[str, str] = {}
 
@@ -143,19 +206,20 @@ def collect_all(config: CollectorConfig, s3_client=None) -> CollectResult:
             api_key = os.environ.get(f"{source_id.upper()}_API_KEY")
             connector.initialize(api_key)
 
+            deadline = time.monotonic() + _SOURCE_TIMEOUT_SECONDS
             strategy = _COLLECT_STRATEGIES.get(source_id, _collect_default)
-            items = strategy(connector)
+            items = strategy(connector, deadline=deadline)
 
             write_source_json(config.bucket_name, source_id, items, s3_client=s3_client)
-            all_items.extend(items)
             source_counts[source_id] = len(items)
             logger.info("Collected %d items from %s", len(items), source_id)
+            # メモリ解放: ソース毎に S3 書き込み後は保持しない
+            del items
 
         except Exception as exc:
             errors[source_id] = str(exc)
             logger.error("Failed to collect from %s: %s", source_id, exc)
 
-    write_metadata_json(config.bucket_name, tuple(all_items), s3_client=s3_client)
     write_last_updated(config.bucket_name, s3_client=s3_client)
 
     return CollectResult(source_counts=source_counts, errors=errors)
