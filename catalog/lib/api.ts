@@ -111,8 +111,9 @@ export async function fetchDataset(id: string, accessToken?: string): Promise<Pa
   const url = typeof window !== "undefined"
     ? `/api/datasets/${encodeURIComponent(id)}`
     : `${process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL}/datasets/${encodeURIComponent(id)}/fetch`;
+  // ユーザー固有の API キーを使うため ISR キャッシュしない
   const response = await fetch(url, {
-    next: { revalidate: BROWSE_REVALIDATE },
+    cache: "no-store",
     headers: buildHeaders(accessToken),
   });
 
