@@ -14,11 +14,10 @@ from dataclasses import dataclass, field
 from collector.config import CollectorConfig
 from collector.s3_writer import write_last_updated, write_source_json
 
-# ソース毎の収集タイムアウト（秒）。超過したら途中結果を保存して次のソースへ。
 from core.connector import DataSourceConnector
 from core.models import DatasetMetadata
 
-# ソース毎の収集タイムアウト（秒）
+# ソース毎の収集タイムアウト（秒）。超過したら途中結果を保存して次のソースへ。
 _SOURCE_TIMEOUT_SECONDS = 120
 
 logger = logging.getLogger(__name__)
