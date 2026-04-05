@@ -87,13 +87,35 @@ def get_current_user(token: str | None = Depends(oauth2_scheme)) -> str:
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        payload = jwt.decode(
-            token,
-            key,
-            algorithms=["RS256"],
-            audience=client_id,
-            issuer=issuer,
-        )
+        # Cognito access_token は aud クレームを持たず client_id クレームを使う。
+        # id_token は aud を持つ。両方に対応するため、まず aud で試し、
+        # 失敗したら client_id クレームで検証する。
+        try:
+            payload = jwt.decode(
+                token,
+                key,
+                algorithms=["RS256"],
+                audience=client_id,
+                issuer=issuer,
+            )
+        except JWTError:
+            # access_token: aud なし → audience チェックをスキップして検証
+            payload = jwt.decode(
+                token,
+                key,
+                algorithms=["RS256"],
+                issuer=issuer,
+                options={"verify_aud": False},
+            )
+            # client_id クレームで手動検証
+            token_client_id = payload.get("client_id", "")
+            if token_client_id != client_id:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="無効なトークンです（client_id 不一致）。",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+
         return str(payload["sub"])
 
     except ExpiredSignatureError as e:
@@ -145,13 +167,26 @@ def get_current_user_optional(token: str | None = Depends(oauth2_scheme)) -> str
         if key is None:
             return None
 
-        payload = jwt.decode(
-            token,
-            key,
-            algorithms=["RS256"],
-            audience=client_id,
-            issuer=issuer,
-        )
+        # Cognito access_token は aud クレームを持たない（client_id クレームを使う）
+        try:
+            payload = jwt.decode(
+                token,
+                key,
+                algorithms=["RS256"],
+                audience=client_id,
+                issuer=issuer,
+            )
+        except JWTError:
+            payload = jwt.decode(
+                token,
+                key,
+                algorithms=["RS256"],
+                issuer=issuer,
+                options={"verify_aud": False},
+            )
+            if payload.get("client_id", "") != client_id:
+                return None
+
         return str(payload["sub"])
 
     except (HTTPException, JWTError, ExpiredSignatureError):
