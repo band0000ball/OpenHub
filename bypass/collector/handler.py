@@ -33,6 +33,18 @@ _CINII_KEYWORDS: tuple[str, ...] = (
     "機械学習", "エネルギー", "ロボット", "材料", "宇宙",
 )
 
+# BOJ 日銀統計は DB ID 別にメタデータを取得する
+_BOJ_DB_IDS: tuple[str, ...] = (
+    "FM08",  # 為替
+    "IR01",  # 金利
+    "MD10",  # マネーストック
+    "BP01",  # 国際収支
+    "CO",    # 企業物価
+    "ST",    # 短観
+    "FC01",  # 資金循環
+    "QE",    # 四半期別GDP
+)
+
 
 @dataclass(frozen=True)
 class CollectResult:
@@ -114,10 +126,35 @@ def _collect_cinii(connector: DataSourceConnector) -> tuple[DatasetMetadata, ...
     return tuple(items)
 
 
+def _collect_boj(connector: DataSourceConnector, deadline: float = 0) -> tuple[DatasetMetadata, ...]:
+    """BOJ 日銀統計収集: DB ID 別にメタデータを取得して統合する。"""
+    seen: set[str] = set()
+    items: list[DatasetMetadata] = []
+
+    for db_id in _BOJ_DB_IDS:
+        if deadline and time.monotonic() > deadline:
+            logger.warning("  BOJ deadline reached at %d items, stopping", len(items))
+            break
+
+        try:
+            result = connector.search("", {"db": db_id})
+            for item in result.items:
+                if item.id not in seen:
+                    seen.add(item.id)
+                    items.append(item)
+            logger.info("  BOJ db=%s: %d unique items so far", db_id, len(items))
+        except Exception as exc:
+            logger.warning("BOJ db '%s' failed: %s", db_id, exc)
+            continue
+
+    return tuple(items)
+
+
 # ソース ID → 収集関数のマッピング
 _COLLECT_STRATEGIES: dict[str, callable] = {
     "egov_law": _collect_egov_law,
     "cinii": _collect_cinii,
+    "boj": _collect_boj,
 }
 
 
