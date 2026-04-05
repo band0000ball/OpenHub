@@ -11,8 +11,8 @@
 
 ## 優先度: 高（新規）
 
-- [ ] **S1: Bypass 経由の e-Stat 検索で API キーが取得できていない** — Catalog 経由で DynamoDB に登録済みの API キーが、`/datasets/search?source=estat` で使われていない可能性。Collector は `ESTAT_API_KEY` 環境変数で動作するが、ユーザーリクエスト経由の検索で認証エラー（0件）になる。CredentialStore → Bypass 検索の連携を調査する。
-- [ ] **S2: e-Stat の Collector 全件取得** — 現在 14,000 件だが e-Stat には約 30 万件の統計表がある。空クエリ `searchWord=` の挙動調査 + 主要カテゴリ別キーワード検索型の収集戦略を検討する。S1 の API キー問題と合わせて対応。
+- [x] **S1: Bypass 経由の e-Stat 検索で API キーが取得できていない** — ~~バグではなかった~~。検索は S3 キャッシュ経由に移行済みのため API キー不要。データ取得（詳細ページ）は DynamoDB 経由で正常動作（要ログイン）。Collector は環境変数で動作。
+- [x] **S2: e-Stat の Collector 全件取得** — 空クエリ `searchWord=` で取得可能な全件は約 43,000 件（重複除去済み）。上限 500,000 + 重複除去を実装済み。e-Stat API の空クエリがこれ以上返さないため、これが実質的な全件。30万件という見積もりは統計表＋データの合計であり、getStatsList で返るメタデータは約 43,000 件が上限。
 
 ## 優先度: 中
 

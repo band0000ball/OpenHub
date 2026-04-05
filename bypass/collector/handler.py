@@ -79,26 +79,30 @@ def _get_connector_factories() -> dict[str, type]:
 
 
 _PAGE_SIZE = 1000
-_DEFAULT_MAX_ITEMS = 50000
+_DEFAULT_MAX_ITEMS = 500000
 
 
 def _collect_default(connector: DataSourceConnector, deadline: float = 0) -> tuple[DatasetMetadata, ...]:
-    """汎用収集: 空クエリでページネーション。deadline 超過で途中終了。"""
+    """汎用収集: 空クエリでページネーション。deadline 超過で途中終了。重複除去あり。"""
+    seen: set[str] = set()
     all_items: list[DatasetMetadata] = []
     offset = 0
 
     while offset < _DEFAULT_MAX_ITEMS:
         if deadline and time.monotonic() > deadline:
-            logger.warning("  Deadline reached at %d items, stopping", len(all_items))
+            logger.warning("  Deadline reached at %d unique items (offset=%d), stopping", len(all_items), offset)
             break
 
         result = connector.search("", {"limit": _PAGE_SIZE, "offset": offset})
-        all_items.extend(result.items)
+        for item in result.items:
+            if item.id not in seen:
+                seen.add(item.id)
+                all_items.append(item)
 
         if not result.has_next or len(result.items) == 0:
             break
         offset += len(result.items)
-        logger.info("  ... %d items so far (offset=%d)", len(all_items), offset)
+        logger.info("  ... %d unique items (offset=%d)", len(all_items), offset)
 
     return tuple(all_items)
 
