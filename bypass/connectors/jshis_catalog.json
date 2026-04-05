@@ -1,0 +1,1759 @@
+[
+  {
+    "id": "jshis:pshm_Y2024",
+    "title": "確率論的地震動予測地図 2024年版",
+    "description": "今後30年間に震度6弱以上の揺れに見舞われる確率の分布（2024年版・全地震タイプ統合）",
+    "tags": [
+      "地震ハザード",
+      "確率論的地震動予測",
+      "2024"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2024/AVR/TTL_MTTL/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:pshm_Y2022",
+    "title": "確率論的地震動予測地図 2022年版",
+    "description": "今後30年間に震度6弱以上の揺れに見舞われる確率の分布（2022年版）",
+    "tags": [
+      "地震ハザード",
+      "確率論的地震動予測",
+      "2022"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2022/AVR/TTL_MTTL/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:pshm_Y2020",
+    "title": "確率論的地震動予測地図 2020年版",
+    "description": "今後30年間に震度6弱以上の揺れに見舞われる確率の分布（2020年版）",
+    "tags": [
+      "地震ハザード",
+      "確率論的地震動予測",
+      "2020"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2020/AVR/TTL_MTTL/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:pshm_Y2018",
+    "title": "確率論的地震動予測地図 2018年版",
+    "description": "今後30年間に震度6弱以上の揺れに見舞われる確率の分布（2018年版）",
+    "tags": [
+      "地震ハザード",
+      "確率論的地震動予測",
+      "2018"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2018/AVR/TTL_MTTL/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:pshm_Y2016",
+    "title": "確率論的地震動予測地図 2016年版",
+    "description": "今後30年間に震度6弱以上の揺れに見舞われる確率の分布（2016年版）",
+    "tags": [
+      "地震ハザード",
+      "確率論的地震動予測",
+      "2016"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2016/AVR/TTL_MTTL/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:pshm_Y2014",
+    "title": "確率論的地震動予測地図 2014年版",
+    "description": "今後30年間に震度6弱以上の揺れに見舞われる確率の分布（2014年版）",
+    "tags": [
+      "地震ハザード",
+      "確率論的地震動予測",
+      "2014"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2014/AVR/TTL_MTTL/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:fault_nankai",
+    "title": "南海トラフ巨大地震 想定震源断層",
+    "description": "南海トラフ巨大地震の想定震源域と断層モデル",
+    "tags": [
+      "活断層",
+      "南海トラフ",
+      "巨大地震",
+      "四国",
+      "近畿",
+      "東海"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_sagami",
+    "title": "相模トラフ沿いの地震 想定震源断層",
+    "description": "相模トラフ沿いの巨大地震の想定震源域と断層モデル",
+    "tags": [
+      "活断層",
+      "相模トラフ",
+      "巨大地震",
+      "関東"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tokai",
+    "title": "東海地震 想定震源断層",
+    "description": "東海地震の想定震源域と断層モデル",
+    "tags": [
+      "活断層",
+      "東海地震",
+      "東海"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_median_tectonic",
+    "title": "中央構造線断層帯",
+    "description": "中央構造線断層帯の活断層評価情報（四国〜近畿〜中部）",
+    "tags": [
+      "活断層",
+      "中央構造線",
+      "断層帯",
+      "四国",
+      "近畿"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_itoigawa",
+    "title": "糸魚川-静岡構造線断層帯",
+    "description": "糸魚川-静岡構造線断層帯の活断層評価情報",
+    "tags": [
+      "活断層",
+      "糸魚川",
+      "静岡",
+      "構造線",
+      "中部"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tachikawa",
+    "title": "立川断層帯",
+    "description": "立川断層帯の活断層評価情報（東京都〜埼玉県）",
+    "tags": [
+      "活断層",
+      "立川",
+      "断層帯",
+      "関東",
+      "東京"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_miura",
+    "title": "三浦半島断層群",
+    "description": "三浦半島断層群の活断層評価情報（神奈川県）",
+    "tags": [
+      "活断層",
+      "三浦半島",
+      "断層群",
+      "関東",
+      "神奈川"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_uemachi",
+    "title": "上町断層帯",
+    "description": "上町断層帯の活断層評価情報（大阪平野）",
+    "tags": [
+      "活断層",
+      "上町",
+      "断層帯",
+      "大阪",
+      "関西"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_arima_takatsuki",
+    "title": "有馬-高槻断層帯",
+    "description": "有馬-高槻断層帯の活断層評価情報",
+    "tags": [
+      "活断層",
+      "有馬",
+      "高槻",
+      "断層帯",
+      "関西"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nojima",
+    "title": "野島断層",
+    "description": "野島断層の活断層評価情報（阪神・淡路大震災の震源断層）",
+    "tags": [
+      "活断層",
+      "野島",
+      "阪神",
+      "淡路"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_hatagawa",
+    "title": "畑川断層帯",
+    "description": "畑川断層帯の活断層評価情報（福島県）",
+    "tags": [
+      "活断層",
+      "畑川",
+      "断層帯",
+      "東北",
+      "福島"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nagamachi_rifu",
+    "title": "長町-利府線断層帯",
+    "description": "長町-利府線断層帯の活断層評価情報（宮城県）",
+    "tags": [
+      "活断層",
+      "長町",
+      "利府",
+      "断層帯",
+      "東北",
+      "宮城"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_morimoto_togashi",
+    "title": "森本・富樫断層帯",
+    "description": "森本・富樫断層帯の活断層評価情報（石川県）",
+    "tags": [
+      "活断層",
+      "森本",
+      "富樫",
+      "断層帯",
+      "北陸",
+      "石川"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tonami_heiya",
+    "title": "砺波平野断層帯",
+    "description": "砺波平野断層帯の活断層評価情報（富山県）",
+    "tags": [
+      "活断層",
+      "砺波平野",
+      "断層帯",
+      "北陸",
+      "富山"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_atotsugawa",
+    "title": "跡津川断層帯",
+    "description": "跡津川断層帯の活断層評価情報（岐阜県〜富山県）",
+    "tags": [
+      "活断層",
+      "跡津川",
+      "断層帯",
+      "中部",
+      "岐阜",
+      "富山"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_neodani",
+    "title": "根尾谷断層帯（濃尾断層帯）",
+    "description": "根尾谷断層帯の活断層評価情報（1891年濃尾地震の震源断層）",
+    "tags": [
+      "活断層",
+      "根尾谷",
+      "濃尾",
+      "断層帯",
+      "中部",
+      "岐阜"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_yanagase",
+    "title": "柳ヶ瀬・関ヶ原断層帯",
+    "description": "柳ヶ瀬・関ヶ原断層帯の活断層評価情報",
+    "tags": [
+      "活断層",
+      "柳ヶ瀬",
+      "関ヶ原",
+      "断層帯",
+      "中部",
+      "滋賀"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_fujikawa_kako",
+    "title": "富士川河口断層帯",
+    "description": "富士川河口断層帯の活断層評価情報（静岡県）",
+    "tags": [
+      "活断層",
+      "富士川",
+      "断層帯",
+      "東海",
+      "静岡"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_ise_wan",
+    "title": "伊勢湾断層帯",
+    "description": "伊勢湾断層帯の活断層評価情報（愛知県〜三重県）",
+    "tags": [
+      "活断層",
+      "伊勢湾",
+      "断層帯",
+      "東海",
+      "愛知",
+      "三重"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_sanage_takahama",
+    "title": "猿投-高浜断層帯",
+    "description": "猿投-高浜断層帯の活断層評価情報（愛知県）",
+    "tags": [
+      "活断層",
+      "猿投",
+      "高浜",
+      "断層帯",
+      "東海",
+      "愛知"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_yamada",
+    "title": "山田断層帯",
+    "description": "山田断層帯の活断層評価情報（京都府）",
+    "tags": [
+      "活断層",
+      "山田",
+      "断層帯",
+      "関西",
+      "京都"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_hanaori",
+    "title": "花折断層帯",
+    "description": "花折断層帯の活断層評価情報（滋賀県〜京都府）",
+    "tags": [
+      "活断層",
+      "花折",
+      "断層帯",
+      "関西",
+      "滋賀",
+      "京都"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_rokko_awaji",
+    "title": "六甲・淡路島断層帯",
+    "description": "六甲・淡路島断層帯の活断層評価情報",
+    "tags": [
+      "活断層",
+      "六甲",
+      "淡路島",
+      "断層帯",
+      "関西",
+      "兵庫"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_biwako_seigan",
+    "title": "琵琶湖西岸断層帯",
+    "description": "琵琶湖西岸断層帯の活断層評価情報（滋賀県）",
+    "tags": [
+      "活断層",
+      "琵琶湖",
+      "西岸",
+      "断層帯",
+      "関西",
+      "滋賀"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nishi_yamato",
+    "title": "奈良盆地東縁断層帯",
+    "description": "奈良盆地東縁断層帯の活断層評価情報（奈良県）",
+    "tags": [
+      "活断層",
+      "奈良",
+      "断層帯",
+      "関西"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_shinanogawa",
+    "title": "信濃川断層帯",
+    "description": "信濃川断層帯の活断層評価情報（新潟県〜長野県）",
+    "tags": [
+      "活断層",
+      "信濃川",
+      "断層帯",
+      "中部",
+      "新潟",
+      "長野"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_sanbagawa",
+    "title": "三波川断層帯",
+    "description": "三波川断層帯の活断層評価情報",
+    "tags": [
+      "活断層",
+      "三波川",
+      "断層帯",
+      "四国"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_futagawa_hinagu",
+    "title": "布田川・日奈久断層帯",
+    "description": "布田川・日奈久断層帯の活断層評価情報（2016年熊本地震の震源断層）",
+    "tags": [
+      "活断層",
+      "布田川",
+      "日奈久",
+      "断層帯",
+      "九州",
+      "熊本"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_beppu_haneyama",
+    "title": "別府-万年山断層帯",
+    "description": "別府-万年山断層帯の活断層評価情報（大分県）",
+    "tags": [
+      "活断層",
+      "別府",
+      "万年山",
+      "断層帯",
+      "九州",
+      "大分"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_unzen",
+    "title": "雲仙断層群",
+    "description": "雲仙断層群の活断層評価情報（長崎県）",
+    "tags": [
+      "活断層",
+      "雲仙",
+      "断層群",
+      "九州",
+      "長崎"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_izumi",
+    "title": "出水断層帯",
+    "description": "出水断層帯の活断層評価情報（鹿児島県）",
+    "tags": [
+      "活断層",
+      "出水",
+      "断層帯",
+      "九州",
+      "鹿児島"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_sarobetsu",
+    "title": "サロベツ断層帯",
+    "description": "サロベツ断層帯の活断層評価情報（北海道）",
+    "tags": [
+      "活断層",
+      "サロベツ",
+      "断層帯",
+      "北海道"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tokachi_heiya",
+    "title": "十勝平野断層帯",
+    "description": "十勝平野断層帯の活断層評価情報（北海道）",
+    "tags": [
+      "活断層",
+      "十勝",
+      "断層帯",
+      "北海道"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_ishikari_teichi",
+    "title": "石狩低地東縁断層帯",
+    "description": "石狩低地東縁断層帯の活断層評価情報（北海道）",
+    "tags": [
+      "活断層",
+      "石狩",
+      "断層帯",
+      "北海道"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_yokote_bonchi",
+    "title": "横手盆地東縁断層帯",
+    "description": "横手盆地東縁断層帯の活断層評価情報（秋田県）",
+    "tags": [
+      "活断層",
+      "横手",
+      "断層帯",
+      "東北",
+      "秋田"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_shonai_heiya",
+    "title": "庄内平野東縁断層帯",
+    "description": "庄内平野東縁断層帯の活断層評価情報（山形県）",
+    "tags": [
+      "活断層",
+      "庄内",
+      "断層帯",
+      "東北",
+      "山形"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_atera",
+    "title": "阿寺断層帯",
+    "description": "阿寺断層帯の活断層評価情報（岐阜県〜長野県）",
+    "tags": [
+      "活断層",
+      "阿寺",
+      "断層帯",
+      "中部",
+      "岐阜",
+      "長野"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_fukui_heiya",
+    "title": "福井平野東縁断層帯",
+    "description": "福井平野東縁断層帯の活断層評価情報（福井県）",
+    "tags": [
+      "活断層",
+      "福井",
+      "断層帯",
+      "北陸"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_hyoubetsu",
+    "title": "標津断層帯",
+    "description": "標津断層帯の活断層評価情報（北海道）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "北海道"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_furano",
+    "title": "富良野断層帯",
+    "description": "富良野断層帯の活断層評価情報（北海道）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "北海道"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_mashike",
+    "title": "増毛山地東縁断層帯・沼田-砂川付近の断層帯",
+    "description": "増毛山地東縁断層帯・沼田-砂川付近の断層帯の活断層評価情報（北海道）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "北海道"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tobetsu",
+    "title": "当別断層",
+    "description": "当別断層の活断層評価情報（北海道）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "北海道"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kuromatsunai",
+    "title": "黒松内低地断層帯",
+    "description": "黒松内低地断層帯の活断層評価情報（北海道）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "北海道"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_hakodate",
+    "title": "函館平野西縁断層帯",
+    "description": "函館平野西縁断層帯の活断層評価情報（北海道）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "北海道"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_aomori_wan",
+    "title": "青森湾西岸断層帯",
+    "description": "青森湾西岸断層帯の活断層評価情報（東北・青森）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "青森"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tsugaru",
+    "title": "津軽山地西縁断層帯",
+    "description": "津軽山地西縁断層帯の活断層評価情報（東北・青森）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "青森"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_oritsume",
+    "title": "折爪断層",
+    "description": "折爪断層の活断層評価情報（東北・岩手）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "岩手"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_hanawa",
+    "title": "花輪東断層帯",
+    "description": "花輪東断層帯の活断層評価情報（東北・秋田）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "秋田"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_noshiro",
+    "title": "能代断層帯",
+    "description": "能代断層帯の活断層評価情報（東北・秋田）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "秋田"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kitakami",
+    "title": "北上低地西縁断層帯",
+    "description": "北上低地西縁断層帯の活断層評価情報（東北・岩手）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "岩手"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_shizukuishi",
+    "title": "雫石盆地西縁-真昼山地東縁断層帯",
+    "description": "雫石盆地西縁-真昼山地東縁断層帯の活断層評価情報（東北・岩手）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "岩手"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kitayuri",
+    "title": "北由利断層",
+    "description": "北由利断層の活断層評価情報（東北・秋田）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "秋田"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_shinjo",
+    "title": "新庄盆地断層帯",
+    "description": "新庄盆地断層帯の活断層評価情報（東北・山形）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "山形"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_yamagata",
+    "title": "山形盆地断層帯",
+    "description": "山形盆地断層帯の活断層評価情報（東北・山形）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "山形"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nagai",
+    "title": "長井盆地西縁断層帯",
+    "description": "長井盆地西縁断層帯の活断層評価情報（東北・山形）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "山形"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_fukushima",
+    "title": "福島盆地西縁断層帯",
+    "description": "福島盆地西縁断層帯の活断層評価情報（東北・福島）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "福島"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_futaba",
+    "title": "双葉断層",
+    "description": "双葉断層の活断層評価情報（東北・福島）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "福島"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_aizu",
+    "title": "会津盆地西縁・東縁断層帯",
+    "description": "会津盆地西縁・東縁断層帯の活断層評価情報（東北・福島）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "東北",
+      "福島"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_sekiya",
+    "title": "関谷断層",
+    "description": "関谷断層の活断層評価情報（関東・栃木）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関東",
+      "栃木"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_okubo",
+    "title": "大久保断層",
+    "description": "大久保断層の活断層評価情報（関東・栃木）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関東",
+      "栃木"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_fukaya",
+    "title": "深谷断層帯・綾瀬川断層",
+    "description": "深谷断層帯・綾瀬川断層の活断層評価情報（関東・埼玉）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関東",
+      "埼玉"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_isehara",
+    "title": "伊勢原断層",
+    "description": "伊勢原断層の活断層評価情報（関東・神奈川）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関東",
+      "神奈川"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kannawa",
+    "title": "神縄・国府津-松田断層帯",
+    "description": "神縄・国府津-松田断層帯の活断層評価情報（関東・神奈川）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関東",
+      "神奈川"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kamogawa",
+    "title": "鴨川低地断層帯",
+    "description": "鴨川低地断層帯の活断層評価情報（関東・千葉）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関東",
+      "千葉"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kitaizu",
+    "title": "北伊豆断層帯",
+    "description": "北伊豆断層帯の活断層評価情報（中部・静岡）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "静岡"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_minobu",
+    "title": "身延断層",
+    "description": "身延断層の活断層評価情報（中部・山梨）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "山梨"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_sone",
+    "title": "曽根丘陵断層帯",
+    "description": "曽根丘陵断層帯の活断層評価情報（中部・山梨）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "山梨"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kushigata",
+    "title": "櫛形山脈断層帯",
+    "description": "櫛形山脈断層帯の活断層評価情報（中部・新潟）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "新潟"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tsukioka",
+    "title": "月岡断層帯",
+    "description": "月岡断層帯の活断層評価情報（中部・新潟）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "新潟"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nagaoka",
+    "title": "長岡平野西縁断層帯",
+    "description": "長岡平野西縁断層帯の活断層評価情報（中部・新潟）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "新潟"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_muikamachi",
+    "title": "六日町断層帯",
+    "description": "六日町断層帯の活断層評価情報（中部・新潟）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "新潟"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tokamachi",
+    "title": "十日町断層帯",
+    "description": "十日町断層帯の活断層評価情報（中部・新潟）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "新潟"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_takada",
+    "title": "高田平野断層帯",
+    "description": "高田平野断層帯の活断層評価情報（中部・新潟）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "新潟"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_naganobonchi",
+    "title": "長野盆地西縁断層帯",
+    "description": "長野盆地西縁断層帯の活断層評価情報（中部・長野）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "長野"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_sakaito",
+    "title": "境峠・神谷断層帯",
+    "description": "境峠・神谷断層帯の活断層評価情報（中部・長野）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "長野"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_inadani",
+    "title": "伊那谷断層帯",
+    "description": "伊那谷断層帯の活断層評価情報（中部・長野）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "長野"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kisosanmyaku",
+    "title": "木曽山脈西縁断層帯",
+    "description": "木曽山脈西縁断層帯の活断層評価情報（中部・長野）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "長野"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_uozu",
+    "title": "魚津断層帯",
+    "description": "魚津断層帯の活断層評価情報（中部・富山）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "富山"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_ouchi",
+    "title": "邑知潟断層帯",
+    "description": "邑知潟断層帯の活断層評価情報（中部・石川）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "石川"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_ushikubi",
+    "title": "牛首断層帯",
+    "description": "牛首断層帯の活断層評価情報（中部・石川）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "石川"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_takayama",
+    "title": "高山・大原断層帯",
+    "description": "高山・大原断層帯の活断層評価情報（中部・岐阜）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "岐阜"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_byoubu",
+    "title": "屏風山・恵那山断層帯及び猿投山断層帯",
+    "description": "屏風山・恵那山断層帯及び猿投山断層帯の活断層評価情報（中部・岐阜）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "岐阜"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_shogawa",
+    "title": "庄川断層帯",
+    "description": "庄川断層帯の活断層評価情報（中部・富山）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "富山"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nagaragawa",
+    "title": "長良川上流断層帯",
+    "description": "長良川上流断層帯の活断層評価情報（中部・岐阜）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "岐阜"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nosaka",
+    "title": "野坂・集福寺断層帯",
+    "description": "野坂・集福寺断層帯の活断層評価情報（中部・福井）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "福井"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kohoku",
+    "title": "湖北山地断層帯",
+    "description": "湖北山地断層帯の活断層評価情報（中部・滋賀）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "滋賀"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_yourou",
+    "title": "養老-桑名-四日市断層帯",
+    "description": "養老-桑名-四日市断層帯の活断層評価情報（中部・三重）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "三重"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_suzuka_e",
+    "title": "鈴鹿東縁断層帯",
+    "description": "鈴鹿東縁断層帯の活断層評価情報（中部・三重）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "三重"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nunobiki",
+    "title": "布引山地東縁断層帯",
+    "description": "布引山地東縁断層帯の活断層評価情報（中部・三重）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "三重"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_suzuka_w",
+    "title": "鈴鹿西縁断層帯",
+    "description": "鈴鹿西縁断層帯の活断層評価情報（中部・三重）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "三重"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tongu",
+    "title": "頓宮断層",
+    "description": "頓宮断層の活断層評価情報（中部・三重）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中部",
+      "三重"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kizugawa",
+    "title": "木津川断層帯",
+    "description": "木津川断層帯の活断層評価情報（関西・京都）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関西",
+      "京都"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_mikata_hanaori",
+    "title": "三方・花折断層帯",
+    "description": "三方・花折断層帯の活断層評価情報（関西・滋賀）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関西",
+      "滋賀"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nara_higashi",
+    "title": "奈良盆地東縁断層帯",
+    "description": "奈良盆地東縁断層帯の活断層評価情報（関西・奈良）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関西",
+      "奈良"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_mitsutouge",
+    "title": "三峠・京都西山断層帯",
+    "description": "三峠・京都西山断層帯の活断層評価情報（関西・京都）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関西",
+      "京都"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_ikoma",
+    "title": "生駒断層帯",
+    "description": "生駒断層帯の活断層評価情報（関西・大阪）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関西",
+      "大阪"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_osakawan",
+    "title": "大阪湾断層帯",
+    "description": "大阪湾断層帯の活断層評価情報（関西・大阪）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関西",
+      "大阪"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_yamasaki",
+    "title": "山崎断層帯",
+    "description": "山崎断層帯の活断層評価情報（関西・兵庫）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "関西",
+      "兵庫"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_shikano",
+    "title": "鹿野-吉岡断層",
+    "description": "鹿野-吉岡断層の活断層評価情報（中国・鳥取）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "鳥取"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_shinji",
+    "title": "宍道（鹿島）断層",
+    "description": "宍道（鹿島）断層の活断層評価情報（中国・島根）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "島根"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_choja",
+    "title": "長者ヶ原-芳井断層",
+    "description": "長者ヶ原-芳井断層の活断層評価情報（中国・岡山）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "岡山"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_yasaka",
+    "title": "弥栄断層・地福断層",
+    "description": "弥栄断層・地福断層の活断層評価情報（中国・山口）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "山口"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tsutsuga",
+    "title": "筒賀断層",
+    "description": "筒賀断層の活断層評価情報（中国・広島）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "広島"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_akina",
+    "title": "安芸灘断層帯・広島湾-岩国沖断層帯",
+    "description": "安芸灘断層帯・広島湾-岩国沖断層帯の活断層評価情報（中国・広島）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "広島"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_iwakuni",
+    "title": "岩国-五日市断層帯",
+    "description": "岩国-五日市断層帯の活断層評価情報（中国・広島）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "広島"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_oharako",
+    "title": "大原湖断層・小郡断層",
+    "description": "大原湖断層・小郡断層の活断層評価情報（中国・山口）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "山口"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_suounada",
+    "title": "周防灘断層帯",
+    "description": "周防灘断層帯の活断層評価情報（中国・山口）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "山口"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kikugawa",
+    "title": "菊川断層帯",
+    "description": "菊川断層帯の活断層評価情報（中国・山口）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "中国",
+      "山口"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nagao",
+    "title": "長尾断層帯",
+    "description": "長尾断層帯の活断層評価情報（四国・香川）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "四国",
+      "香川"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_fukuchiyama",
+    "title": "福智山断層帯",
+    "description": "福智山断層帯の活断層評価情報（九州・福岡）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "福岡"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nishiyama",
+    "title": "西山断層帯",
+    "description": "西山断層帯の活断層評価情報（九州・福岡）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "福岡"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_umi",
+    "title": "宇美断層",
+    "description": "宇美断層の活断層評価情報（九州・福岡）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "福岡"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_kego",
+    "title": "警固断層帯",
+    "description": "警固断層帯の活断層評価情報（九州・福岡）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "福岡"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_hyugatouge",
+    "title": "日向峠-小笠木峠断層帯",
+    "description": "日向峠-小笠木峠断層帯の活断層評価情報（九州・福岡）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "福岡"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_mizunawa",
+    "title": "水縄断層帯",
+    "description": "水縄断層帯の活断層評価情報（九州・福岡）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "福岡"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_saga",
+    "title": "佐賀平野北縁断層帯",
+    "description": "佐賀平野北縁断層帯の活断層評価情報（九州・佐賀）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "佐賀"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_hijyu",
+    "title": "日出生断層帯",
+    "description": "日出生断層帯の活断層評価情報（九州・大分）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "大分"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_haneyama",
+    "title": "万年山-崩平山断層帯",
+    "description": "万年山-崩平山断層帯の活断層評価情報（九州・大分）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "大分"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_midorikawa",
+    "title": "緑川断層帯",
+    "description": "緑川断層帯の活断層評価情報（九州・熊本）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "熊本"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_hitoyoshi",
+    "title": "人吉盆地南縁断層",
+    "description": "人吉盆地南縁断層の活断層評価情報（九州・熊本）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "熊本"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_koshiki",
+    "title": "甑断層帯",
+    "description": "甑断層帯の活断層評価情報（九州・鹿児島）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "九州",
+      "鹿児島"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_miyako",
+    "title": "宮古島断層帯",
+    "description": "宮古島断層帯の活断層評価情報（沖縄）",
+    "tags": [
+      "活断層",
+      "断層帯",
+      "沖縄"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:sground_arv",
+    "title": "表層地盤 平均S波速度（AVS30）",
+    "description": "250mメッシュの表層地盤の平均S波速度（地表から30mまで）",
+    "tags": [
+      "地盤構造",
+      "表層地盤",
+      "S波速度",
+      "AVS30"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/sground/Y2024/arv/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:sground_amp",
+    "title": "表層地盤 地盤増幅率",
+    "description": "250mメッシュの表層地盤の地盤増幅率",
+    "tags": [
+      "地盤構造",
+      "表層地盤",
+      "増幅率"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/sground/Y2024/amp/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:dground",
+    "title": "深部地盤構造モデル",
+    "description": "全国の深部地盤構造（地震基盤までの3次元地盤構造モデル）",
+    "tags": [
+      "地盤構造",
+      "深部地盤",
+      "3次元モデル"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/dground/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:landslide",
+    "title": "地すべり地形分布図",
+    "description": "全国の地すべり地形の分布（防災科研作成）",
+    "tags": [
+      "地すべり",
+      "地形",
+      "防災",
+      "斜面災害"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/landslide/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:liquefaction",
+    "title": "液状化ハザードマップ",
+    "description": "地震時の液状化発生可能性の評価結果",
+    "tags": [
+      "液状化",
+      "ハザード",
+      "地盤",
+      "防災"
+    ],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/liquefaction/meshinfo.geojson"
+  }
+]

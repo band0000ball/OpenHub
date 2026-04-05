@@ -24,6 +24,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
 from pydantic import BaseModel
 
 from connectors.boj import BojConnector
+from connectors.jshis import JshisConnector
 from connectors.cinii import CiNiiConnector
 from connectors.datagojp import DataGoJpConnector
 from connectors.egov_law import EGovLawConnector
@@ -88,6 +89,7 @@ _SOURCE_REGISTRY: list[tuple[SourceDefinition, type]] = [
     (SourceDefinition(id="jma", label="気象庁", requires_api_key=False), JmaConnector),
     (SourceDefinition(id="cinii", label="CiNii Research", requires_api_key=False), CiNiiConnector),
     (SourceDefinition(id="boj", label="日本銀行", requires_api_key=False), BojConnector),
+    (SourceDefinition(id="jshis", label="J-SHIS 地震ハザード", requires_api_key=False), JshisConnector),
 ]
 
 # source_id → コネクタークラス（検索・取得用）
