@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
     AUTH_COGNITO_SECRET: process.env.AUTH_COGNITO_SECRET ?? "",
     AUTH_SECRET: process.env.AUTH_SECRET ?? "",
     AUTH_URL: process.env.AUTH_URL ?? "",
+    NEXT_PUBLIC_BYPASS_BASE_URL: process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? "",
   },
 };
 
