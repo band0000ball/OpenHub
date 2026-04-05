@@ -20,6 +20,12 @@ from core.models import DatasetMetadata
 # ソース毎の収集タイムアウト（秒）。超過したら途中結果を保存して次のソースへ。
 _SOURCE_TIMEOUT_SECONDS = 120
 
+# ソース別タイムアウトのオーバーライド（大量データソース向け）
+_SOURCE_TIMEOUT_OVERRIDES: dict[str, int] = {
+    "estat": 300,     # e-Stat: 約30万件、1リクエスト1-3秒
+    "datagojp": 180,  # data.go.jp: 約2万件
+}
+
 logger = logging.getLogger(__name__)
 
 # e-Gov 法令 API は全件取得ができないため、代表的な法令カテゴリで検索する
@@ -206,7 +212,8 @@ def collect_all(config: CollectorConfig, s3_client=None) -> CollectResult:
             api_key = os.environ.get(f"{source_id.upper()}_API_KEY")
             connector.initialize(api_key)
 
-            deadline = time.monotonic() + _SOURCE_TIMEOUT_SECONDS
+            timeout = _SOURCE_TIMEOUT_OVERRIDES.get(source_id, _SOURCE_TIMEOUT_SECONDS)
+            deadline = time.monotonic() + timeout
             strategy = _COLLECT_STRATEGIES.get(source_id, _collect_default)
             items = strategy(connector, deadline=deadline)
 
