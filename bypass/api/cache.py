@@ -54,7 +54,7 @@ def _get_source_items(source_id: str) -> list[dict]:
 def _get_all_items() -> list[dict]:
     """全ソースのメタデータを統合して返す。"""
     all_items: list[dict] = []
-    for source_id in ("estat", "datagojp", "egov_law", "jma", "cinii", "boj"):
+    for source_id in ("estat", "datagojp", "egov_law", "jma", "cinii", "boj", "jshis"):
         all_items.extend(_get_source_items(source_id))
     return all_items
 

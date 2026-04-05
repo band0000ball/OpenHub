@@ -35,6 +35,7 @@ export const FALLBACK_SOURCES: readonly DataSource[] = [
   { id: "jma", label: "気象庁", requiresApiKey: false },
   { id: "cinii", label: "CiNii Research", requiresApiKey: false },
   { id: "boj", label: "日本銀行", requiresApiKey: false },
+  { id: "jshis", label: "J-SHIS 地震ハザード", requiresApiKey: false },
 ] as const;
 
 /** @deprecated FALLBACK_SOURCES を使用してください。後方互換のため維持。 */

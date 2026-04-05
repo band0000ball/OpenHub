@@ -1,0 +1,162 @@
+[
+  {
+    "id": "jshis:pshm_Y2024_AVR_TTL_MTTL",
+    "title": "確率論的地震動予測地図 2024年版 全期間 全地震",
+    "description": "今後30年間に震度6弱以上の揺れに見舞われる確率の分布（全地震タイプ統合）",
+    "tags": ["地震ハザード", "確率論的地震動予測", "2024"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2024/AVR/TTL_MTTL/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:pshm_Y2024_AVR_TTL_SBTR",
+    "title": "確率論的地震動予測地図 2024年版 全期間 海溝型地震",
+    "description": "今後30年間に海溝型地震による震度6弱以上の揺れに見舞われる確率の分布",
+    "tags": ["地震ハザード", "確率論的地震動予測", "海溝型地震", "2024"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2024/AVR/TTL_SBTR/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:pshm_Y2024_AVR_TTL_ITRP",
+    "title": "確率論的地震動予測地図 2024年版 全期間 内陸活断層",
+    "description": "今後30年間に内陸活断層による震度6弱以上の揺れに見舞われる確率の分布",
+    "tags": ["地震ハザード", "確率論的地震動予測", "活断層", "2024"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2024/AVR/TTL_ITRP/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:pshm_Y2020_AVR_TTL_MTTL",
+    "title": "確率論的地震動予測地図 2020年版 全期間 全地震",
+    "description": "今後30年間に震度6弱以上の揺れに見舞われる確率の分布（2020年版）",
+    "tags": ["地震ハザード", "確率論的地震動予測", "2020"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/pshm/Y2020/AVR/TTL_MTTL/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:fault_nankai",
+    "title": "南海トラフ巨大地震 想定震源断層",
+    "description": "南海トラフ巨大地震の想定震源域と断層モデル",
+    "tags": ["活断層", "南海トラフ", "巨大地震", "想定震源断層"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_sagami",
+    "title": "相模トラフ沿いの地震 想定震源断層",
+    "description": "相模トラフ沿いの巨大地震の想定震源域と断層モデル",
+    "tags": ["活断層", "相模トラフ", "巨大地震", "想定震源断層"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tokai",
+    "title": "東海地震 想定震源断層",
+    "description": "東海地震の想定震源域と断層モデル",
+    "tags": ["活断層", "東海地震", "想定震源断層"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_median_tectonic",
+    "title": "中央構造線断層帯 活断層情報",
+    "description": "中央構造線断層帯の活断層評価情報",
+    "tags": ["活断層", "中央構造線", "断層帯"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_itoigawa",
+    "title": "糸魚川-静岡構造線断層帯 活断層情報",
+    "description": "糸魚川-静岡構造線断層帯の活断層評価情報",
+    "tags": ["活断層", "糸魚川", "静岡", "構造線", "断層帯"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_tachikawa",
+    "title": "立川断層帯 活断層情報",
+    "description": "立川断層帯の活断層評価情報",
+    "tags": ["活断層", "立川", "断層帯", "関東"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_miura",
+    "title": "三浦半島断層群 活断層情報",
+    "description": "三浦半島断層群の活断層評価情報",
+    "tags": ["活断層", "三浦半島", "断層群", "関東"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_uemachi",
+    "title": "上町断層帯 活断層情報",
+    "description": "上町断層帯の活断層評価情報（大阪平野）",
+    "tags": ["活断層", "上町", "断層帯", "大阪"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_arima_takatsuki",
+    "title": "有馬-高槻断層帯 活断層情報",
+    "description": "有馬-高槻断層帯の活断層評価情報",
+    "tags": ["活断層", "有馬", "高槻", "断層帯", "関西"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_nojima",
+    "title": "野島断層 活断層情報",
+    "description": "野島断層の活断層評価情報（阪神・淡路大震災の震源断層）",
+    "tags": ["活断層", "野島", "阪神", "淡路"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:fault_hatagawa",
+    "title": "畑川断層帯 活断層情報",
+    "description": "畑川断層帯の活断層評価情報（福島県）",
+    "tags": ["活断層", "畑川", "断層帯", "福島"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/scase/Y2024/info.geojson"
+  },
+  {
+    "id": "jshis:sground_arv",
+    "title": "表層地盤 平均S波速度（AVS30）",
+    "description": "250mメッシュの表層地盤の平均S波速度（地表から30mまで）",
+    "tags": ["地盤構造", "表層地盤", "S波速度", "AVS30"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/sground/Y2024/arv/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:sground_amp",
+    "title": "表層地盤 地盤増幅率",
+    "description": "250mメッシュの表層地盤の地盤増幅率",
+    "tags": ["地盤構造", "表層地盤", "増幅率"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/sground/Y2024/amp/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:dground",
+    "title": "深部地盤構造モデル",
+    "description": "全国の深部地盤構造（地震基盤までの3次元地盤構造モデル）",
+    "tags": ["地盤構造", "深部地盤", "3次元モデル"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/dground/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:landslide",
+    "title": "地すべり地形分布図",
+    "description": "全国の地すべり地形の分布（防災科研作成）",
+    "tags": ["地すべり", "地形", "防災", "斜面災害"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/landslide/meshinfo.geojson"
+  },
+  {
+    "id": "jshis:liquefaction",
+    "title": "液状化ハザードマップ",
+    "description": "地震時の液状化発生可能性の評価結果",
+    "tags": ["液状化", "ハザード", "地盤", "防災"],
+    "url": "https://www.j-shis.bosai.go.jp/map/JSHIS2/index.html",
+    "endpoint": "https://www.j-shis.bosai.go.jp/map/api/liquefaction/meshinfo.geojson"
+  }
+]
