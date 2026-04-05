@@ -1,4 +1,5 @@
 import { type NextRequest } from "next/server";
+import { getAccessToken } from "../../../../lib/auth-helpers";
 
 const DEFAULT_BYPASS_BASE_URL = "http://localhost:8000";
 
@@ -10,10 +11,14 @@ export async function GET(
   const baseUrl = process.env.NEXT_PUBLIC_BYPASS_BASE_URL ?? DEFAULT_BYPASS_BASE_URL;
   const upstreamUrl = `${baseUrl}/datasets/${id}/fetch`;
 
+  const accessToken = await getAccessToken().catch(() => undefined);
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  }
+
   try {
-    const upstreamResponse = await fetch(upstreamUrl, {
-      headers: { "Content-Type": "application/json" },
-    });
+    const upstreamResponse = await fetch(upstreamUrl, { headers });
 
     if (!upstreamResponse.ok) {
       return Response.json(
